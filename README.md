@@ -13,11 +13,11 @@ This library must be included on both the landing page and thank you page. It ca
 <script src="http://assets.kickbit.com/moveRewards/aquto.js"></script>
 ```
 
-or included using AMD or common.js syntax
+<!-- or included using AMD or common.js syntax
 
 ```javascript
 var aquto = require("aquto.js");
-```
+``` -->
 
 When embedded as a script tag, it exposes the `aquto` global object.
 

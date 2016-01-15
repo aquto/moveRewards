@@ -1,0 +1,26 @@
+{
+  "name": "move-rewards",
+  "version": "0.0.1",
+  "description": "Move Rewards javascript library",
+  "main": "aquto.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aquto/moveRewards.git"
+  },
+  "author": "jrunge@aquto.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aquto/moveRewards/issues"
+  },
+  "homepage": "https://github.com/aquto/moveRewards#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-webpack": "^1.0.11",
+    "webpack": "^1.12.11",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
