@@ -22,5 +22,8 @@
     "grunt-webpack": "^1.0.11",
     "webpack": "^1.12.11",
     "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "browser-jsonp": "^1.1.2"
   }
 }
