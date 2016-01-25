@@ -34,12 +34,12 @@ The `checkEligibility` method determines if the current user if eligible to rece
 |callback|function|yes|Function called after checking eligibility on the server|
 
 ### Response properties
-|Key|Type|Description|
-|---|:----:|-----------|
-|eligible|boolean|Is the current user eligible for the reward?|
-|rewardAmount|integer|Reward amount in MB|
-|rewardText|string|Server configured string containing carrier and reward amount. Ex: Purchase any subscription and get 1GB added to your AT&T data plan.|
-|carrierLogo|string|Image URL for user's carrier logo|
+|Key|Type|Optional|Description|
+|---|:--:|:------:|-----------|
+|eligible|boolean|false|Is the current user eligible for the reward?|
+|rewardAmount|integer|true|Reward amount in MB|
+|rewardText|string|true|Server configured string containing carrier and reward amount. Ex: Purchase any subscription and get 1GB added to your AT&T data plan.|
+|carrier|string|true|Code for user's carrier|
 
 
 ```html
@@ -55,7 +55,7 @@ aquto.checkEligibility({
   callback: function(response) {
     if (response && response.eligible) {
       $('.rewardText').text(response.rewardText);
-      $('.carrierLogo').attr({src: response.carrierLogo});
+      $('.rewardHeader').addClass('rewardHeader'+response.carrier);
       $('.rewardBlock').show();
     }
   }
@@ -74,16 +74,16 @@ The `complete` method finishes the reward session and triggers the MB reward. Th
 |callback|function|yes|Function called after completing the reward on the server|
 
 ### Response properties
-|Key|Type|Description|
-|---|:----:|-----------|
-|success|boolean|Was the reward successfully applied?|
-|rewardAmount|integer|Reward amount in MB|
-|rewardText|string|Server configured string containing carrier and reward amount. Ex: Congratulations, you just added 1GB to your AT&T data plan!|
-|carrierLogo|string|URL for user's carrier logo|
+|Key|Type|Optional|Description|
+|---|:--:|:------:|-----------|
+|eligible|boolean|false|Is the user still eligible for the reward|
+|rewardAmount|integer|true|Reward amount in MB|
+|rewardText|string|true|Server configured string containing carrier and reward amount. Ex: Congratulations, you just added 1GB to your AT&T data plan!|
+|carrier|string|true|Code for user's carrier|
 
 ```html
 <div class="rewardBlock">
-  <img class="carrierLogo"/>
+  <div class="rewardHeader"></div>
   <div class="rewardText"></div>
 </div>
 ```
@@ -92,9 +92,9 @@ The `complete` method finishes the reward session and triggers the MB reward. Th
 aquto.complete({
   campaignId: '12345',
   callback: function(response) {
-    if (response && response.success) {
+    if (response && response.eligible) {
       $('.rewardText').text(response.rewardText);
-      $('.carrierLogo').attr({src: response.carrierLogo});
+      $('.rewardHeader').addClass('rewardHeader'+response.carrier);
       $('.rewardBlock').show();
     }
   }

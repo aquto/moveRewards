@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+
+  <title>Move Rewards</title>
+  
+  <style>
+  h1 {
+    font-size: 2em;
+    margin: 0 0 40px 0;
+  }
+  .rewardBlock {
+      width: 300px;
+      display: none;
+      margin: 0 auto 15px
+  }
+  .rewardText {
+      background: #6b6b6b;
+      color: #fff;
+      width: 298px;
+      padding: 8px 10px;
+      font: normal normal normal 12px helvetica, sans-serif;
+      box-sizing: border-box;
+      margin: -1px 0 0 0
+  }
+  .rewardHeaderatt {
+      background: url("images/offerHeaderATTConv.png") no-repeat;
+      width: 300px;
+      height: 20px;
+      z-index: 1;
+  }
+  @media all and (-webkit-min-device-pixel-ratio: 1.5),
+  (min-resolution: 1.5dppx) {
+      .rewardHeaderatt {
+          background-image: url("images/offerHeaderATTConv@2x.png");
+          background-size: 300px 20px
+      }
+  }
+  .rewardHeadervzw {
+      background: url("images/offerHeaderVerizonConv.png") no-repeat;
+      width: 300px;
+      height: 20px;
+      z-index: 1;
+  }
+  @media all and (-webkit-min-device-pixel-ratio: 1.5),
+  (min-resolution: 1.5dppx) {
+      .rewardHeadervzw {
+          background-image: url("images/offerHeaderVerizonConv@2x.png");
+          background-size: 300px 20px
+      }
+  }
+  </style>
+
+  
+</head>
+
+<body>
+
+  <h1>Thank You</h1>
+
+  <div class="rewardBlock">
+    <div class="rewardHeader"></div>
+    <div class="rewardText"></div>
+  </div>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="assets/js/jquery-1.9.1.min.js"><\/script>')</script>
+
+  <script src="../aquto.js"></script>
+
+  <script>
+    $(document).ready(function () { 
+      aquto.complete({
+        campaignId: '12345',
+        callback: function(response) {
+          if (response && response.eligible) {
+            $('.rewardText').text(response.rewardText);
+            $('.rewardHeader').addClass('rewardHeader'+response.carrier);
+            $('.rewardBlock').show();
+          }
+        }
+      });
+    });
+
+  </script>
+  
+</body>
+</html>
+
+

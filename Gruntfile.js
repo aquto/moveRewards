@@ -3,9 +3,26 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    connect: {
+      server: {
+        options: {
+          index: './example/index.html',
+          port: 8035,
+          hostname: '*'
+        }
+      }
+    },
     webpack: {
       compile: {
-        // webpack options
+        entry: "./src/aquto.js",
+        output: {
+            path: "./",
+            filename: "aquto.js",
+            library: ["aquto"],
+            libraryTarget: "var"
+        }
+      },
+      watch: {
         entry: "./src/aquto.js",
         output: {
             path: "./",
@@ -13,21 +30,8 @@ module.exports = function(grunt) {
             library: ["aquto"],
             libraryTarget: "var"
         },
-
-        stats: {
-            // Configure the console output
-            colors: false,
-            modules: true,
-            reasons: true
-        },
-        // stats: false disables the stats output
-
-        storeStatsTo: "xyz", // writes the status to a variable named xyz
-        // you may use it later in grunt i.e. <%= xyz.hash %>
-
-        progress: true, // Don't show progress
-        // Defaults to true
-
+        watch: true,
+        keepalive: true
       }
     },
     uglify: {
@@ -44,8 +48,11 @@ module.exports = function(grunt) {
   // Load plugins
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task(s).
-  grunt.registerTask('default', ['webpack', 'uglify']);
+  grunt.registerTask('default', ['webpack:compile', 'uglify']);
+  grunt.registerTask('watch', ['webpack:watch']);
+  grunt.registerTask('serve', ['connect:server', 'watch']);
 
 };

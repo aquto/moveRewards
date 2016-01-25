@@ -14,6 +14,79 @@ var clearTimeout = window.clearTimeout,
     setTimeout = window.setTimeout;
 
 /**
+ * Format reward amount
+ * Adds MB or GB as appropriate
+ *
+ * @param {Integer} rewardAmount Reward amount in MB
+ *
+ */
+function formatData(rewardAmount) {
+  var dataNum = rewardAmount;
+  var dataLabel = 'MB';
+  if (dataNum > 9999) {
+    dataNum = Math.floor(dataNum/1024);
+    dataLabel = 'GB';
+  }
+  return dataNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + dataLabel;
+}
+
+/**
+ * Prepare the response to be returned and fires callback
+ * Code shared between checkEligiblity and complete that formats the reward amount,
+ * prepares the returned strings, and fires the callback
+ *
+ * @param {Object} response JSON response from server
+ * @param {Object} callback Optional callback to be fired after response from server
+ *
+ */
+function sharedCallback(response, callback) {
+  if (callback &&  typeof callback === 'function') {
+    if (response && response.response && response.response.eligible) {
+      var operatorName;
+      var operatorCode;
+      if (response.response.operatorCode === 'attmb') {
+        operatorName = "AT&T";
+        operatorCode = 'att';
+      }
+      else if (response.response.operatorCode === 'vzwmb') {
+        operatorName = "Verizon Wireless";
+        operatorCode = 'vzw';
+      }
+      else {
+        return;
+      }
+
+      var rewardText;
+      if (response.response.displayText) {
+        var rewardAmountFormatted;
+        if (response.response.rewardAmountMB) {
+          rewardAmountFormatted = response.response.rewardAmountMB + 'MB';
+        }
+        else {
+          return;
+        }
+        rewardText = response.response.displayText;
+
+        rewardText = rewardText.replace('$$operator$$', operatorName);
+        rewardText = rewardText.replace('$$rewardAmount$$', rewardAmountFormatted);
+
+      }
+      callback({
+        eligible: response.response.eligible,
+        rewardAmount: response.response.rewardAmountMB,
+        carrier: operatorCode,
+        rewardText: rewardText
+      });
+    }
+    else {
+      callback({
+        eligible: false
+      });
+    }
+  }
+}
+
+/**
  * Check eligibility for the current device
  * Campaign id is used to determine configured reward, and operator
  *
@@ -22,62 +95,16 @@ var clearTimeout = window.clearTimeout,
  *
  */
 function checkEligibility(options) {
-  jsonp({
-    url: 'http://localhost:3000/move/checkEligibility',
-    data: { campaignId: options.campaignId },
-    callbackName: 'jsonp',
-    success: function(response) {
-      if (options.callback &&  typeof options.callback === 'function') {
-        var operatorName;
-        var operatorCode;
-        if (response.operator && response.operator.code === 'attmb') {
-          operatorName = "AT&T";
-          operatorCode = 'att';
-        }
-        else if (response.operator && response.operator.code === 'vzwmb') {
-          operatorName = "Verizon Wireless";
-          operatorCode = 'vzw';
-        }
-        else {
-          return;
-        }
+  if (options && options.campaignId) {
+    jsonp({
+      url: 'https://broadway-dev.kickbit.com/api/datarewards/eligibility/'+options.campaignId,
+      callbackName: 'jsonp',
+      success: function(response) {
+        sharedCallback(response, options.callback);
+      }
+    });
+  }
 
-        var rewardText;
-        if (response.displayText) {
-          var rewardAmountFormatted;
-          if (response.rewardAmount) {
-            rewardAmountFormatted = response.rewardAmount + 'MB';
-          }
-          else {
-            return;
-          }
-          rewardText = response.displayText;
-
-          rewardText = rewardText.replace('$$operator$$', operatorName);
-          rewardText = rewardText.replace('$$rewardAmount$$', rewardAmountFormatted);
-
-        }
-
-        options.callback({
-          eligible: response.eligible,
-          rewardAmount: response.rewardAmount,
-          carrier: operatorCode,
-          rewardText: rewardText
-        });
-      }      
-    }
-  });
-  // setTimeout(function(){
-  //   if (options.callback &&  typeof options.callback === 'function') {
-  //     options.callback({
-  //       eligible: true,
-  //       rewardAmount: 1024,
-  //       carrier: 'att',
-  //       rewardText: 'Purchase any subscription and get 1GB added to your AT&T data plan.'
-  //     });
-  //   }
-
-  // },1000);
 }
 
 /**
@@ -89,62 +116,15 @@ function checkEligibility(options) {
  *
  */
 function complete(options) {
-  jsonp({
-    url: 'http://localhost:3000/move/complete',
-    data: { campaignId: options.campaignId },
-    callbackName: 'jsonp',
-    success: function(response) {
-      if (options.callback &&  typeof options.callback === 'function') {
-        var operatorName;
-        var operatorCode;
-        if (response.operator && response.operator.code === 'attmb') {
-          operatorName = "AT&T";
-          operatorCode = 'att';
-        }
-        else if (response.operator && response.operator.code === 'vzwmb') {
-          operatorName = "Verizon Wireless";
-          operatorCode = 'vzw';
-        }
-        else {
-          return;
-        }
-
-        var rewardText;
-        if (response.displayText) {
-          var rewardAmountFormatted;
-          if (response.rewardAmount) {
-            rewardAmountFormatted = response.rewardAmount + 'MB';
-          }
-          else {
-            return;
-          }
-          rewardText = response.displayText;
-
-          rewardText = rewardText.replace('$$operator$$', operatorName);
-          rewardText = rewardText.replace('$$rewardAmount$$', rewardAmountFormatted);
-
-        }
-
-        options.callback({
-          success: response.success,
-          rewardAmount: response.rewardAmount,
-          carrier: operatorCode,
-          rewardText: rewardText
-        });
-      }      
-    }
-  });
-  // setTimeout(function(){
-  //   if (options.callback &&  typeof options.callback === 'function') {
-  //     options.callback({
-  //       success: true,
-  //       rewardAmount: 1024,
-  //       carrier: 'att',
-  //       rewardText: 'You have received 1GB of mobile data for purchasing a subscription.'
-  //     });
-  //   }
-
-  // },1000);
+  if (options && options.campaignId) {
+    jsonp({
+      url: 'https://broadway-dev.kickbit.com/api/datarewards/applyreward/'+options.campaignId,
+      callbackName: 'jsonp',
+      success: function(response) {
+        sharedCallback(response, options.callback);
+      }
+    });
+  }
 }
 
 /*--------------------------------------------------------------------------*/
