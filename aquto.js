@@ -95,7 +95,7 @@ var aquto =
 	        operatorName = "AT&T";
 	        operatorCode = 'att';
 	      }
-	      else if (response.response.operatorCode === 'vzwmb') {
+	      else if (response.response.operatorCode === 'vzwrw') {
 	        operatorName = "Verizon Wireless";
 	        operatorCode = 'vzw';
 	      }
@@ -144,7 +144,7 @@ var aquto =
 	function checkEligibility(options) {
 	  if (options && options.campaignId) {
 	    jsonp({
-	      url: 'https://broadway-dev.kickbit.com/api/datarewards/eligibility/'+options.campaignId,
+	      url: 'https://broadway-dev.kickbit.com/api/datarewards/identifyandcheck/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      success: function(response) {
 	        sharedCallback(response, options.callback);
