@@ -144,7 +144,7 @@ var aquto =
 	function checkEligibility(options) {
 	  if (options && options.campaignId) {
 	    jsonp({
-	      url: 'https://broadway-dev.kickbit.com/api/datarewards/identifyandcheck/'+options.campaignId,
+	      url: 'https://broadway-dev.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      success: function(response) {
 	        sharedCallback(response, options.callback);
@@ -165,7 +165,7 @@ var aquto =
 	function complete(options) {
 	  if (options && options.campaignId) {
 	    jsonp({
-	      url: 'https://broadway-dev.kickbit.com/api/datarewards/applyreward/'+options.campaignId,
+	      url: 'https://broadway-dev.kickbit.com/api/campaign/datarewards/applyreward/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      success: function(response) {
 	        sharedCallback(response, options.callback);
