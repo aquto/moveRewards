@@ -42,6 +42,11 @@ function formatData(rewardAmount) {
 function sharedCallback(response, callback) {
   if (callback &&  typeof callback === 'function') {
     if (response && response.response && response.response.eligible) {
+
+      var callbackObject = {
+        eligible: true,
+        rewardAmount: response.response.rewardAmountMB
+      };
       var operatorName;
       var operatorCode;
       if (response.response.operatorCode === 'attmb') {
@@ -55,6 +60,7 @@ function sharedCallback(response, callback) {
       else {
         return;
       }
+      callbackObject.carrier = operatorCode;
 
       var rewardText;
       if (response.response.displayText) {
@@ -69,14 +75,14 @@ function sharedCallback(response, callback) {
 
         rewardText = rewardText.replace('$$operator$$', operatorName);
         rewardText = rewardText.replace('$$rewardAmount$$', rewardAmountFormatted);
-
       }
-      callback({
-        eligible: response.response.eligible,
-        rewardAmount: response.response.rewardAmountMB,
-        carrier: operatorCode,
-        rewardText: rewardText
-      });
+      callbackObject.rewardText = rewardText;
+
+      if (response.response.offerUrl) {
+        callbackObject.clickUrl = response.response.offerUrl;
+      }
+
+      callback(callbackObject);
     }
     else {
       callback({
@@ -97,15 +103,35 @@ function sharedCallback(response, callback) {
 function checkEligibility(options) {
   if (options && options.campaignId) {
     jsonp({
-      url: 'https://broadway-dev.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
+      url: 'http://app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
       callbackName: 'jsonp',
       success: function(response) {
         sharedCallback(response, options.callback);
       }
     });
   }
-
 }
+
+/**
+ * Check eligibility for the current device
+ * Campaign id is used to determine configured reward, and operator
+ *
+ * @param {String} campaignId Aquto campaign id
+ * @param {function} callback Callback function on success or error
+ *
+ */
+function checkAppEligibility(options) {
+  if (options && options.campaignId) {
+    jsonp({
+      url: 'http://app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
+      callbackName: 'jsonp',
+      success: function(response) {
+        sharedCallback(response, options.callback);
+      }
+    });
+  }
+}
+
 
 /**
  * Complete the conversion for the last checkEligibility call
@@ -118,7 +144,7 @@ function checkEligibility(options) {
 function complete(options) {
   if (options && options.campaignId) {
     jsonp({
-      url: 'https://broadway-dev.kickbit.com/api/campaign/datarewards/applyreward/'+options.campaignId,
+      url: 'https://app.kickbit.com/api/campaign/datarewards/applyreward/'+options.campaignId,
       callbackName: 'jsonp',
       success: function(response) {
         sharedCallback(response, options.callback);
@@ -140,6 +166,7 @@ moveRewards.VERSION = '0.1.0';
 
 // assign static methods
 moveRewards.checkEligibility = checkEligibility;
+moveRewards.checkAppEligibility = checkAppEligibility;
 moveRewards.complete = complete;
 
 /*--------------------------------------------------------------------------*/
