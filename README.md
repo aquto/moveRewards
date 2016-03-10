@@ -45,7 +45,7 @@ The `checkEligibility` method determines if the current user if eligible to rece
 
 ```html
 <div class="rewardBlock">
-  <img class="carrierLogo"/>
+  <div class="rewardHeader"></div>
   <div class="rewardText"></div>
 </div>
 ```
@@ -149,7 +149,7 @@ The `checkAppEligibility` method determines if the current user if eligible to r
 
 ```html
 <div class="rewardBlock">
-  <img class="carrierLogo"/>
+  <div class="rewardHeader"></div>
   <div class="rewardText"></div>
 </div>
 
