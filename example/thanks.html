@@ -12,45 +12,37 @@
     font-size: 2em;
     margin: 0 0 40px 0;
   }
+  .continue {
+    font-size: 1.5em;
+    margin: 40px 0 0 0;
+    display: block;
+  }
   .rewardBlock {
-      width: 300px;
-      display: none;
-      margin: 0 auto 15px
+    display: none;
+/*    width: 300px;
+    margin: 0 auto;*/
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0 10px;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #A0A0A0;
   }
   .rewardText {
-      background: #6b6b6b;
-      color: #fff;
-      width: 298px;
-      padding: 8px 10px;
-      font: normal normal normal 12px helvetica, sans-serif;
-      box-sizing: border-box;
-      margin: -1px 0 0 0
+    margin: 6px 0;
+  }
+  .rewardHeader {
+    font-weight: bold;
   }
   .rewardHeaderatt {
-      background: url("images/offerHeaderATTConv.png") no-repeat;
-      width: 300px;
-      height: 20px;
-      z-index: 1;
-  }
-  @media all and (-webkit-min-device-pixel-ratio: 1.5),
-  (min-resolution: 1.5dppx) {
-      .rewardHeaderatt {
-          background-image: url("images/offerHeaderATTConv@2x.png");
-          background-size: 300px 20px
-      }
+    color: #EF7C2A;
   }
   .rewardHeadervzw {
-      background: url("images/offerHeaderVerizonConv.png") no-repeat;
-      width: 300px;
-      height: 20px;
-      z-index: 1;
+    color: #CB0C1A;
   }
-  @media all and (-webkit-min-device-pixel-ratio: 1.5),
-  (min-resolution: 1.5dppx) {
-      .rewardHeadervzw {
-          background-image: url("images/offerHeaderVerizonConv@2x.png");
-          background-size: 300px 20px
-      }
+  a.termsLink {
+    text-decoration: none;
+    color: #386999;
+    font-size: .9em;
   }
   </style>
 
@@ -62,7 +54,7 @@
   <h1>Thank You</h1>
 
   <div class="rewardBlock">
-    <div class="rewardHeader"></div>
+    <div class="rewardHeader">Congratulations!</div>
     <div class="rewardText"></div>
   </div>
 
@@ -74,7 +66,7 @@
   <script>
     $(document).ready(function () { 
       aquto.complete({
-        campaignId: '12345',
+        campaignId: '1858',
         callback: function(response) {
           if (response && response.eligible) {
             $('.rewardText').text(response.rewardText);

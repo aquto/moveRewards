@@ -96,18 +96,20 @@ var aquto =
 	      };
 	      var operatorName;
 	      var operatorCode;
-	      if (response.response.operatorCode === 'attmb') {
+	      
+	      if (response.response.operatorCode === 'attmb' || response.response.operatorCode === 'attsim') {
 	        operatorName = "AT&T";
 	        operatorCode = 'att';
 	      }
 	      else if (response.response.operatorCode === 'vzwrw') {
-	        operatorName = "Verizon Wireless";
+	        operatorName = "Verizon";
 	        operatorCode = 'vzw';
 	      }
 	      else {
 	        return;
 	      }
 	      callbackObject.carrier = operatorCode;
+	      callbackObject.carrierName = operatorName;
 
 	      var rewardText;
 	      if (response.response.displayText) {

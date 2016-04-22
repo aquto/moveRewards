@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 
   <title>Move Rewards</title>
-  
+
   <style>
   h1 {
     font-size: 2em;
@@ -18,48 +18,36 @@
     display: block;
   }
   .rewardBlock {
-    width: 300px;
     display: none;
-    margin: 0 auto;
+/*    width: 300px;
+    margin: 0 auto;*/
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #fff;
+    margin: 0 10px;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #A0A0A0;
   }
   .rewardText {
-      background: #6b6b6b;
-      color: #fff;
-      width: 280px;
-      padding: 8px 10px;
-      font: normal normal normal 12px helvetica, sans-serif;
-      box-sizing: border-box;
-      margin: -1px 0 0 0;
+    margin: 6px 0;
+  }
+  .rewardHeader {
+    font-weight: bold;
   }
   .rewardHeaderatt {
-      background: url("images/offerHeaderATT.png") no-repeat;
-      width: 300px;
-      height: 25px;
-      z-index: 1;
-  }
-  @media all and (-webkit-min-device-pixel-ratio: 1.5),
-  (min-resolution: 1.5dppx) {
-      .rewardHeaderatt {
-          background-image: url("images/offerHeaderATT@2x.png");
-          background-size: 300px 25px;
-      }
+    color: #EF7C2A;
   }
   .rewardHeadervzw {
-      background: url("images/offerHeaderVerizon.png") no-repeat;
-      width: 300px;
-      height: 25px;
-      z-index: 1;
+    color: #CB0C1A;
   }
-  @media all and (-webkit-min-device-pixel-ratio: 1.5),
-  (min-resolution: 1.5dppx) {
-      .rewardHeadervzw {
-          background-image: url("images/offerHeaderVerizon@2x.png");
-          background-size: 300px 25px;
-      }
+  a.termsLink {
+    text-decoration: none;
+    color: #386999;
+    font-size: .9em;
   }
   </style>
 
-  
+
 </head>
 
 <body>
@@ -67,8 +55,9 @@
   <h1>Welcome</h1>
 
   <div class="rewardBlock">
-    <div class="rewardHeader"></div>
+    <div class="rewardHeader">Exclusive offer for <span class="rewardCarrier"></span> customers</div>
     <div class="rewardText"></div>
+    <a href="#" class="termsLink">Terms & conditions</a>
   </div>
 
   <a class="continue" href="#">Get App</a>
@@ -79,14 +68,15 @@
   <script src="../aquto.js"></script>
 
   <script>
-    $(document).ready(function () { 
+    $(document).ready(function () {
       aquto.checkAppEligibility({
-        campaignId: '12345',
+        campaignId: '1859',
         callback: function(response) {
           if (response && response.eligible) {
             $('.rewardText').text(response.rewardText);
+            $('.rewardCarrier').text(response.carrierName);
             $('.rewardHeader').addClass('rewardHeader'+response.carrier);
-            $('.rewardBlock').show(); 
+            $('.rewardBlock').show();
           }
           if (response && response.clickUrl) {
             $('.continue').attr('href', response.clickUrl);
@@ -96,8 +86,6 @@
     });
 
   </script>
-  
+
 </body>
 </html>
-
-
