@@ -172,7 +172,7 @@ var aquto =
 	function checkAppEligibility(options) {
 	  if (options && options.campaignId) {
 	    jsonp({
-	      url: 'http://app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
+	      url: 'http://app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      success: function(response) {
 	        sharedCallback(response, options.callback);
