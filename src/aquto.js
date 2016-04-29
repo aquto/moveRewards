@@ -68,7 +68,7 @@ function sharedCallback(response, callback) {
       if (response.response.displayText) {
         var rewardAmountFormatted;
         if (response.response.rewardAmountMB) {
-          rewardAmountFormatted = response.response.rewardAmountMB + 'MB';
+          rewardAmountFormatted = response.response.rewardAmountMB + '\xa0MB';
         }
         else {
           return;
