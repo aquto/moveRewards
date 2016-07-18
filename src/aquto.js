@@ -15,7 +15,7 @@ var clearTimeout = window.clearTimeout,
 
 /**
  * Format reward amount
- * Adds MB or GB as appropriate
+ * Adds MB or GB as broadway-devropriate
  *
  * @param {Integer} rewardAmount Reward amount in MB
  *
@@ -106,7 +106,7 @@ function sharedCallback(response, callback) {
 function checkEligibility(options) {
   if (options && options.campaignId) {
     jsonp({
-      url: 'http://app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
+      url: '//app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
       callbackName: 'jsonp',
       data: { apiVersion: 'v8' },
       success: function(response) {
@@ -127,7 +127,7 @@ function checkEligibility(options) {
 function checkAppEligibility(options) {
   if (options && options.campaignId) {
     jsonp({
-      url: 'http://app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
+      url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
       callbackName: 'jsonp',
       data: { apiVersion: 'v8' },
       success: function(response) {
@@ -153,7 +153,7 @@ function complete(options) {
       data.userToken = options.userToken
     }
     jsonp({
-      url: 'https://app.kickbit.com/api/campaign/datarewards/applyreward/'+options.campaignId,
+      url: '//app.kickbit.com/api/campaign/datarewards/applyreward/'+options.campaignId,
       callbackName: 'jsonp',
       data: data,
       success: function(response) {

@@ -61,7 +61,7 @@
 
   <h1>Welcome</h1>
 
-  <div class="rewardBlock1">
+  <div class="rewardBlock">
     <div class="rewardHeader">Exclusive offer for <span class="rewardCarrier"></span> customers</div>
     <div class="rewardText"></div>
     <a href="#" class="termsLink">Terms & conditions</a>
@@ -84,7 +84,7 @@
 
     $(document).ready(function () {
       aquto.checkEligibilitySingePage({
-        campaignId: '118',
+        campaignId: '1858',
         callback: function(response) {
           userToken = response.userToken
           if (response && response.eligible) {
@@ -99,7 +99,7 @@
 
     var complete = function() {
       aquto.complete({
-        campaignId: '118',
+        campaignId: '1858',
         userToken: userToken,
         callback: function(response) {
           if (response && response.eligible) {

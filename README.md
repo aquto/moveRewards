@@ -160,7 +160,7 @@ aquto.checkEligibilitySingePage({
 
 ## Complete Reward
 
-The `complete` method finishes the reward session and triggers the MB reward. The `complete` method must be executed within the same scope as the userToken
+The `complete` method finishes the reward session and triggers the MB reward. The `complete` method must be executed within the same scope as the `userToken`
 
 ### Input arguments
 |Key|Type|Required|Description|
