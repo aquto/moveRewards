@@ -71,6 +71,7 @@
       aquto.checkEligibility({
         campaignId: '1858',
         callback: function(response) {
+          userToken = response.userToken
           if (response && response.eligible) {
             $('.rewardText').text(response.rewardText);
             $('.rewardCarrier').text(response.carrierName);
