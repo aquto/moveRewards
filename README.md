@@ -3,11 +3,11 @@ MoVE Rewards
 
 MoVE allows you to reward engagement with your brand through every step of the customer journey, increasing the number of new customers, while increasing engagement with existing customers.
 
-Reward customers with mobile data in a wide range of scenarios, such as making purchases, booking reservations, enrolling in notifications, and help increase add-on items during the purchase process while reducing cart abandonment.
-
 # MoVE for Commerce (Multi-Page flow)
 
-The integration for the Multi-page MoVE Reward Commerce flow will occur in two places, the landing page, where the offer is displayed to the subscriber, and the thank you page, where the reward confirmation is displayed to the subscriber. During this flow Aquto will set a 3rd party cookie to register the beginning of the offer. This occurs when the initial offer is displayed to the subscriber, and is performed automatically by the Aquto MoVE Rewards Javascript API. The Aquto MoVE Rewards Javascript API reads the cookie again and is used to perform the reward when the conversion occurs and the reward confirmation is displayed to the subscriber.
+Reward customers with mobile data in a wide range of scenarios, such as making purchases, booking reservations, enrolling in notifications, and help increase add-on items during the purchase process while reducing cart abandonment.
+
+The integration for the Multi-page MoVE Reward Commerce flow will occur in two places, the landing page, where the offer is displayed to the subscriber, and the thank you page, where the reward confirmation is displayed to the subscriber. During this flow Aquto will set a 3rd party cookie to register the beginning of the offer. This occurs when the initial offer is displayed to the subscriber, and is performed automatically by the API. The API reads the cookie again and it is used to perform the reward when the conversion occurs and the reward confirmation is displayed to the subscriber.
 
 ![Move Rewards User Flow](./MoveRewardsUserFlow.png)
 
@@ -105,11 +105,9 @@ aquto.complete({
 
 The single-page MoVE Reward Commerce flow is ideal for flows where the offer is displayed to the customer and they are rewarded for taking an action directly on that page, such as watching a video to completion. This flow does not utilize 3rd party cookies like the Multi-page MoVE Reward Commerce Flow, and instead returns a token when the offer is displayed to the customer. The same token is provided to the Javascript SDK when the user completes the offer and is shown the reward confirmation.
 
-![Move Rewards User Flow](./MoveRewardsUserFlow.png)
-
 ## Setup
 
-This library must be included on the landing page. It can be embedded as a script tag:
+This library must be included on the page. It can be embedded as a script tag:
 
 ```html
 <script src="http://assets.aquto.com/moveRewards/aquto.min.js"></script>
@@ -117,11 +115,9 @@ This library must be included on the landing page. It can be embedded as a scrip
 
 When embedded as a script tag, it exposes the `aquto` global object.
 
-We assume you are using a DOM manipulation library, such as jQuery. All examples below will assume jQuery $ syntax and should be called in `$(document).ready()` block.
-
 ## Check Eligibility
 
-The `checkEligibilitySingePage` method determines if the current user if eligible to receive the configured MB reward . This function also starts a reward session on the server that can be completed later. You should call `checkEligibilitySingePage` on your landing page.
+The `checkEligibilitySingePage` method determines if the current user is eligible to receive the configured MB reward. This function also starts a reward session on the server that can be completed later.
 
 ### Input arguments
 |Key|Type|Required|Description|
@@ -164,7 +160,7 @@ aquto.checkEligibilitySingePage({
 
 ## Complete Reward
 
-The `complete` method finishes the reward session and triggers the MB reward. The stored userToken should be passed in at this point
+The `complete` method finishes the reward session and triggers the MB reward. The `complete` method must be executed within the same scope as the userToken
 
 ### Input arguments
 |Key|Type|Required|Description|
