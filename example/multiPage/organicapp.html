@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 
   <title>Move Rewards</title>
-  
+
   <style>
   h1 {
     font-size: 2em;
@@ -22,6 +22,7 @@
 /*    width: 300px;
     margin: 0 auto;*/
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #fff;
     margin: 0 10px;
     padding: 10px 15px;
     font-size: 14px;
@@ -46,40 +47,45 @@
   }
   </style>
 
-  
+
 </head>
 
 <body>
 
-  <h1>Thank You</h1>
+  <h1>Welcome</h1>
 
   <div class="rewardBlock">
-    <div class="rewardHeader">Congratulations!</div>
+    <div class="rewardHeader">Exclusive offer for <span class="rewardCarrier"></span> customers</div>
     <div class="rewardText"></div>
+    <a href="#" class="termsLink">Terms & conditions</a>
   </div>
+
+  <a class="continue" href="#">Get App</a>
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="assets/js/jquery-1.9.1.min.js"><\/script>')</script>
 
-  <script src="../aquto.js"></script>
+  <script src="../../aquto.js"></script>
 
   <script>
-    $(document).ready(function () { 
-      aquto.complete({
-        campaignId: '1858',
+    $(document).ready(function () {
+      aquto.checkAppEligibility({
+        campaignId: '1859',
         callback: function(response) {
           if (response && response.eligible) {
             $('.rewardText').text(response.rewardText);
+            $('.rewardCarrier').text(response.carrierName);
             $('.rewardHeader').addClass('rewardHeader'+response.carrier);
             $('.rewardBlock').show();
+          }
+          if (response && response.clickUrl) {
+            $('.continue').attr('href', response.clickUrl);
           }
         }
       });
     });
 
   </script>
-  
+
 </body>
 </html>
-
-
