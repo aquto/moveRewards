@@ -45,11 +45,12 @@ function sharedCallback(response, callback) {
 
       var callbackObject = {
         eligible: true,
-        rewardAmount: response.response.rewardAmountMB
+        rewardAmount: response.response.rewardAmountMB,
+        userToken: response.response.userToken
       };
       var operatorName;
       var operatorCode;
-      
+
       if (response.response.operatorCode === 'attmb' || response.response.operatorCode === 'attsim') {
         operatorName = "AT&T";
         operatorCode = 'att';
@@ -107,6 +108,7 @@ function checkEligibility(options) {
     jsonp({
       url: 'http://app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
       callbackName: 'jsonp',
+      data: { apiVersion: 'v8' },
       success: function(response) {
         sharedCallback(response, options.callback);
       }
@@ -125,8 +127,9 @@ function checkEligibility(options) {
 function checkAppEligibility(options) {
   if (options && options.campaignId) {
     jsonp({
-      url: 'http://app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
+      url: 'http://app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
       callbackName: 'jsonp',
+      data: { apiVersion: 'v8' },
       success: function(response) {
         sharedCallback(response, options.callback);
       }
@@ -145,9 +148,14 @@ function checkAppEligibility(options) {
  */
 function complete(options) {
   if (options && options.campaignId) {
+    var data = { apiVersion: 'v8' }
+    if(options.userToken) {
+      data.userToken = options.userToken
+    }
     jsonp({
       url: 'https://app.kickbit.com/api/campaign/datarewards/applyreward/'+options.campaignId,
       callbackName: 'jsonp',
+      data: data,
       success: function(response) {
         sharedCallback(response, options.callback);
       }
@@ -168,6 +176,7 @@ moveRewards.VERSION = '0.1.0';
 
 // assign static methods
 moveRewards.checkEligibility = checkEligibility;
+moveRewards.checkEligibilitySingePage = checkAppEligibility;
 moveRewards.checkAppEligibility = checkAppEligibility;
 moveRewards.complete = complete;
 
