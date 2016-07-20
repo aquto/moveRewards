@@ -117,7 +117,7 @@ When embedded as a script tag, it exposes the `aquto` global object.
 
 ## Check Eligibility
 
-The `checkEligibilitySingePage` method determines if the current user is eligible to receive the configured MB reward. This function also starts a reward session on the server that can be completed later.
+The `checkEligibilitySinglePage` method determines if the current user is eligible to receive the configured MB reward. This function also starts a reward session on the server that can be completed later.
 
 ### Input arguments
 |Key|Type|Required|Description|
@@ -280,4 +280,4 @@ In order to complete the conversion, you need to set up a server side callback t
 * Appsflyer
 * Kochava
 
-Select Aquto as publisher and provider iOS and Android click trackers to your Aquto account manager.
+Select Aquto as publisher and provide iOS and Android click trackers to your Aquto account manager.
