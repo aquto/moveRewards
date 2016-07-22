@@ -144,7 +144,7 @@ El método `checkEligibilitySinglePage` determina si el usuario actual es elegib
 ```javascript
 var userToken
 
-aquto.checkEligibilitySingePage({
+aquto.checkEligibilitySinglePage({
   campaignId: '12345',
   callback: function(response) {
     userToken = response.useTokens

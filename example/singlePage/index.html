@@ -83,8 +83,8 @@
     var userToken
 
     $(document).ready(function () {
-      aquto.checkEligibilitySingePage({
-        campaignId: '1858',
+      aquto.checkEligibilitySinglePage({
+        campaignId: '1984',
         callback: function(response) {
           userToken = response.userToken
           if (response && response.eligible) {
@@ -99,7 +99,7 @@
 
     var complete = function() {
       aquto.complete({
-        campaignId: '1858',
+        campaignId: '1984',
         userToken: userToken,
         callback: function(response) {
           if (response && response.eligible) {
