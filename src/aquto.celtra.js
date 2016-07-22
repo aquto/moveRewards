@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var jsonp = require('browser-jsonp');
+// var jsonp = require('browser-jsonp');
 
 /** instantiate moveRewards object */
 var moveRewards = {};
@@ -113,13 +113,9 @@ function sharedCallback(response, callback) {
  */
 function checkEligibility(options) {
   if (options && options.campaignId) {
-    jsonp({
-      url: '//app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
-      callbackName: 'jsonp',
-      data: { apiVersion: 'v8' },
-      success: function(response) {
-        sharedCallback(response, options.callback);
-      }
+    var url = "//app.kickbit.com/api/campaign/datarewards/identifyandcheck/"+options.campaignId+"?apiVersion=v8";
+    loadJSONP(url, {paramName: 'jsonp'}, function(response) {
+      sharedCallback(response, options.callback);
     });
   }
 }
@@ -134,13 +130,9 @@ function checkEligibility(options) {
  */
 function checkAppEligibility(options) {
   if (options && options.campaignId) {
-    jsonp({
-      url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
-      callbackName: 'jsonp',
-      data: { apiVersion: 'v8' },
-      success: function(response) {
-        sharedCallback(response, options.callback);
-      }
+    var url = "//app.kickbit.com/api/campaign/datarewards/eligibility/"+options.campaignId+"?apiVersion=v8";
+    loadJSONP(url, {paramName: 'jsonp'}, function(response) {
+      sharedCallback(response, options.callback);
     });
   }
 }
@@ -156,17 +148,12 @@ function checkAppEligibility(options) {
  */
 function complete(options) {
   if (options && options.campaignId) {
-    var data = { apiVersion: 'v8' }
+    var url = "//app.kickbit.com/api/campaign/datarewards/applyreward/"+options.campaignId+"?apiVersion=v8";
     if(options.userToken) {
-      data.userToken = options.userToken
+      url = "//app.kickbit.com/api/campaign/datarewards/applyreward/"+options.campaignId+"?apiVersion=v8"+"&userToken="+options.userToken;
     }
-    jsonp({
-      url: '//app.kickbit.com/api/campaign/datarewards/applyreward/'+options.campaignId,
-      callbackName: 'jsonp',
-      data: data,
-      success: function(response) {
-        sharedCallback(response, options.callback);
-      }
+    loadJSONP(url, {paramName: 'jsonp'}, function(response) {
+      sharedCallback(response, options.callback);
     });
   }
 }

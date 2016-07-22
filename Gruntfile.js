@@ -14,19 +14,25 @@ module.exports = function(grunt) {
     },
     webpack: {
       compile: {
-        entry: "./src/aquto.js",
+        entry: {
+          aquto: "./src/aquto.js",
+          aquto_celtra: "./src/aquto.celtra.js"
+        },
         output: {
             path: "./",
-            filename: "aquto.js",
+            filename: "[name].js",
             library: ["aquto"],
             libraryTarget: "var"
         }
       },
       watch: {
-        entry: "./src/aquto.js",
+        entry: {
+          aquto: "./src/aquto.js",
+          aquto_celtra: "./src/aquto.celtra.js"
+        },
         output: {
             path: "./",
-            filename: "aquto.js",
+            filename: "[name].js",
             library: ["aquto"],
             libraryTarget: "var"
         },
@@ -39,8 +45,10 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: 'aquto.js',
-        dest: 'aquto.min.js'
+        files: {
+          'aquto.min.js': ['aquto.js'],
+          'aquto_celtra.min.js': ['aquto_celtra.js']
+        }
       }
     }
   });
