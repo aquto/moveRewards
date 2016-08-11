@@ -1,0 +1,214 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2016, Aquto
+# This file is distributed under the same license as the MoVE Rewards
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MoVE Rewards 1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-11 11:19-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ../../commerce.rst:2
+msgid "MoVE for Commerce (Multi-Page flow)"
+msgstr "MoVE para Comercio (Flujo Multi-Page)"
+
+#: ../../commerce.rst:4
+msgid ""
+"Reward customers with mobile data in a wide range of scenarios, such as "
+"making purchases, booking reservations, enrolling in notifications, and "
+"help increase add-on items during the purchase process while reducing "
+"cart abandonment."
+msgstr "Premia a tus clientes con datos móviles en una amplia variedad de escenarios, tales como hacer compras, realizar reservas, subscribirse a notificaciones, y ayuda a aumentar la cantidad de items adicionales durante el proceso de compra mientras reduces el abandono de tus usuarios al mismo."
+
+#: ../../commerce.rst:6
+msgid ""
+"The integration for the Multi-page MoVE Reward Commerce flow will occur "
+"in two places, the landing page, where the offer is displayed to the "
+"subscriber, and the thank you page, where the reward confirmation is "
+"displayed to the subscriber. During this flow Aquto will set a 3rd party "
+"cookie to register the beginning of the offer. This occurs when the "
+"initial offer is displayed to the subscriber, and is performed "
+"automatically by the API. The API reads the cookie again and it is used "
+"to perform the reward when the conversion occurs and the reward "
+"confirmation is displayed to the subscriber."
+msgstr "La integración con el flujo Multi-page de MoVE Reward Commerce debe realizarse en dos lugares, la página de inicio, donde la oferta es mostrada al abonado, y la página de agradecimiento, donde la confirmación del premio es mostrada al abonado. Durante este proceso Aquto utilizará una cookie de un servicio de terceros para registrar que el flujo ha comenzado. Esto sucede de forma automática a través de la API cuando la oferta inicial es mostrada al abonado. Cuando la conversión se concreta, la API lee esta cookie nuevamente y es utilizada para otorgar el premio y mostrar la página de confirmación al abonado."
+
+#: ../../commerce.rst:11
+msgid "Setup"
+msgstr "Configuración"
+
+#: ../../commerce.rst:13
+msgid ""
+"This library must be included on both the landing page and thank you "
+"page. It can be embedded as a script tag:"
+msgstr "Esta librería debe ser añadida tanto en la página de inicio como la de agradecimiento. Puede ser embebida a través de un tag de script de la siguiente manera:"
+
+#: ../../commerce.rst:19
+msgid "When embedded as a script tag, it exposes the ``aquto`` global object."
+msgstr "Si es embebida como un tag de script, esta expondrá un objeto global llamado ``aquto``."
+
+#: ../../commerce.rst:21
+msgid ""
+"We assume you are using a DOM manipulation library, such as jQuery. All "
+"examples below will assume jQuery $ syntax and should be called in "
+"``$(document).ready()`` block."
+msgstr "Se asume que se esta utilizando alguna librería de manipulación del DOM, como por ejemplo jQuery. Todos los ejemplos a continuación utilizaran la sintaxis de jQuery y deberán ser llamados en un bloque del tipo ``$(document).ready()``."
+
+#: ../../commerce.rst:24
+msgid "Check Eligibility"
+msgstr "Chequeo de Elegiblidad"
+
+#: ../../commerce.rst:26
+msgid ""
+"The ``checkEligibility`` method determines if the current user if "
+"eligible to receive the configured MB reward . This function also starts "
+"a reward session on the server that can be completed later. You should "
+"call ``checkEligibility`` on your landing page."
+msgstr "El método ``checkEligibility`` determina si el usuario actual es elegible o no para recibir los MB configurados de premio. Esta función inicia también una sesión para otorgar el premio en el servidor que puede ser completada más tarde. Debes llamar a ``checkEligibility`` en tu página de inicio."
+
+#: ../../commerce.rst:29 ../../commerce.rst:86
+msgid "Input arguments"
+msgstr "Parámetros de entrada"
+
+#: ../../commerce.rst:32 ../../commerce.rst:44 ../../commerce.rst:91
+#: ../../commerce.rst:102
+msgid "Key"
+msgstr "Nombre"
+
+#: ../../commerce.rst:32 ../../commerce.rst:44 ../../commerce.rst:91
+#: ../../commerce.rst:102
+msgid "Type"
+msgstr "Tipo"
+
+#: ../../commerce.rst:32 ../../commerce.rst:91
+msgid "Required"
+msgstr "Obligatorio"
+
+#: ../../commerce.rst:32 ../../commerce.rst:44 ../../commerce.rst:91
+#: ../../commerce.rst:102
+msgid "Description"
+msgstr "Descripción"
+
+#: ../../commerce.rst:34 ../../commerce.rst:93
+msgid "campaignId"
+msgstr "campaignId"
+
+#: ../../commerce.rst:34 ../../commerce.rst:50 ../../commerce.rst:53
+#: ../../commerce.rst:93 ../../commerce.rst:108 ../../commerce.rst:111
+msgid "string"
+msgstr "string"
+
+#: ../../commerce.rst:34 ../../commerce.rst:36 ../../commerce.rst:93
+#: ../../commerce.rst:95
+msgid "yes"
+msgstr "sí"
+
+#: ../../commerce.rst:34 ../../commerce.rst:93
+msgid "ID for campaign setup by Aquto"
+msgstr "ID para la camapaña configurada por Aquto"
+
+#: ../../commerce.rst:36 ../../commerce.rst:95
+msgid "callback"
+msgstr "callback"
+
+#: ../../commerce.rst:36 ../../commerce.rst:95
+msgid "function"
+msgstr "function"
+
+#: ../../commerce.rst:36
+msgid "Function called after checking eligibility on the server"
+msgstr "Función que se llamará después de verificar la elegiblidad en el servidor"
+
+#: ../../commerce.rst:41 ../../commerce.rst:99
+msgid "Response properties"
+msgstr "Propiedades de la respuesta"
+
+#: ../../commerce.rst:44 ../../commerce.rst:102
+msgid "Optional"
+msgstr "Opcional"
+
+#: ../../commerce.rst:46 ../../commerce.rst:104
+msgid "eligible"
+msgstr "eligible"
+
+#: ../../commerce.rst:46 ../../commerce.rst:104
+msgid "boolean"
+msgstr "boolean"
+
+#: ../../commerce.rst:46 ../../commerce.rst:104
+msgid "false"
+msgstr "no"
+
+#: ../../commerce.rst:46
+msgid "Is the current user eligible for the reward?"
+msgstr "Indica si el usuario actual es elegible o no para el premio"
+
+#: ../../commerce.rst:48 ../../commerce.rst:106
+msgid "rewardAmount"
+msgstr "rewardAmount"
+
+#: ../../commerce.rst:48 ../../commerce.rst:106
+msgid "integer"
+msgstr "integer"
+
+#: ../../commerce.rst:48 ../../commerce.rst:50 ../../commerce.rst:53
+#: ../../commerce.rst:106 ../../commerce.rst:108 ../../commerce.rst:111
+msgid "true"
+msgstr "sí"
+
+#: ../../commerce.rst:48 ../../commerce.rst:106
+msgid "Reward amount in MB"
+msgstr "Cantidad en MB del premio"
+
+#: ../../commerce.rst:50 ../../commerce.rst:108
+msgid "rewardText"
+msgstr "rewardText"
+
+#: ../../commerce.rst:50
+msgid ""
+"Server configured string containing carrier and reward amount. Ex: "
+"Purchase any subscription and get 1GB added to your AT&T data plan."
+msgstr "Texto configurado en el servidor que debe contener el nombre del operador y la cantidad de datos de premio. Ejemplo: Abonando cualquier subscripción recibe 1GB extra para tu plan de datos de AT&T."
+
+#: ../../commerce.rst:53 ../../commerce.rst:111
+msgid "carrier"
+msgstr "carrier"
+
+#: ../../commerce.rst:53 ../../commerce.rst:111
+msgid "Code for user's carrier"
+msgstr "Código que representa el operador del usuario"
+
+#: ../../commerce.rst:81
+msgid "Complete Reward"
+msgstr "Otorgar el Premio"
+
+#: ../../commerce.rst:83
+msgid ""
+"The ``complete`` method finishes the reward session and triggers the MB "
+"reward. This method should be called on your thank you page."
+msgstr "El método ``complete`` finaliza la sesión creada previamente en el servidor y comienza el proceso de premiación de datos. Este método debe ser llamado en tu página de agradecimiento."
+
+#: ../../commerce.rst:95
+msgid "Function called after completing the reward on the server"
+msgstr "Función que se llamará después de otorgado el premio en el servidor"
+
+#: ../../commerce.rst:104
+msgid "Is the user still eligible for the reward"
+msgstr "Indica si el usuario sigue siendo elegible o no para el premio"
+
+#: ../../commerce.rst:108
+msgid ""
+"Server configured string containing carrier and reward amount. Ex: "
+"Congratulations, you just added 1GB to your AT&T data plan!"
+msgstr "Texto configurado en el servidor que debe contener el nombre del operador y la cantidad de datos de premio. Ejemplo: ¡Felicitaciones, has ganado 1GB extra para tu plan de datos de AT&T!"
+
