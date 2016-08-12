@@ -1,33 +1,27 @@
-MoVE for Commerce (Multi-Page flow)
-===================================
+Single-Page flow
+----------------
 
-Reward customers with mobile data in a wide range of scenarios, such as making purchases, booking reservations, enrolling in notifications, and help increase add-on items during the purchase process while reducing cart abandonment.
-
-The integration for the Multi-page MoVE Reward Commerce flow will occur in two places, the landing page, where the offer is displayed to the subscriber, and the thank you page, where the reward confirmation is displayed to the subscriber. During this flow Aquto will set a 3rd party cookie to register the beginning of the offer. This occurs when the initial offer is displayed to the subscriber, and is performed automatically by the API. The API reads the cookie again and it is used to perform the reward when the conversion occurs and the reward confirmation is displayed to the subscriber.
-
-.. image:: ../MoveRewardsUserFlow.png
+The single-page MoVE Reward Commerce flow is ideal for flows where the offer is displayed to the customer and they are rewarded for taking an action directly on that page, such as watching a video to completion. This flow does not utilize 3rd party cookies like the Multi-page MoVE Reward Commerce Flow, and instead returns a token when the offer is displayed to the customer. The same token is provided to the Javascript SDK when the user completes the offer and is shown the reward confirmation.
 
 Setup
----------
+^^^^^
 
-This library must be included on both the landing page and thank you page. It can be embedded as a script tag:
+This library must be included on the page. It can be embedded as a script tag:
 
 .. code-block:: html
 
   <script src="http://assets.aquto.com/moveRewards/aquto.min.js"></script>
 
+
 When embedded as a script tag, it exposes the ``aquto`` global object.
 
-We assume you are using a DOM manipulation library, such as jQuery. All examples below will assume jQuery $ syntax and should be called in ``$(document).ready()`` block.
-
 Check Eligibility
----------------------
+^^^^^^^^^^^^^^^^^
 
-The ``checkEligibility`` method determines if the current user if eligible to receive the configured MB reward . This function also starts a reward session on the server that can be completed later. You should call ``checkEligibility`` on your landing page.
+The ``checkEligibilitySinglePage`` method determines if the current user is eligible to receive the configured MB reward. This function also starts a reward session on the server that can be completed later.
 
 Input arguments
-~~~~~~~~~~~~~~~~
-
+~~~~~~~~~~~~~~~
 +------------+----------+----------+----------------------------------------------------------+
 |    Key     |   Type   | Required |                       Description                        |
 +------------+----------+----------+----------------------------------------------------------+
@@ -36,14 +30,15 @@ Input arguments
 | callback   | function | yes      | Function called after checking eligibility on the server |
 +------------+----------+----------+----------------------------------------------------------+
 
-
 Response properties
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 +--------------+---------+----------+-------------------------------------------------------------------------+
 |     Key      |   Type  | Optional |                               Description                               |
 +--------------+---------+----------+-------------------------------------------------------------------------+
 | eligible     | boolean | false    | Is the current user eligible for the reward?                            |
++--------------+---------+----------+-------------------------------------------------------------------------+
+| userToken    | string  | false    |  Token that must be passed back to server when offer is completed       |
 +--------------+---------+----------+-------------------------------------------------------------------------+
 | rewardAmount | integer | true     | Reward amount in MB                                                     |
 +--------------+---------+----------+-------------------------------------------------------------------------+
@@ -54,7 +49,6 @@ Response properties
 +--------------+---------+----------+-------------------------------------------------------------------------+
 
 
-
 .. code-block:: html
 
   <div class="rewardBlock">
@@ -62,12 +56,14 @@ Response properties
     <div class="rewardText"></div>
   </div>
 
-
 .. code-block:: javascript
 
-  aquto.checkEligibility({
+  var userToken
+
+  aquto.checkEligibilitySinglePage({
     campaignId: '12345',
     callback: function(response) {
+      userToken = response.useTokens
       if (response && response.eligible) {
         $('.rewardText').text(response.rewardText);
         $('.rewardHeader').addClass('rewardHeader'+response.carrier);
@@ -76,27 +72,24 @@ Response properties
     }
   });
 
-
 Complete Reward
------------------
+^^^^^^^^^^^^^^^
 
-The ``complete`` method finishes the reward session and triggers the MB reward. This method should be called on your thank you page.
+The ``complete`` method finishes the reward session and triggers the MB reward. The ``complete`` method must be executed within the same scope as the ``userToken``
 
 Input arguments
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
-
-
-+------------+----------+----------+-----------------------------------------------------------+
-|    Key     |   Type   | Required |                        Description                        |
-+------------+----------+----------+-----------------------------------------------------------+
-| campaignId | string   | yes      | ID for campaign setup by Aquto                            |
-+------------+----------+----------+-----------------------------------------------------------+
-| callback   | function | yes      | Function called after completing the reward on the server |
-+------------+----------+----------+-----------------------------------------------------------+
++------------+----------+----------+----------------------------------------------------------+
+|    Key     |   Type   | Required |                       Description                        |
++------------+----------+----------+----------------------------------------------------------+
+| campaignId | string   | yes      | ID for campaign setup by Aquto                           |
++------------+----------+----------+----------------------------------------------------------+
+| callback   | function | yes      | Function called after completing the reward on the server|
++------------+----------+----------+----------------------------------------------------------+
 
 Response properties
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 +--------------+---------+----------+-----------------------------------------------------------------+
 |     Key      |   Type  | Optional |                           Description                           |
@@ -111,8 +104,6 @@ Response properties
 | carrier      | string  | true     | Code for user's carrier                                         |
 +--------------+---------+----------+-----------------------------------------------------------------+
 
-
-
 .. code-block:: html
 
   <div class="rewardBlock">
@@ -120,16 +111,20 @@ Response properties
     <div class="rewardText"></div>
   </div>
 
+  <button onClick='complete()' />Finish</button>
 
 .. code-block:: javascript
 
-  aquto.complete({
-    campaignId: '12345',
-    callback: function(response) {
-      if (response && response.eligible) {
-        $('.rewardText').text(response.rewardText);
-        $('.rewardHeader').addClass('rewardHeader'+response.carrier);
-        $('.rewardBlock').show();
+  var complete = function() {
+    aquto.complete({
+      campaignId: '12345',
+      userToken: userToken,
+      callback: function(response) {
+        if (response && response.eligible) {
+          $('.rewardText').text(response.rewardText);
+          $('.rewardHeader').addClass('rewardHeader'+response.carrier);
+          $('.rewardBlock').show();
+        }
       }
-    }
-  });
+    });
+  }

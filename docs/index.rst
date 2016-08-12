@@ -9,6 +9,14 @@ MoVE Rewards
 MoVE allows you to reward engagement with your brand through every step of the customer journey, increasing the number of new customers, while increasing engagement with existing customers.
 
 .. toctree::
-   :maxdepth: 2
+  :maxdepth: 2
+  :caption: Commerce
 
-   commerce
+  commerce/multi
+  commerce/single
+
+.. toctree::
+  :maxdepth: 2
+  :caption: App
+
+  app/organic
