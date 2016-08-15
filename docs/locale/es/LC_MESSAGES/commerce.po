@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../../commerce/multi.rst:2
 msgid "Multi-Page flow"
-msgstr "Flujo Multi-Page"
+msgstr "MoVE para Comercio (Flujo Multi-Page)"
 
 #: ../../commerce/multi.rst:4
 msgid ""
@@ -286,7 +286,7 @@ msgstr ""
 
 #: ../../commerce/single.rst:2
 msgid "Single-Page flow"
-msgstr "Flujo Single-Page"
+msgstr "MoVE para Comercio (Flujo Single-Page)"
 
 #: ../../commerce/single.rst:4
 msgid ""
