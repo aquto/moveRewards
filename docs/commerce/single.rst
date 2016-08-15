@@ -59,7 +59,6 @@ Response properties
 .. code-block:: javascript
 
   var userToken
-
   aquto.checkEligibilitySinglePage({
     campaignId: '12345',
     callback: function(response) {

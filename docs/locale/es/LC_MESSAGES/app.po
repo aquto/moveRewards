@@ -1,0 +1,254 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2016, Aquto
+# This file is distributed under the same license as the MoVE Rewards
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MoVE Rewards 1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-15 11:04-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ../../app/organic.rst:2
+msgid "Organic Downloads"
+msgstr "MoVE para descargas orgánicas de aplicación"
+
+#: ../../app/organic.rst:4
+msgid ""
+"With MoVE for Organic App Installs you can reward users in real time with"
+" data for downloading your app. This removes the burden of cellular data "
+"usage for downloading your apps."
+msgstr ""
+"Con MoVE para Organic App Installs puedes premiar a los usuarios en "
+"tiempo real con datos por bajar tu aplicación. Esto eliminará la barrera "
+"de uso de datos que los usuarios encuentran al descargar tus "
+"aplicaciones."
+
+#: ../../app/organic.rst:7
+msgid "Setup"
+msgstr "Configuración"
+
+#: ../../app/organic.rst:9
+msgid ""
+"This library must be included on the app download page. It can be "
+"embedded as a script tag:"
+msgstr ""
+"Esta librería debe ser añadida en la página de descarga de la "
+"aplicación.Puede ser embebida a través de un tag de script de la "
+"siguiente manera:"
+
+#: ../../app/organic.rst:16
+msgid "When embedded as a script tag, it exposes the `aquto` global object."
+msgstr ""
+"Si es embebida como un tag de script, esta expondrá un objeto global "
+"llamado `aquto`."
+
+#: ../../app/organic.rst:18
+msgid ""
+"We assume you are using a DOM manipulation library, such as jQuery. All "
+"examples below will assume jQuery $ syntax and should be called in "
+"``$(document).ready()`` block."
+msgstr ""
+"Se asume que se esta utilizando alguna librería de manipulación del DOM, "
+"como por ejemplo jQuery. Todos los ejemplos a continuación utilizaran la "
+"sintaxis de jQuery y deberán ser llamados en un bloque del tipo "
+"``$(document).ready()``."
+
+#: ../../app/organic.rst:21
+msgid "Pre-Qualification"
+msgstr "Pre-Calificación"
+
+#: ../../app/organic.rst:23
+msgid ""
+"The check eligibility call make take a few seconds due to communication "
+"with the carrier. To improve the performance of the eligibility call, you"
+" can include the following 1x1 pixel earlier in the user flow. We will "
+"cache the user's eligibility information and further calls to check "
+"eligibility should be faster."
+msgstr ""
+"La llamada de chequeo de elegibilidad puede demorar algunos segundos "
+"debido a la comunicación con el operador. Para mejorar el rendimiento de "
+"esta llamada, puedes incluir el píxel 1x1 en algún paso anterior en en el"
+" flujo del usuario. Nosotros guardaremos en cache la información de "
+"elegibilidad del usuario por lo que todas las llamadas futuras para "
+"realizar el chequeo de elegiblidad deberían ser más rápidas."
+
+#: ../../app/organic.rst:31
+msgid "Check Eligibility"
+msgstr "Chequeo de Elegibilidad"
+
+#: ../../app/organic.rst:33
+msgid ""
+"The ``checkAppEligibility`` method determines if the current user if "
+"eligible to receive the configured MB reward . This function also starts "
+"a reward session on the server that can be completed later."
+msgstr ""
+"El método `checkAppEligibility ` determina si el usuario actual es "
+"elegible o no para recibir los MB configurados de premio. Esta función "
+"inicia también una sesión para otorgar el premio en el servidor que puede"
+" ser completada más tarde."
+
+#: ../../app/organic.rst:36
+msgid "Input arguments"
+msgstr "Parámetros de entrada"
+
+#: ../../app/organic.rst:39 ../../app/organic.rst:50
+msgid "Key"
+msgstr "Nombre"
+
+#: ../../app/organic.rst:39 ../../app/organic.rst:50
+msgid "Type"
+msgstr "Tipo"
+
+#: ../../app/organic.rst:39
+msgid "Required"
+msgstr "Obligatorion"
+
+#: ../../app/organic.rst:39 ../../app/organic.rst:50
+msgid "Description"
+msgstr "Descripción"
+
+#: ../../app/organic.rst:41
+msgid "campaignId"
+msgstr "campaignId"
+
+#: ../../app/organic.rst:41 ../../app/organic.rst:56 ../../app/organic.rst:59
+#: ../../app/organic.rst:61
+msgid "string"
+msgstr "string"
+
+#: ../../app/organic.rst:41 ../../app/organic.rst:43
+msgid "yes"
+msgstr "sí"
+
+#: ../../app/organic.rst:41
+msgid "ID for campaign setup by Aquto"
+msgstr "ID para la camapaña configurada por Aquto"
+
+#: ../../app/organic.rst:43
+msgid "callback"
+msgstr "callback"
+
+#: ../../app/organic.rst:43
+msgid "function"
+msgstr "function"
+
+#: ../../app/organic.rst:43
+msgid "Function called after checking eligibility on the server"
+msgstr "Función que se llamará después de verificar la elegiblidad en el servidor"
+
+#: ../../app/organic.rst:47
+msgid "Response properties"
+msgstr "Propiedades de la respuesta"
+
+#: ../../app/organic.rst:50
+msgid "Optional"
+msgstr "Opcional"
+
+#: ../../app/organic.rst:52
+msgid "eligible"
+msgstr "eligible"
+
+#: ../../app/organic.rst:52
+msgid "boolean"
+msgstr "boolean"
+
+#: ../../app/organic.rst:52
+msgid "false"
+msgstr "no"
+
+#: ../../app/organic.rst:52
+msgid "Is the current user eligible for the reward?"
+msgstr "Indica si el usuario actual es elegible o no para el premio"
+
+#: ../../app/organic.rst:54
+msgid "rewardAmount"
+msgstr "rewardAmount"
+
+#: ../../app/organic.rst:54
+msgid "integer"
+msgstr "integer"
+
+#: ../../app/organic.rst:54 ../../app/organic.rst:56 ../../app/organic.rst:59
+#: ../../app/organic.rst:61
+msgid "true"
+msgstr "sí"
+
+#: ../../app/organic.rst:54
+msgid "Reward amount in MB"
+msgstr "Cantidad en MB del premio"
+
+#: ../../app/organic.rst:56
+msgid "rewardText"
+msgstr "rewardText"
+
+#: ../../app/organic.rst:56
+msgid ""
+"Server configured string containing carrier and reward amount. Ex: "
+"Purchase any subscription and get 1GB added to your AT&T data plan."
+msgstr ""
+"Texto configurado en el servidor que debe contener el nombre del operador"
+" y la cantidad de datos de premio. Ejemplo: Abonando cualquier "
+"subscripción recibe 1GB extra para tu plan de datos de AT&T."
+
+#: ../../app/organic.rst:59
+msgid "carrier"
+msgstr "carrier"
+
+#: ../../app/organic.rst:59
+msgid "Code for user's carrier"
+msgstr "Código que representa el operador del usuario"
+
+#: ../../app/organic.rst:61
+msgid "clickUrl"
+msgstr "clickUrl"
+
+#: ../../app/organic.rst:61
+msgid "Url to replace app download link"
+msgstr "Url que debe reemplazar la url de descarga de la aplicación"
+
+#: ../../app/organic.rst:92
+msgid "Complete"
+msgstr "Completar"
+
+#: ../../app/organic.rst:94
+msgid ""
+"In order to complete the conversion, you need to set up a server side "
+"callback through one of our integration partners:"
+msgstr ""
+"Para completar la conversión debes configurar un ``callback`` a través de"
+" alguno de nuestros socios de integración:"
+
+#: ../../app/organic.rst:96
+msgid "Adjust"
+msgstr "Adjust"
+
+#: ../../app/organic.rst:97
+msgid "Tune"
+msgstr "Tune"
+
+#: ../../app/organic.rst:98
+msgid "Appsflyer"
+msgstr "Appsflyer"
+
+#: ../../app/organic.rst:99
+msgid "Kochava"
+msgstr "Kochava"
+
+#: ../../app/organic.rst:101
+msgid ""
+"Select Aquto as publisher and provide iOS and Android click trackers to "
+"your Aquto account manager."
+msgstr ""
+"Selecciona Aquto como editor y provee tus \"click trackers\" de iOS y "
+"Android a tu administrador de cuentas de Aquto."
+

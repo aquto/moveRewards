@@ -5,7 +5,7 @@ Reward customers with mobile data in a wide range of scenarios, such as making p
 
 The integration for the Multi-page MoVE Reward Commerce flow will occur in two places, the landing page, where the offer is displayed to the subscriber, and the thank you page, where the reward confirmation is displayed to the subscriber. During this flow Aquto will set a 3rd party cookie to register the beginning of the offer. This occurs when the initial offer is displayed to the subscriber, and is performed automatically by the API. The API reads the cookie again and it is used to perform the reward when the conversion occurs and the reward confirmation is displayed to the subscriber.
 
-.. image:: ../MoveRewardsUserFlow.png
+.. image:: ../_static/MoveRewardsUserFlow.png
 
 Setup
 ^^^^^

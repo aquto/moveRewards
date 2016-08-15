@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MoVE Rewards 1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-11 11:19-0400\n"
+"POT-Creation-Date: 2016-08-15 10:20-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,19 +18,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ../../commerce.rst:2
-msgid "MoVE for Commerce (Multi-Page flow)"
-msgstr "MoVE para Comercio (Flujo Multi-Page)"
+#: ../../commerce/multi.rst:2
+msgid "Multi-Page flow"
+msgstr "Flujo Multi-Page"
 
-#: ../../commerce.rst:4
+#: ../../commerce/multi.rst:4
 msgid ""
 "Reward customers with mobile data in a wide range of scenarios, such as "
 "making purchases, booking reservations, enrolling in notifications, and "
 "help increase add-on items during the purchase process while reducing "
 "cart abandonment."
-msgstr "Premia a tus clientes con datos móviles en una amplia variedad de escenarios, tales como hacer compras, realizar reservas, subscribirse a notificaciones, y ayuda a aumentar la cantidad de items adicionales durante el proceso de compra mientras reduces el abandono de tus usuarios al mismo."
+msgstr ""
+"Premia a tus clientes con datos móviles en una amplia variedad de "
+"escenarios, tales como hacer compras, realizar reservas, subscribirse a "
+"notificaciones, y ayuda a aumentar la cantidad de items adicionales "
+"durante el proceso de compra mientras reduces el abandono de tus usuarios"
+" al mismo."
 
-#: ../../commerce.rst:6
+#: ../../commerce/multi.rst:6
 msgid ""
 "The integration for the Multi-page MoVE Reward Commerce flow will occur "
 "in two places, the landing page, where the offer is displayed to the "
@@ -41,174 +46,304 @@ msgid ""
 "automatically by the API. The API reads the cookie again and it is used "
 "to perform the reward when the conversion occurs and the reward "
 "confirmation is displayed to the subscriber."
-msgstr "La integración con el flujo Multi-page de MoVE Reward Commerce debe realizarse en dos lugares, la página de inicio, donde la oferta es mostrada al abonado, y la página de agradecimiento, donde la confirmación del premio es mostrada al abonado. Durante este proceso Aquto utilizará una cookie de un servicio de terceros para registrar que el flujo ha comenzado. Esto sucede de forma automática a través de la API cuando la oferta inicial es mostrada al abonado. Cuando la conversión se concreta, la API lee esta cookie nuevamente y es utilizada para otorgar el premio y mostrar la página de confirmación al abonado."
+msgstr ""
+"La integración con el flujo Multi-page de MoVE Reward Commerce debe "
+"realizarse en dos lugares, la página de inicio, donde la oferta es "
+"mostrada al abonado, y la página de agradecimiento, donde la confirmación"
+" del premio es mostrada al abonado. Durante este proceso Aquto utilizará "
+"una cookie de un servicio de terceros para registrar que el flujo ha "
+"comenzado. Esto sucede de forma automática a través de la API cuando la "
+"oferta inicial es mostrada al abonado. Cuando la conversión se concreta, "
+"la API lee esta cookie nuevamente y es utilizada para otorgar el premio y"
+" mostrar la página de confirmación al abonado."
 
-#: ../../commerce.rst:11
+#: ../../commerce/multi.rst:11 ../../commerce/single.rst:7
 msgid "Setup"
 msgstr "Configuración"
 
-#: ../../commerce.rst:13
+#: ../../commerce/multi.rst:13
 msgid ""
 "This library must be included on both the landing page and thank you "
 "page. It can be embedded as a script tag:"
-msgstr "Esta librería debe ser añadida tanto en la página de inicio como la de agradecimiento. Puede ser embebida a través de un tag de script de la siguiente manera:"
+msgstr ""
+"Esta librería debe ser añadida tanto en la página de inicio como la de "
+"agradecimiento. Puede ser embebida a través de un tag de script de la "
+"siguiente manera:"
 
-#: ../../commerce.rst:19
+#: ../../commerce/multi.rst:19 ../../commerce/single.rst:16
 msgid "When embedded as a script tag, it exposes the ``aquto`` global object."
-msgstr "Si es embebida como un tag de script, esta expondrá un objeto global llamado ``aquto``."
+msgstr ""
+"Si es embebida como un tag de script, esta expondrá un objeto global "
+"llamado ``aquto``."
 
-#: ../../commerce.rst:21
+#: ../../commerce/multi.rst:21
 msgid ""
 "We assume you are using a DOM manipulation library, such as jQuery. All "
 "examples below will assume jQuery $ syntax and should be called in "
 "``$(document).ready()`` block."
-msgstr "Se asume que se esta utilizando alguna librería de manipulación del DOM, como por ejemplo jQuery. Todos los ejemplos a continuación utilizaran la sintaxis de jQuery y deberán ser llamados en un bloque del tipo ``$(document).ready()``."
+msgstr ""
+"Se asume que se esta utilizando alguna librería de manipulación del DOM, "
+"como por ejemplo jQuery. Todos los ejemplos a continuación utilizaran la "
+"sintaxis de jQuery y deberán ser llamados en un bloque del tipo "
+"``$(document).ready()``."
 
-#: ../../commerce.rst:24
+#: ../../commerce/multi.rst:24 ../../commerce/single.rst:19
 msgid "Check Eligibility"
 msgstr "Chequeo de Elegiblidad"
 
-#: ../../commerce.rst:26
+#: ../../commerce/multi.rst:26
 msgid ""
 "The ``checkEligibility`` method determines if the current user if "
 "eligible to receive the configured MB reward . This function also starts "
 "a reward session on the server that can be completed later. You should "
 "call ``checkEligibility`` on your landing page."
-msgstr "El método ``checkEligibility`` determina si el usuario actual es elegible o no para recibir los MB configurados de premio. Esta función inicia también una sesión para otorgar el premio en el servidor que puede ser completada más tarde. Debes llamar a ``checkEligibility`` en tu página de inicio."
+msgstr ""
+"El método ``checkEligibility`` determina si el usuario actual es elegible"
+" o no para recibir los MB configurados de premio. Esta función inicia "
+"también una sesión para otorgar el premio en el servidor que puede ser "
+"completada más tarde. Debes llamar a ``checkEligibility`` en tu página de"
+" inicio."
 
-#: ../../commerce.rst:29 ../../commerce.rst:86
+#: ../../commerce/multi.rst:29 ../../commerce/multi.rst:86
+#: ../../commerce/single.rst:24 ../../commerce/single.rst:80
 msgid "Input arguments"
 msgstr "Parámetros de entrada"
 
-#: ../../commerce.rst:32 ../../commerce.rst:44 ../../commerce.rst:91
-#: ../../commerce.rst:102
+#: ../../commerce/multi.rst:32 ../../commerce/multi.rst:44
+#: ../../commerce/multi.rst:91 ../../commerce/multi.rst:102
+#: ../../commerce/single.rst:26 ../../commerce/single.rst:37
+#: ../../commerce/single.rst:83 ../../commerce/single.rst:94
 msgid "Key"
 msgstr "Nombre"
 
-#: ../../commerce.rst:32 ../../commerce.rst:44 ../../commerce.rst:91
-#: ../../commerce.rst:102
+#: ../../commerce/multi.rst:32 ../../commerce/multi.rst:44
+#: ../../commerce/multi.rst:91 ../../commerce/multi.rst:102
+#: ../../commerce/single.rst:26 ../../commerce/single.rst:37
+#: ../../commerce/single.rst:83 ../../commerce/single.rst:94
 msgid "Type"
 msgstr "Tipo"
 
-#: ../../commerce.rst:32 ../../commerce.rst:91
+#: ../../commerce/multi.rst:32 ../../commerce/multi.rst:91
+#: ../../commerce/single.rst:26 ../../commerce/single.rst:83
 msgid "Required"
 msgstr "Obligatorio"
 
-#: ../../commerce.rst:32 ../../commerce.rst:44 ../../commerce.rst:91
-#: ../../commerce.rst:102
+#: ../../commerce/multi.rst:32 ../../commerce/multi.rst:44
+#: ../../commerce/multi.rst:91 ../../commerce/multi.rst:102
+#: ../../commerce/single.rst:26 ../../commerce/single.rst:37
+#: ../../commerce/single.rst:83 ../../commerce/single.rst:94
 msgid "Description"
 msgstr "Descripción"
 
-#: ../../commerce.rst:34 ../../commerce.rst:93
+#: ../../commerce/multi.rst:34 ../../commerce/multi.rst:93
+#: ../../commerce/single.rst:28 ../../commerce/single.rst:85
 msgid "campaignId"
 msgstr "campaignId"
 
-#: ../../commerce.rst:34 ../../commerce.rst:50 ../../commerce.rst:53
-#: ../../commerce.rst:93 ../../commerce.rst:108 ../../commerce.rst:111
+#: ../../commerce/multi.rst:34 ../../commerce/multi.rst:50
+#: ../../commerce/multi.rst:53 ../../commerce/multi.rst:93
+#: ../../commerce/multi.rst:108 ../../commerce/multi.rst:111
+#: ../../commerce/single.rst:28 ../../commerce/single.rst:41
+#: ../../commerce/single.rst:45 ../../commerce/single.rst:48
+#: ../../commerce/single.rst:85 ../../commerce/single.rst:100
+#: ../../commerce/single.rst:103
 msgid "string"
 msgstr "string"
 
-#: ../../commerce.rst:34 ../../commerce.rst:36 ../../commerce.rst:93
-#: ../../commerce.rst:95
+#: ../../commerce/multi.rst:34 ../../commerce/multi.rst:36
+#: ../../commerce/multi.rst:93 ../../commerce/multi.rst:95
+#: ../../commerce/single.rst:28 ../../commerce/single.rst:30
+#: ../../commerce/single.rst:85 ../../commerce/single.rst:87
 msgid "yes"
 msgstr "sí"
 
-#: ../../commerce.rst:34 ../../commerce.rst:93
+#: ../../commerce/multi.rst:34 ../../commerce/multi.rst:93
+#: ../../commerce/single.rst:28 ../../commerce/single.rst:85
 msgid "ID for campaign setup by Aquto"
 msgstr "ID para la camapaña configurada por Aquto"
 
-#: ../../commerce.rst:36 ../../commerce.rst:95
+#: ../../commerce/multi.rst:36 ../../commerce/multi.rst:95
+#: ../../commerce/single.rst:30 ../../commerce/single.rst:87
 msgid "callback"
 msgstr "callback"
 
-#: ../../commerce.rst:36 ../../commerce.rst:95
+#: ../../commerce/multi.rst:36 ../../commerce/multi.rst:95
+#: ../../commerce/single.rst:30 ../../commerce/single.rst:87
 msgid "function"
 msgstr "function"
 
-#: ../../commerce.rst:36
+#: ../../commerce/multi.rst:36 ../../commerce/single.rst:30
 msgid "Function called after checking eligibility on the server"
 msgstr "Función que se llamará después de verificar la elegiblidad en el servidor"
 
-#: ../../commerce.rst:41 ../../commerce.rst:99
+#: ../../commerce/multi.rst:41 ../../commerce/multi.rst:99
+#: ../../commerce/single.rst:34 ../../commerce/single.rst:91
 msgid "Response properties"
 msgstr "Propiedades de la respuesta"
 
-#: ../../commerce.rst:44 ../../commerce.rst:102
+#: ../../commerce/multi.rst:44 ../../commerce/multi.rst:102
+#: ../../commerce/single.rst:37 ../../commerce/single.rst:94
 msgid "Optional"
 msgstr "Opcional"
 
-#: ../../commerce.rst:46 ../../commerce.rst:104
+#: ../../commerce/multi.rst:46 ../../commerce/multi.rst:104
+#: ../../commerce/single.rst:39 ../../commerce/single.rst:96
 msgid "eligible"
 msgstr "eligible"
 
-#: ../../commerce.rst:46 ../../commerce.rst:104
+#: ../../commerce/multi.rst:46 ../../commerce/multi.rst:104
+#: ../../commerce/single.rst:39 ../../commerce/single.rst:96
 msgid "boolean"
 msgstr "boolean"
 
-#: ../../commerce.rst:46 ../../commerce.rst:104
+#: ../../commerce/multi.rst:46 ../../commerce/multi.rst:104
+#: ../../commerce/single.rst:39 ../../commerce/single.rst:41
+#: ../../commerce/single.rst:96
 msgid "false"
 msgstr "no"
 
-#: ../../commerce.rst:46
+#: ../../commerce/multi.rst:46 ../../commerce/single.rst:39
 msgid "Is the current user eligible for the reward?"
 msgstr "Indica si el usuario actual es elegible o no para el premio"
 
-#: ../../commerce.rst:48 ../../commerce.rst:106
+#: ../../commerce/multi.rst:48 ../../commerce/multi.rst:106
+#: ../../commerce/single.rst:43 ../../commerce/single.rst:98
 msgid "rewardAmount"
 msgstr "rewardAmount"
 
-#: ../../commerce.rst:48 ../../commerce.rst:106
+#: ../../commerce/multi.rst:48 ../../commerce/multi.rst:106
+#: ../../commerce/single.rst:43 ../../commerce/single.rst:98
 msgid "integer"
 msgstr "integer"
 
-#: ../../commerce.rst:48 ../../commerce.rst:50 ../../commerce.rst:53
-#: ../../commerce.rst:106 ../../commerce.rst:108 ../../commerce.rst:111
+#: ../../commerce/multi.rst:48 ../../commerce/multi.rst:50
+#: ../../commerce/multi.rst:53 ../../commerce/multi.rst:106
+#: ../../commerce/multi.rst:108 ../../commerce/multi.rst:111
+#: ../../commerce/single.rst:43 ../../commerce/single.rst:45
+#: ../../commerce/single.rst:48 ../../commerce/single.rst:98
+#: ../../commerce/single.rst:100 ../../commerce/single.rst:103
 msgid "true"
 msgstr "sí"
 
-#: ../../commerce.rst:48 ../../commerce.rst:106
+#: ../../commerce/multi.rst:48 ../../commerce/multi.rst:106
+#: ../../commerce/single.rst:43 ../../commerce/single.rst:98
 msgid "Reward amount in MB"
 msgstr "Cantidad en MB del premio"
 
-#: ../../commerce.rst:50 ../../commerce.rst:108
+#: ../../commerce/multi.rst:50 ../../commerce/multi.rst:108
+#: ../../commerce/single.rst:45 ../../commerce/single.rst:100
 msgid "rewardText"
 msgstr "rewardText"
 
-#: ../../commerce.rst:50
+#: ../../commerce/multi.rst:50 ../../commerce/single.rst:45
 msgid ""
 "Server configured string containing carrier and reward amount. Ex: "
 "Purchase any subscription and get 1GB added to your AT&T data plan."
-msgstr "Texto configurado en el servidor que debe contener el nombre del operador y la cantidad de datos de premio. Ejemplo: Abonando cualquier subscripción recibe 1GB extra para tu plan de datos de AT&T."
+msgstr ""
+"Texto configurado en el servidor que debe contener el nombre del operador"
+" y la cantidad de datos de premio. Ejemplo: Abonando cualquier "
+"subscripción recibe 1GB extra para tu plan de datos de AT&T."
 
-#: ../../commerce.rst:53 ../../commerce.rst:111
+#: ../../commerce/multi.rst:53 ../../commerce/multi.rst:111
+#: ../../commerce/single.rst:48 ../../commerce/single.rst:103
 msgid "carrier"
 msgstr "carrier"
 
-#: ../../commerce.rst:53 ../../commerce.rst:111
+#: ../../commerce/multi.rst:53 ../../commerce/multi.rst:111
+#: ../../commerce/single.rst:48 ../../commerce/single.rst:103
 msgid "Code for user's carrier"
 msgstr "Código que representa el operador del usuario"
 
-#: ../../commerce.rst:81
+#: ../../commerce/multi.rst:81 ../../commerce/single.rst:75
 msgid "Complete Reward"
 msgstr "Otorgar el Premio"
 
-#: ../../commerce.rst:83
+#: ../../commerce/multi.rst:83
 msgid ""
 "The ``complete`` method finishes the reward session and triggers the MB "
 "reward. This method should be called on your thank you page."
-msgstr "El método ``complete`` finaliza la sesión creada previamente en el servidor y comienza el proceso de premiación de datos. Este método debe ser llamado en tu página de agradecimiento."
+msgstr ""
+"El método ``complete`` finaliza la sesión creada previamente en el "
+"servidor y comienza el proceso de premiación de datos. Este método debe "
+"ser llamado en tu página de agradecimiento."
 
-#: ../../commerce.rst:95
+#: ../../commerce/multi.rst:95 ../../commerce/single.rst:87
 msgid "Function called after completing the reward on the server"
 msgstr "Función que se llamará después de otorgado el premio en el servidor"
 
-#: ../../commerce.rst:104
+#: ../../commerce/multi.rst:104 ../../commerce/single.rst:96
 msgid "Is the user still eligible for the reward"
 msgstr "Indica si el usuario sigue siendo elegible o no para el premio"
 
-#: ../../commerce.rst:108
+#: ../../commerce/multi.rst:108 ../../commerce/single.rst:100
 msgid ""
 "Server configured string containing carrier and reward amount. Ex: "
 "Congratulations, you just added 1GB to your AT&T data plan!"
-msgstr "Texto configurado en el servidor que debe contener el nombre del operador y la cantidad de datos de premio. Ejemplo: ¡Felicitaciones, has ganado 1GB extra para tu plan de datos de AT&T!"
+msgstr ""
+"Texto configurado en el servidor que debe contener el nombre del operador"
+" y la cantidad de datos de premio. Ejemplo: ¡Felicitaciones, has ganado "
+"1GB extra para tu plan de datos de AT&T!"
+
+#: ../../commerce/single.rst:2
+msgid "Single-Page flow"
+msgstr "Flujo Single-Page"
+
+#: ../../commerce/single.rst:4
+msgid ""
+"The single-page MoVE Reward Commerce flow is ideal for flows where the "
+"offer is displayed to the customer and they are rewarded for taking an "
+"action directly on that page, such as watching a video to completion. "
+"This flow does not utilize 3rd party cookies like the Multi-page MoVE "
+"Reward Commerce Flow, and instead returns a token when the offer is "
+"displayed to the customer. The same token is provided to the Javascript "
+"SDK when the user completes the offer and is shown the reward "
+"confirmation."
+msgstr ""
+"El flujo single-page de MoVE Reward Commerce es ideal para flujos en donde"
+" la oferta es mostrada al cliente y estos son premiados por realizar una"
+" acción directamente en esa página, como por ejemplo mirar un video."
+" Este flujo no utiliza cookies de terceros como el flujo Multi-page"
+" de MoVE Reward Commerce y devuelve en cambio un token cuando la oferta"
+" es mostrada al cliente. Este mismo token es provisto luego al SDK de"
+" Javascript cuando el usuario completa la oferta y se le muestra la confirmación del premio."
+
+#: ../../commerce/single.rst:9
+msgid ""
+"This library must be included on the page. It can be embedded as a script tag:"
+msgstr ""
+"Esta librería debe ser añadida tanto en la página de inicio como la de "
+"agradecimiento. Puede ser embebida a través de un tag de script de la "
+"siguiente manera:"
+
+#: ../../commerce/single.rst:21
+msgid ""
+"The ``checkEligibilitySinglePage`` method determines if the current user "
+"is eligible to receive the configured MB reward. This function also "
+"starts a reward session on the server that can be completed later."
+msgstr ""
+"El método `checkEligibilitySinglePage` determina si el usuario actual "
+"es elegible o no para recibir los MB configurados de premio."
+" Esta función inicia también una sesión para otorgar el premio en"
+" el servidor que puede ser completada más tarde."
+
+#: ../../commerce/single.rst:41
+msgid "userToken"
+msgstr "userToken"
+
+#: ../../commerce/single.rst:41
+msgid "Token that must be passed back to server when offer is completed"
+msgstr "Token que debe ser enviado nuevamente al servidor cuando la acción de la oferta es completada"
+
+#: ../../commerce/single.rst:77
+msgid ""
+"The ``complete`` method finishes the reward session and triggers the MB "
+"reward. The ``complete`` method must be executed within the same scope as"
+" the ``userToken``"
+msgstr ""
+"El método ``complete`` finaliza la sesión creada previamente en el "
+"servidor y comienza el proceso de premiación de datos. Este método debe "
+"ser llamado en tu página de agradecimiento."
+
+#~ msgid "MoVE for Commerce (Multi-Page flow)"
+#~ msgstr "MoVE para Comercio (Flujo Multi-Page)"
 

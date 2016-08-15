@@ -62,6 +62,7 @@ Response properties
 +--------------+---------+----------+-------------------------------------------------------------------------+
 
 .. code-block:: html
+
   <div class="rewardBlock">
     <div class="rewardHeader"></div>
     <div class="rewardText"></div>
@@ -71,6 +72,7 @@ Response properties
 
 
 .. code-block:: javascript
+
   aquto.checkAppEligibility({
     campaignId: '12345',
     callback: function(response) {
@@ -89,7 +91,7 @@ Response properties
 Complete
 ^^^^^^^^
 
-In order to complete the conversion, you need to set up a server side callback through one of our integration partners.
+In order to complete the conversion, you need to set up a server side callback through one of our integration partners:
 
 * Adjust
 * Tune
