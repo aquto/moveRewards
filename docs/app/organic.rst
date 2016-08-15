@@ -13,7 +13,7 @@ This library must be included on the app download page. It can be embedded as a 
   <script src="http://assets.aquto.com/moveRewards/aquto.min.js"></script>
 
 
-When embedded as a script tag, it exposes the `aquto` global object.
+When embedded as a script tag, it exposes the ``aquto`` global object.
 
 We assume you are using a DOM manipulation library, such as jQuery. All examples below will assume jQuery $ syntax and should be called in ``$(document).ready()`` block.
 

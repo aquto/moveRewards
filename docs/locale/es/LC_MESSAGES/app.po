@@ -47,10 +47,10 @@ msgstr ""
 "siguiente manera:"
 
 #: ../../app/organic.rst:16
-msgid "When embedded as a script tag, it exposes the `aquto` global object."
+msgid "When embedded as a script tag, it exposes the ``aquto`` global object."
 msgstr ""
 "Si es embebida como un tag de script, esta expondrá un objeto global "
-"llamado `aquto`."
+"llamado ``aquto``."
 
 #: ../../app/organic.rst:18
 msgid ""
