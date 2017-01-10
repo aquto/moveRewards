@@ -36,7 +36,11 @@ function sharedCallback(response, callback) {
       var operatorName;
       var operatorCode;
 
-      if (response.response.operatorCode === 'attmb' || response.response.operatorCode === 'attsim') {
+      if (
+        response.response.operatorCode === 'attmb' ||
+        response.response.operatorCode === 'attsim' ||
+        response.response.operatorCode === 'attrw' 
+      ) {
         operatorName = "AT&T";
         operatorCode = 'att';
       }
@@ -52,7 +56,10 @@ function sharedCallback(response, callback) {
         operatorName = "Movistar";
         operatorCode = 'movi';
       }
-      else {
+      else if (response.response.operatorCode === 'telcelrw') {
+        operatorName = "Telcel";
+        operatorCode = 'telcel';
+      } else {
         return;
       }
       callbackObject.carrier = operatorCode;

@@ -163,7 +163,9 @@ var aquto =
 
 	  JSONP = function(options) {
 	    var callback, callbackFunc, callbackName, done, head, params, script;
-	    options = options ? options : {};
+	    if (options == null) {
+	      options = {};
+	    }
 	    params = {
 	      data: options.data || {},
 	      error: options.error || noop,
@@ -200,16 +202,20 @@ var aquto =
 	        }, params);
 	      };
 	      script.onload = script.onreadystatechange = function() {
-	        if (!done && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete')) {
-	          done = true;
+	        var ref, ref1;
+	        if (done || ((ref = this.readyState) !== 'loaded' && ref !== 'complete')) {
+	          return;
+	        }
+	        done = true;
+	        if (script) {
 	          script.onload = script.onreadystatechange = null;
-	          if (script && script.parentNode) {
-	            script.parentNode.removeChild(script);
+	          if ((ref1 = script.parentNode) != null) {
+	            ref1.removeChild(script);
 	          }
 	          return script = null;
 	        }
 	      };
-	      head = head || window.document.getElementsByTagName('head')[0] || window.document.documentElement;
+	      head = window.document.getElementsByTagName('head')[0] || window.document.documentElement;
 	      head.insertBefore(script, head.firstChild);
 	    }
 	    return {
@@ -218,11 +224,9 @@ var aquto =
 	          return window[callback] = null;
 	        };
 	        done = true;
-	        if (script && script.parentNode) {
+	        if (script != null ? script.parentNode : void 0) {
 	          script.onload = script.onreadystatechange = null;
-	          if (script && script.parentNode) {
-	            script.parentNode.removeChild(script);
-	          }
+	          script.parentNode.removeChild(script);
 	          return script = null;
 	        }
 	      }
@@ -245,26 +249,30 @@ var aquto =
 	    var str;
 	    str = '';
 	    while (str.length < length) {
-	      str += random().toString(36)[2];
+	      str += random().toString(36).slice(2, 3);
 	    }
 	    return str;
 	  };
 
 	  objectToURI = function(obj) {
 	    var data, key, value;
-	    data = [];
-	    for (key in obj) {
-	      value = obj[key];
-	      data.push(encode(key) + '=' + encode(value));
-	    }
+	    data = (function() {
+	      var results;
+	      results = [];
+	      for (key in obj) {
+	        value = obj[key];
+	        results.push(encode(key) + '=' + encode(value));
+	      }
+	      return results;
+	    })();
 	    return data.join('&');
 	  };
 
-	  if (("function" !== "undefined" && __webpack_require__(3) !== null) && __webpack_require__(4)) {
+	  if ("function" !== "undefined" && __webpack_require__(3) !== null ? __webpack_require__(4) : void 0) {
 	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 	      return JSONP;
 	    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	  } else if ((typeof module !== "undefined" && module !== null) && module.exports) {
+	  } else if (typeof module !== "undefined" && module !== null ? module.exports : void 0) {
 	    module.exports = JSONP;
 	  } else {
 	    this.JSONP = JSONP;
@@ -347,7 +355,11 @@ var aquto =
 	      var operatorName;
 	      var operatorCode;
 
-	      if (response.response.operatorCode === 'attmb' || response.response.operatorCode === 'attsim') {
+	      if (
+	        response.response.operatorCode === 'attmb' ||
+	        response.response.operatorCode === 'attsim' ||
+	        response.response.operatorCode === 'attrw' 
+	      ) {
 	        operatorName = "AT&T";
 	        operatorCode = 'att';
 	      }
@@ -363,7 +375,10 @@ var aquto =
 	        operatorName = "Movistar";
 	        operatorCode = 'movi';
 	      }
-	      else {
+	      else if (response.response.operatorCode === 'telcelrw') {
+	        operatorName = "Telcel";
+	        operatorCode = 'telcel';
+	      } else {
 	        return;
 	      }
 	      callbackObject.carrier = operatorCode;
@@ -400,6 +415,7 @@ var aquto =
 	}
 
 	module.exports = sharedCallback;
+
 
 /***/ }
 /******/ ]);
