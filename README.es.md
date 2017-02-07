@@ -233,7 +233,7 @@ El método `checkAppEligibility ` determina si el usuario actual es elegible o n
 |---|:----:|:--------:|-----------|
 |campaignId|string|sí|ID para la camapaña configurada por Aquto|
 |callback|function|sí|Función que se llamará después de verificar la elegiblidad en el servidor|
-
+|phoneNumber|string|no|Número de teléfono de los usuarios|
 
 ### Propiedades de la respuesta
 |Nombre|Tipo|Opcional| Descripción |
@@ -242,7 +242,8 @@ El método `checkAppEligibility ` determina si el usuario actual es elegible o n
 |rewardAmount|integer| sí |Cantidad en MB del premio|
 |rewardText|string| sí |Texto configurado en el servidor que debe contener el nombre del operador y la cantidad de datos de premio. Ejemplo: Abonando cualquier subscripción recibe 1GB extra para tu plan de datos de AT&T.|
 |carrier|string| sí |Código que representa el operador del usuario|
-|clickUrl|string|true|Url que debe reemplazar la url de descarga de la aplicación|
+|clickUrl|string| sí |Url que debe reemplazar la url de descarga de la aplicación|
+|identified|boolean| sí |¿Se ha identificado la red del usuario?|
 
 
 ```html

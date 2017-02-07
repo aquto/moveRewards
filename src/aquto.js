@@ -19,10 +19,14 @@ var moveRewards = {};
  */
 function checkEligibility(options) {
   if (options && options.campaignId) {
+    var data = { apiVersion: 'v8' }
+    if(options.phoneNumber) {
+      data.phoneNumber = options.phoneNumber
+    }
     jsonp({
       url: '//app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
       callbackName: 'jsonp',
-      data: { apiVersion: 'v8' },
+      data: data,
       success: function(response) {
         sharedCallback(response, options.callback);
       }
@@ -40,10 +44,14 @@ function checkEligibility(options) {
  */
 function checkAppEligibility(options) {
   if (options && options.campaignId) {
+    var data = { apiVersion: 'v8' }
+    if(options.phoneNumber) {
+      data.phoneNumber = options.phoneNumber
+    }
     jsonp({
       url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
       callbackName: 'jsonp',
-      data: { apiVersion: 'v8' },
+      data: data,
       success: function(response) {
         sharedCallback(response, options.callback);
       }

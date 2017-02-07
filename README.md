@@ -235,6 +235,7 @@ The `checkAppEligibility` method determines if the current user if eligible to r
 |---|:----:|:--------:|-----------|
 |campaignId|string|yes|ID for campaign setup by Aquto|
 |callback|function|yes|Function called after checking eligibility on the server|
+|phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
 
 ### Response properties
 |Key|Type|Optional|Description|
@@ -244,6 +245,7 @@ The `checkAppEligibility` method determines if the current user if eligible to r
 |rewardText|string|true|Server configured string containing carrier and reward amount. Ex: Purchase any subscription and get 1GB added to your AT&T data plan.|
 |carrier|string|true|Code for user's carrier|
 |clickUrl|string|true|Url to replace app download link|
+|identified|boolean|true|Has the user's network been identified (i.e. network is known)?|
 
 
 ```html

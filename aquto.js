@@ -66,10 +66,14 @@ var aquto =
 	 */
 	function checkEligibility(options) {
 	  if (options && options.campaignId) {
+	    var data = { apiVersion: 'v8' }
+	    if(options.phoneNumber) {
+	      data.phoneNumber = options.phoneNumber
+	    }
 	    jsonp({
 	      url: '//app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
 	      callbackName: 'jsonp',
-	      data: { apiVersion: 'v8' },
+	      data: data,
 	      success: function(response) {
 	        sharedCallback(response, options.callback);
 	      }
@@ -87,10 +91,14 @@ var aquto =
 	 */
 	function checkAppEligibility(options) {
 	  if (options && options.campaignId) {
+	    var data = { apiVersion: 'v8' }
+	    if(options.phoneNumber) {
+	      data.phoneNumber = options.phoneNumber
+	    }
 	    jsonp({
 	      url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
 	      callbackName: 'jsonp',
-	      data: { apiVersion: 'v8' },
+	      data: data,
 	      success: function(response) {
 	        sharedCallback(response, options.callback);
 	      }
@@ -358,7 +366,7 @@ var aquto =
 	      if (
 	        response.response.operatorCode === 'attmb' ||
 	        response.response.operatorCode === 'attsim' ||
-	        response.response.operatorCode === 'attrw' 
+	        response.response.operatorCode === 'attrw'
 	      ) {
 	        operatorName = "AT&T";
 	        operatorCode = 'att';
@@ -408,7 +416,8 @@ var aquto =
 	    }
 	    else {
 	      callback({
-	        eligible: false
+	        eligible: false,
+	        identified: !(response.response.operatorCode === 'unknown')
 	      });
 	    }
 	  }

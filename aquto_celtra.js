@@ -180,7 +180,7 @@ var aquto =
 	      if (
 	        response.response.operatorCode === 'attmb' ||
 	        response.response.operatorCode === 'attsim' ||
-	        response.response.operatorCode === 'attrw' 
+	        response.response.operatorCode === 'attrw'
 	      ) {
 	        operatorName = "AT&T";
 	        operatorCode = 'att';
@@ -230,7 +230,8 @@ var aquto =
 	    }
 	    else {
 	      callback({
-	        eligible: false
+	        eligible: false,
+	        identified: !(response.response.operatorCode === 'unknown')
 	      });
 	    }
 	  }
