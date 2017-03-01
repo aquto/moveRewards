@@ -59,6 +59,10 @@ function sharedCallback(response, callback) {
       else if (response.response.operatorCode === 'telcelrw') {
         operatorName = "Telcel";
         operatorCode = 'telcel';
+      } 
+      else if (response.response.operatorCode === 'tigogtrw') {
+        operatorName = 'Tigo';
+        operatorCode = 'tigogt';
       } else {
         return;
       }
