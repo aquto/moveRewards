@@ -70,6 +70,9 @@ var aquto =
 	    if(options.phoneNumber) {
 	      data.phoneNumber = options.phoneNumber
 	    }
+	    if(options.channel) {
+	      data.channel = options.channel
+	    }
 	    jsonp({
 	      url: '//app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
 	      callbackName: 'jsonp',
@@ -94,6 +97,9 @@ var aquto =
 	    var data = { apiVersion: 'v8' }
 	    if(options.phoneNumber) {
 	      data.phoneNumber = options.phoneNumber
+	    }
+	    if(options.channel) {
+	      data.channel = options.channel
 	    }
 	    jsonp({
 	      url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,

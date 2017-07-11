@@ -32,6 +32,8 @@ The `checkEligibility` method determines if the current user if eligible to rece
 |---|:----:|:--------:|-----------|
 |campaignId|string|yes|ID for campaign setup by Aquto|
 |callback|function|yes|Function called after checking eligibility on the server|
+|phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
+|channel|string|no|Optional incent channel|
 
 ### Response properties
 |Key|Type|Optional|Description|
@@ -124,6 +126,8 @@ The `checkEligibilitySinglePage` method determines if the current user is eligib
 |---|:----:|:--------:|-----------|
 |campaignId|string|yes|ID for campaign setup by Aquto|
 |callback|function|yes|Function called after checking eligibility on the server|
+|phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
+|channel|string|no|Incent channel string is used for reporting purposes|
 
 ### Response properties
 |Key|Type|Optional|Description|
@@ -236,6 +240,7 @@ The `checkAppEligibility` method determines if the current user if eligible to r
 |campaignId|string|yes|ID for campaign setup by Aquto|
 |callback|function|yes|Function called after checking eligibility on the server|
 |phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
+|channel|string|no|Incent channel string is used for reporting purposes|
 
 ### Response properties
 |Key|Type|Optional|Description|

@@ -23,6 +23,9 @@ function checkEligibility(options) {
     if(options.phoneNumber) {
       data.phoneNumber = options.phoneNumber
     }
+    if(options.channel) {
+      data.channel = options.channel
+    }
     jsonp({
       url: '//app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
       callbackName: 'jsonp',
@@ -47,6 +50,9 @@ function checkAppEligibility(options) {
     var data = { apiVersion: 'v8' }
     if(options.phoneNumber) {
       data.phoneNumber = options.phoneNumber
+    }
+    if(options.channel) {
+      data.channel = options.channel
     }
     jsonp({
       url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
