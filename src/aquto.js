@@ -39,6 +39,30 @@ function checkEligibility(options) {
 
 /**
  * Check eligibility for the current device
+ * Doesn't require a campaignId
+ *
+ * @param {function} callback Callback function on success or error
+ *
+ */
+function genericCheckEligibility(options) {
+  var data = { apiVersion: 'v8' }
+  if(options.phoneNumber) {
+    data.phoneNumber = options.phoneNumber
+  }
+  jsonp({
+    url: '//app.kickbit.com/api/datarewards/eligibility',
+    callbackName: 'jsonp',
+    data: data,
+    success: function(response) {
+      if (options.callback &&  typeof options.callback === 'function') {
+        options.callback(response.response)
+      }
+    }
+  });
+}
+
+/**
+ * Check eligibility for the current device
  * Campaign id is used to determine configured reward, and operator
  *
  * @param {String} campaignId Aquto campaign id
@@ -103,6 +127,7 @@ function complete(options) {
 moveRewards.VERSION = '0.1.0';
 
 // assign static methods
+moveRewards.genericCheckEligibility = genericCheckEligibility;
 moveRewards.checkEligibility = checkEligibility;
 moveRewards.checkEligibilitySinglePage = checkAppEligibility;
 moveRewards.checkAppEligibility = checkAppEligibility;

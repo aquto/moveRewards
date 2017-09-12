@@ -288,3 +288,60 @@ In order to complete the conversion, you need to set up a server side callback t
 * Kochava
 
 Select Aquto as publisher and provide iOS and Android click trackers to your Aquto account manager.
+
+# Generic MoVE
+
+Eligibility for MoVE can still be checked even when the campaignId is unknown.
+
+## Setup
+
+This library must be included on the page where eligibility is being checked. It can be embedded as a script tag:
+
+```html
+<script src="http://assets.aquto.com/moveRewards/aquto.min.js"></script>
+```
+
+When embedded as a script tag, it exposes the `aquto` global object.
+
+We assume you are using a DOM manipulation library, such as jQuery. All examples below will assume jQuery $ syntax and should be called in `$(document).ready()` block.
+
+## Check Eligibility
+
+The `genericCheckEligibility` method determines if the current user is eligible for MoVE services.
+
+### Input arguments
+|Key|Type|Required|Description|
+|---|:----:|:--------:|-----------|
+|callback|function|yes|Function called after checking eligibility on the server|
+|phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
+
+### Response properties
+|Key|Type|Optional|Description|
+|---|:--:|:------:|-----------|
+|eligible|boolean|false|Is the current user eligible for a reward?|
+|operatorCode|string|false|Unique code assigned to each eligible operator|
+|coupons|array[coupon]|false|Contains all the coupons the user is eligible for|
+
+### Response coupon
+|Key|Type|Optional|Description|
+|---|:--:|:------:|-----------|
+|couponId|integer|false|Unique coupon id|
+|couponCode|string|false|Unique coupon code that identies coupon|
+|rewardAmountMB|integer|false|Reward amount of the coupon in MB|
+
+```html
+<div class="rewardBlock">
+  <div class="rewardHeader"></div>
+  <div class="rewardText"></div>
+</div>
+```
+
+```javascript
+aquto.genericCheckEligibility({
+  callback: function(response) {
+    if (response && response.eligible) {
+      $('.rewardBlock').show();
+    }
+  }
+});
+```
