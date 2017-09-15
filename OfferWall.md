@@ -41,7 +41,7 @@ aquto.checkOfferWallEligibility({
     if (response && response.eligible) {
       var $offerWallLink = $('.offerWallLink');
       $offerWallLink.text('Aquto Offer Wall: Number of Offers ' + response.numberOfOffers);
-      $offerWallLink.href = response.offerWallHref;
+      $offerWallLink.attr('href', response.offerWallHref);
       $offerWallLink.show();
     }
   }
