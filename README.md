@@ -33,7 +33,7 @@ The `checkEligibility` method determines if the current user if eligible to rece
 |campaignId|string|yes|ID for campaign setup by Aquto|
 |callback|function|yes|Function called after checking eligibility on the server|
 |phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
-|channel|string|no|Optional incent channel|
+|channel|string|no|Optional channel of the inventory|
 
 ### Response properties
 |Key|Type|Optional|Description|
