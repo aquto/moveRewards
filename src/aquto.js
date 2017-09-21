@@ -4,7 +4,8 @@
 'use strict';
 
 var jsonp = require('browser-jsonp');
-var sharedCallback = require('./sharedCallback');
+var sharedCallback = require('./sharedCallback').sharedCallback;
+var voucherCallback = require('./sharedCallback').voucherCallback;
 
 /** instantiate moveRewards object */
 var moveRewards = {};
@@ -15,6 +16,8 @@ var moveRewards = {};
  *
  * @param {String} campaignId Aquto campaign id
  * @param {function} callback Callback function on success or error
+ * @param {String} [phoneNumber] The phone number of the subscriber
+ * @param {String} [channel] Optional channel of the inventory
  *
  */
 function checkEligibility(options) {
@@ -42,6 +45,7 @@ function checkEligibility(options) {
  * Doesn't require a campaignId
  *
  * @param {function} callback Callback function on success or error
+ * @param {String} [phoneNumber] The phone number of the subscriber
  *
  */
 function genericCheckEligibility(options) {
@@ -67,6 +71,8 @@ function genericCheckEligibility(options) {
  *
  * @param {String} campaignId Aquto campaign id
  * @param {function} callback Callback function on success or error
+ * @param {String} [phoneNumber] The phone number of the subscriber
+ * @param {String} [channel] Optional channel of the inventory
  *
  */
 function checkAppEligibility(options) {
@@ -80,6 +86,32 @@ function checkAppEligibility(options) {
     }
     jsonp({
       url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
+      callbackName: 'jsonp',
+      data: data,
+      success: function(response) {
+        sharedCallback(response, options.callback);
+      }
+    });
+  }
+}
+
+/**
+ * Check eligibility for the current device
+ * Campaign id is used to determine configured reward, and operator
+ *
+ * @param {String} campaignId Aquto campaign id
+ * @param {function} callback Callback function on success or error
+ * @param {String} phoneNumber The phone number of the subscriber
+ *
+ */
+function checkVoucherEligibility(options) {
+  if (options && options.campaignId) {
+    var data = { apiVersion: 'v8', campaignId: options.campaignId }
+    if(options.phoneNumber) {
+      data.phoneNumber = options.phoneNumber
+    }
+    jsonp({
+      url: '//app.kickbit.com/api/datarewards/voucher/eligibility',
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
@@ -115,6 +147,36 @@ function complete(options) {
   }
 }
 
+/**
+ * Redeem a voucher for an eligible user
+ * Campaign id is used to link with existing checkVoucherEligibility
+ *
+ * @param {String} callback Callback function on success or error
+ * @param {String} code Voucher code
+ * @param {String} [userToken] User identifier received from eligibility request can be used instead of a phone number
+ * @param {String} [phoneNumber] The phone number of the subscriber.
+ *
+ */
+function redeemVoucher(options) {
+  if (options && options.code) {
+    var data = { apiVersion: 'v8', code: options.code }
+    if(options.userToken) {
+      data.userToken = options.userToken
+    }
+    if(options.phoneNumber) {
+      data.phoneNumber = options.phoneNumber
+    }
+    jsonp({
+      url: '//app.kickbit.com/api/datarewards/voucher/reward',
+      callbackName: 'jsonp',
+      data: data,
+      success: function(response) {
+        voucherCallback(response, options.callback);
+      }
+    });
+  }
+}
+
 /*--------------------------------------------------------------------------*/
 
 /**
@@ -126,12 +188,16 @@ function complete(options) {
  */
 moveRewards.VERSION = '0.1.0';
 
-// assign static methods
+// assign eligibility static methods
 moveRewards.genericCheckEligibility = genericCheckEligibility;
 moveRewards.checkEligibility = checkEligibility;
 moveRewards.checkEligibilitySinglePage = checkAppEligibility;
 moveRewards.checkAppEligibility = checkAppEligibility;
+moveRewards.checkVoucherEligibility = checkVoucherEligibility;
+
+// assign redemption static methods
 moveRewards.complete = complete;
+moveRewards.redeemVoucher = redeemVoucher;
 
 /*--------------------------------------------------------------------------*/
 

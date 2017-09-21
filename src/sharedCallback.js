@@ -33,41 +33,13 @@ function sharedCallback(response, callback) {
         rewardAmount: response.response.rewardAmountMB,
         userToken: response.response.userToken
       };
-      var operatorName;
-      var operatorCode;
 
-      if (
-        response.response.operatorCode === 'attmb' ||
-        response.response.operatorCode === 'attsim' ||
-        response.response.operatorCode === 'attrw'
-      ) {
-        operatorName = "AT&T";
-        operatorCode = 'att';
-      }
-      else if (response.response.operatorCode === 'vzwrw') {
-        operatorName = "Verizon";
-        operatorCode = 'vzw';
-      }
-      else if (response.response.operatorCode === 'vzwrw') {
-        operatorName = "Verizon";
-        operatorCode = 'vzw';
-      }
-      else if (response.response.operatorCode === 'movirw') {
-        operatorName = "Movistar";
-        operatorCode = 'movi';
-      }
-      else if (response.response.operatorCode === 'telcelrw') {
-        operatorName = "Telcel";
-        operatorCode = 'telcel';
-      } 
-      else if (response.response.operatorCode === 'tigogtrw') {
-        operatorName = 'Tigo';
-        operatorCode = 'tigogt';
-      } else {
+      var operatorInfo = getOperatorInfo(response.response.operatorCode)
+      if (!operatorInfo) {
         return;
       }
-      callbackObject.carrier = operatorCode;
-      callbackObject.carrierName = operatorName;
+      callbackObject.carrier = operatorInfo.operatorCode;
+      callbackObject.carrierName = operatorInfo.operatorName;
 
       var rewardText;
       if (response.response.displayText) {
@@ -100,4 +72,109 @@ function sharedCallback(response, callback) {
   }
 }
 
-module.exports = sharedCallback;
+/**
+ * Prepares the voucher response to be returned and fires callback
+ *
+ * @param {Object} response JSON response from server
+ * @param {Object} callback Optional callback to be fired after response from server
+ *
+ */
+function voucherCallback(response, callback) {
+  if (callback &&  typeof callback === 'function') {
+    if (response && response.response && response.response.status === 'success') {
+
+      var callbackObject = {
+        success: true,
+        status: 'success',
+        rewardAmount: response.response.rewardAmountMB,
+      };
+
+      var operatorInfo = getOperatorInfo(response.response.operatorCode)
+      if (!operatorInfo) {
+        return;
+      }
+      callbackObject.carrier = operatorInfo.operatorCode;
+      callbackObject.carrierName = operatorInfo.operatorName;
+
+      callback(callbackObject);
+    }
+    else if (response && response.response && response.response.status) {
+      var callbackObject = {
+        success: false
+      };
+
+      if (response.response.status !== 'unabletoidentify') {
+        var operatorInfo = getOperatorInfo(response.response.operatorCode)
+        if (!operatorInfo) {
+          return;
+        }
+        callbackObject.carrier = operatorInfo.operatorCode;
+        callbackObject.carrierName = operatorInfo.operatorName;
+      }
+
+      var status;
+      switch (response.response.status) {
+        case 'unabletoidentify':
+        case 'ineligible':
+        case 'unabletoconvert':
+        case 'generalerror':
+          status = 'ineligible'
+          break;
+        // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
+        default:
+          status = response.response.status
+      }
+
+      callbackObject.status = status
+      callback(callbackObject)
+    }
+  }
+}
+
+function getOperatorInfo(operatorCode) {
+  var operatorName;
+
+  if (
+    operatorCode === 'attmb' ||
+    operatorCode === 'attsim' ||
+    operatorCode === 'attrw'
+  ) {
+    operatorName = "AT&T";
+    operatorCode = 'att';
+  }
+  else if (operatorCode === 'vzwrw') {
+    operatorName = "Verizon";
+    operatorCode = 'vzw';
+  }
+  else if (operatorCode === 'vzwrw') {
+    operatorName = "Verizon";
+    operatorCode = 'vzw';
+  }
+  else if (operatorCode === 'movirw') {
+    operatorName = "Movistar";
+    operatorCode = 'movi';
+  }
+  else if (operatorCode === 'telcelrw') {
+    operatorName = "Telcel";
+    operatorCode = 'telcel';
+  }
+  else if (operatorCode === 'tigogtrw') {
+    operatorName = 'Tigo';
+    operatorCode = 'tigogt';
+  } else {
+    return;
+  }
+
+  return {
+    operatorCode: operatorCode,
+    operatorName: operatorName
+  }
+}
+
+
+
+
+module.exports = {
+  sharedCallback:sharedCallback,
+  voucherCallback: voucherCallback
+}

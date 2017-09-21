@@ -51,7 +51,8 @@ var aquto =
 	'use strict';
 
 	var jsonp = __webpack_require__(1);
-	var sharedCallback = __webpack_require__(5);
+	var sharedCallback = __webpack_require__(5).sharedCallback;
+	var voucherCallback = __webpack_require__(5).voucherCallback;
 
 	/** instantiate moveRewards object */
 	var moveRewards = {};
@@ -62,6 +63,8 @@ var aquto =
 	 *
 	 * @param {String} campaignId Aquto campaign id
 	 * @param {function} callback Callback function on success or error
+	 * @param {String} [phoneNumber] The phone number of the subscriber
+	 * @param {String} [channel] Optional channel of the inventory
 	 *
 	 */
 	function checkEligibility(options) {
@@ -89,6 +92,7 @@ var aquto =
 	 * Doesn't require a campaignId
 	 *
 	 * @param {function} callback Callback function on success or error
+	 * @param {String} [phoneNumber] The phone number of the subscriber
 	 *
 	 */
 	function genericCheckEligibility(options) {
@@ -114,6 +118,8 @@ var aquto =
 	 *
 	 * @param {String} campaignId Aquto campaign id
 	 * @param {function} callback Callback function on success or error
+	 * @param {String} [phoneNumber] The phone number of the subscriber
+	 * @param {String} [channel] Optional channel of the inventory
 	 *
 	 */
 	function checkAppEligibility(options) {
@@ -127,6 +133,32 @@ var aquto =
 	    }
 	    jsonp({
 	      url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
+	      callbackName: 'jsonp',
+	      data: data,
+	      success: function(response) {
+	        sharedCallback(response, options.callback);
+	      }
+	    });
+	  }
+	}
+
+	/**
+	 * Check eligibility for the current device
+	 * Campaign id is used to determine configured reward, and operator
+	 *
+	 * @param {String} campaignId Aquto campaign id
+	 * @param {function} callback Callback function on success or error
+	 * @param {String} phoneNumber The phone number of the subscriber
+	 *
+	 */
+	function checkVoucherEligibility(options) {
+	  if (options && options.campaignId) {
+	    var data = { apiVersion: 'v8', campaignId: options.campaignId }
+	    if(options.phoneNumber) {
+	      data.phoneNumber = options.phoneNumber
+	    }
+	    jsonp({
+	      url: '//app.kickbit.com/api/datarewards/voucher/eligibility',
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -162,6 +194,36 @@ var aquto =
 	  }
 	}
 
+	/**
+	 * Redeem a voucher for an eligible user
+	 * Campaign id is used to link with existing checkVoucherEligibility
+	 *
+	 * @param {String} callback Callback function on success or error
+	 * @param {String} code Voucher code
+	 * @param {String} [userToken] User identifier received from eligibility request can be used instead of a phone number
+	 * @param {String} [phoneNumber] The phone number of the subscriber.
+	 *
+	 */
+	function redeemVoucher(options) {
+	  if (options && options.code) {
+	    var data = { apiVersion: 'v8', code: options.code }
+	    if(options.userToken) {
+	      data.userToken = options.userToken
+	    }
+	    if(options.phoneNumber) {
+	      data.phoneNumber = options.phoneNumber
+	    }
+	    jsonp({
+	      url: '//app.kickbit.com/api/datarewards/voucher/reward',
+	      callbackName: 'jsonp',
+	      data: data,
+	      success: function(response) {
+	        voucherCallback(response, options.callback);
+	      }
+	    });
+	  }
+	}
+
 	/*--------------------------------------------------------------------------*/
 
 	/**
@@ -173,12 +235,16 @@ var aquto =
 	 */
 	moveRewards.VERSION = '0.1.0';
 
-	// assign static methods
+	// assign eligibility static methods
 	moveRewards.genericCheckEligibility = genericCheckEligibility;
 	moveRewards.checkEligibility = checkEligibility;
 	moveRewards.checkEligibilitySinglePage = checkAppEligibility;
 	moveRewards.checkAppEligibility = checkAppEligibility;
+	moveRewards.checkVoucherEligibility = checkVoucherEligibility;
+
+	// assign redemption static methods
 	moveRewards.complete = complete;
+	moveRewards.redeemVoucher = redeemVoucher;
 
 	/*--------------------------------------------------------------------------*/
 
@@ -391,41 +457,13 @@ var aquto =
 	        rewardAmount: response.response.rewardAmountMB,
 	        userToken: response.response.userToken
 	      };
-	      var operatorName;
-	      var operatorCode;
 
-	      if (
-	        response.response.operatorCode === 'attmb' ||
-	        response.response.operatorCode === 'attsim' ||
-	        response.response.operatorCode === 'attrw'
-	      ) {
-	        operatorName = "AT&T";
-	        operatorCode = 'att';
-	      }
-	      else if (response.response.operatorCode === 'vzwrw') {
-	        operatorName = "Verizon";
-	        operatorCode = 'vzw';
-	      }
-	      else if (response.response.operatorCode === 'vzwrw') {
-	        operatorName = "Verizon";
-	        operatorCode = 'vzw';
-	      }
-	      else if (response.response.operatorCode === 'movirw') {
-	        operatorName = "Movistar";
-	        operatorCode = 'movi';
-	      }
-	      else if (response.response.operatorCode === 'telcelrw') {
-	        operatorName = "Telcel";
-	        operatorCode = 'telcel';
-	      } 
-	      else if (response.response.operatorCode === 'tigogtrw') {
-	        operatorName = 'Tigo';
-	        operatorCode = 'tigogt';
-	      } else {
+	      var operatorInfo = getOperatorInfo(response.response.operatorCode)
+	      if (!operatorInfo) {
 	        return;
 	      }
-	      callbackObject.carrier = operatorCode;
-	      callbackObject.carrierName = operatorName;
+	      callbackObject.carrier = operatorInfo.operatorCode;
+	      callbackObject.carrierName = operatorInfo.operatorName;
 
 	      var rewardText;
 	      if (response.response.displayText) {
@@ -458,7 +496,112 @@ var aquto =
 	  }
 	}
 
-	module.exports = sharedCallback;
+	/**
+	 * Prepares the voucher response to be returned and fires callback
+	 *
+	 * @param {Object} response JSON response from server
+	 * @param {Object} callback Optional callback to be fired after response from server
+	 *
+	 */
+	function voucherCallback(response, callback) {
+	  if (callback &&  typeof callback === 'function') {
+	    if (response && response.response && response.response.status === 'success') {
+
+	      var callbackObject = {
+	        success: true,
+	        status: 'success',
+	        rewardAmount: response.response.rewardAmountMB,
+	      };
+
+	      var operatorInfo = getOperatorInfo(response.response.operatorCode)
+	      if (!operatorInfo) {
+	        return;
+	      }
+	      callbackObject.carrier = operatorInfo.operatorCode;
+	      callbackObject.carrierName = operatorInfo.operatorName;
+
+	      callback(callbackObject);
+	    }
+	    else if (response && response.response && response.response.status) {
+	      var callbackObject = {
+	        success: false
+	      };
+
+	      if (response.response.status !== 'unabletoidentify') {
+	        var operatorInfo = getOperatorInfo(response.response.operatorCode)
+	        if (!operatorInfo) {
+	          return;
+	        }
+	        callbackObject.carrier = operatorInfo.operatorCode;
+	        callbackObject.carrierName = operatorInfo.operatorName;
+	      }
+
+	      var status;
+	      switch (response.response.status) {
+	        case 'unabletoidentify':
+	        case 'ineligible':
+	        case 'unabletoconvert':
+	        case 'generalerror':
+	          status = 'ineligible'
+	          break;
+	        // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
+	        default:
+	          status = response.response.status
+	      }
+
+	      callbackObject.status = status
+	      callback(callbackObject)
+	    }
+	  }
+	}
+
+	function getOperatorInfo(operatorCode) {
+	  var operatorName;
+
+	  if (
+	    operatorCode === 'attmb' ||
+	    operatorCode === 'attsim' ||
+	    operatorCode === 'attrw'
+	  ) {
+	    operatorName = "AT&T";
+	    operatorCode = 'att';
+	  }
+	  else if (operatorCode === 'vzwrw') {
+	    operatorName = "Verizon";
+	    operatorCode = 'vzw';
+	  }
+	  else if (operatorCode === 'vzwrw') {
+	    operatorName = "Verizon";
+	    operatorCode = 'vzw';
+	  }
+	  else if (operatorCode === 'movirw') {
+	    operatorName = "Movistar";
+	    operatorCode = 'movi';
+	  }
+	  else if (operatorCode === 'telcelrw') {
+	    operatorName = "Telcel";
+	    operatorCode = 'telcel';
+	  }
+	  else if (operatorCode === 'tigogtrw') {
+	    operatorName = 'Tigo';
+	    operatorCode = 'tigogt';
+	  } else {
+	    return;
+	  }
+
+	  return {
+	    operatorCode: operatorCode,
+	    operatorName: operatorName
+	  }
+	}
+
+
+
+
+	module.exports = {
+	  sharedCallback:sharedCallback,
+	  voucherCallback: voucherCallback
+	}
 
 
 /***/ }

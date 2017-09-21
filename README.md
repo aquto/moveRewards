@@ -152,7 +152,7 @@ var userToken
 aquto.checkEligibilitySinglePage({
   campaignId: '12345',
   callback: function(response) {
-    userToken = response.useTokens
+    userToken = response.userToken
     if (response && response.eligible) {
       $('.rewardText').text(response.rewardText);
       $('.rewardHeader').addClass('rewardHeader'+response.carrier);
@@ -344,4 +344,107 @@ aquto.genericCheckEligibility({
     }
   }
 });
+```
+
+# MoVE for Voucher Redemptions
+ With MoVE Reward Vouchers user's enter voucher codes, configured by Aquto, in order to receive a data reward. Aquto provides the voucher codes in CSV format on a per campaign bases. This flow can utilize 3rd party cookies like the Multi-page MoVE Reward Commerce Flow, or a `userToken` (received from the eligibility call) to identify a user. Another option is to pass the phone number in directly to `checkVoucherEligibility` or `redeemVoucher`. A call to `checkVoucherEligibility` is not required.
+
+## Setup
+
+This library must be included on the page. It can be embedded as a script tag:
+
+```html
+<script src="http://assets.aquto.com/moveRewards/aquto.min.js"></script>
+```
+
+When embedded as a script tag, it exposes the `aquto` global object.
+
+## Check Eligibility
+
+The `checkVoucherEligibility` method determines if the current user is eligible to receive the configured MB reward. This function also starts a reward session on the server that can be completed later.
+
+### Input arguments
+|Key|Type|Required|Description|
+|---|:----:|:--------:|-----------|
+|campaignId|string|yes|ID for campaign setup by Aquto|
+|callback|function|yes|Function called after checking eligibility on the server|
+|phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
+
+### Response properties
+|Key|Type|Optional|Description|
+|---|:--:|:------:|-----------|
+|eligible|boolean|false|Is the current user eligible for the reward?|
+|userToken|string|false| Token that must be passed back to server when offer is completed|
+|rewardAmount|integer|true|Reward amount in MB|
+|rewardText|string|true|Server configured string containing carrier and reward amount. Ex: Purchase any subscription and get 1GB added to your AT&T data plan.|
+|carrier|string|true|Code for user's carrier|
+
+
+```html
+<div class="rewardBlock" style="display:none;">
+  <div class="rewardText">Enter your voucher code:</div>
+  <input type="text" name="voucherCodeInput" id="voucherCode">
+</div>
+```
+
+```javascript
+var userToken
+
+aquto.checkVoucherEligibility({
+  campaignId: '123456',
+  callback: function(response) {
+    userToken = response.userToken
+    if (response && response.eligible) {
+      $('.rewardText').text(response.rewardText);
+      $('.rewardHeader').addClass('rewardHeader'+response.carrier);
+      $('.rewardBlock').show();
+    }
+  }
+});
+```
+
+## Redeem Voucher Code
+
+The `redeemVoucher` method finishes the reward session and triggers the MB reward. If `checkVoucherEligibility` has been called, then `redeemVoucher` can use the returned `userToken` as long as it's executed within the same scope. If `redeemVoucher`
+is being called on it's own and the user's phone number is known, then it can be passed into `redeemVoucher`. Passing no `phoneNumber` or `userToken` results in server attempting to identify and check for eligibility.
+
+### Input arguments
+|Key|Type|Required|Description|
+|---|:----:|:--------:|-----------|
+|code|string|yes|Voucher code entered by the user|
+|callback|function|yes|Function called after completing the reward on the server|
+|userToken|string|no|Stored string that is returned by eligibility call|
+|phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
+
+### Response properties
+|Key|Type|Optional|Description|
+|---|:--:|:------:|-----------|
+|success|boolean|false|Is the user still eligible for the reward|
+|status|string|false|Status can be either 'success', 'ineligible', 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'|
+|rewardAmount|integer|true|Reward amount in MB returned when status is 'success'|
+|carrier|string|true|Code for user's carrier|
+
+```html
+<div class="rewardBlock">
+  <div class="rewardText">Enter your voucher code:</div>
+  <input type="text" name="voucherCodeInput" id="voucherCode">
+  <button onClick='redeemVoucher()' />Redeem Voucher</button>
+</div>
+
+<div class="rewardStatus" style="display:none;">Congratulations! You have redeemed your voucher successfully.</div>
+```
+
+```javascript
+var redeemVoucher = function() {
+  var code = $('#voucherCode').val()
+  aquto.redeemVoucher({
+    code: code,
+    userToken: userToken,
+    callback: function(response) {
+      if (response && response.success) {
+        $('.rewardStatus').show();
+      }
+    }
+  });
+}
 ```
