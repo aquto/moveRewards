@@ -222,7 +222,7 @@ La llamada de chequeo de elegibilidad puede demorar algunos segundos debido a la
 
 
 ```html
-<img src="http://app.kickbit.com/api/campaign/datarewards/pixel" height="1" width="1" border="0">
+<img src="http://app.aquto.com/api/campaign/datarewards/pixel" height="1" width="1" border="0">
 ```
 
 ## Chequeo de Elegibilidad

@@ -6,6 +6,7 @@
 var jsonp = require('browser-jsonp');
 var sharedCallback = require('./sharedCallback').sharedCallback;
 var voucherCallback = require('./sharedCallback').voucherCallback;
+var _utils = require('./utils');
 
 /** instantiate moveRewards object */
 var moveRewards = {};
@@ -30,7 +31,7 @@ function checkEligibility(options) {
       data.channel = options.channel
     }
     jsonp({
-      url: '//app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
+      url: '//app.aquto.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
@@ -54,7 +55,7 @@ function genericCheckEligibility(options) {
     data.phoneNumber = options.phoneNumber
   }
   jsonp({
-    url: '//app.kickbit.com/api/datarewards/eligibility',
+    url: '//app.aquto.com/api/datarewards/eligibility',
     callbackName: 'jsonp',
     data: data,
     success: function(response) {
@@ -85,7 +86,7 @@ function checkAppEligibility(options) {
       data.channel = options.channel
     }
     jsonp({
-      url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
+      url: '//app.aquto.com/api/campaign/datarewards/eligibility/'+options.campaignId,
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
@@ -111,7 +112,7 @@ function checkVoucherEligibility(options) {
       data.phoneNumber = options.phoneNumber
     }
     jsonp({
-      url: '//app.kickbit.com/api/datarewards/voucher/eligibility',
+      url: '//app.aquto.com/api/datarewards/voucher/eligibility',
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
@@ -137,7 +138,7 @@ function complete(options) {
       data.userToken = options.userToken
     }
     jsonp({
-      url: '//app.kickbit.com/api/campaign/datarewards/applyreward/'+options.campaignId,
+      url: '//app.aquto.com/api/campaign/datarewards/applyreward/'+options.campaignId,
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
@@ -167,7 +168,7 @@ function redeemVoucher(options) {
       data.phoneNumber = options.phoneNumber
     }
     jsonp({
-      url: '//app.kickbit.com/api/datarewards/voucher/reward',
+      url: '//app.aquto.com/api/datarewards/voucher/reward',
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
@@ -198,6 +199,9 @@ moveRewards.checkVoucherEligibility = checkVoucherEligibility;
 // assign redemption static methods
 moveRewards.complete = complete;
 moveRewards.redeemVoucher = redeemVoucher;
+
+// helper functions
+moveRewards._utils = _utils
 
 /*--------------------------------------------------------------------------*/
 

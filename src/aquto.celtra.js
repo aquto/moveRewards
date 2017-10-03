@@ -19,7 +19,7 @@ var moveRewards = {};
  */
 function checkEligibility(options) {
   if (options && options.campaignId) {
-    var url = "//app.kickbit.com/api/campaign/datarewards/identifyandcheck/"+options.campaignId+"?apiVersion=v8";
+    var url = "//app.aquto.com/api/campaign/datarewards/identifyandcheck/"+options.campaignId+"?apiVersion=v8";
     loadJSONP(url, {paramName: 'jsonp'}, function(response) {
       sharedCallback(response, options.callback);
     });
@@ -36,7 +36,7 @@ function checkEligibility(options) {
  */
 function checkAppEligibility(options) {
   if (options && options.campaignId) {
-    var url = "//app.kickbit.com/api/campaign/datarewards/eligibility/"+options.campaignId+"?apiVersion=v8";
+    var url = "//app.aquto.com/api/campaign/datarewards/eligibility/"+options.campaignId+"?apiVersion=v8";
     loadJSONP(url, {paramName: 'jsonp'}, function(response) {
       sharedCallback(response, options.callback);
     });
@@ -54,9 +54,9 @@ function checkAppEligibility(options) {
  */
 function complete(options) {
   if (options && options.campaignId) {
-    var url = "//app.kickbit.com/api/campaign/datarewards/applyreward/"+options.campaignId+"?apiVersion=v8";
+    var url = "//app.aquto.com/api/campaign/datarewards/applyreward/"+options.campaignId+"?apiVersion=v8";
     if(options.userToken) {
-      url = "//app.kickbit.com/api/campaign/datarewards/applyreward/"+options.campaignId+"?apiVersion=v8"+"&userToken="+options.userToken;
+      url = "//app.aquto.com/api/campaign/datarewards/applyreward/"+options.campaignId+"?apiVersion=v8"+"&userToken="+options.userToken;
     }
     loadJSONP(url, {paramName: 'jsonp'}, function(response) {
       sharedCallback(response, options.callback);

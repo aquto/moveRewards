@@ -53,6 +53,7 @@ var aquto =
 	var jsonp = __webpack_require__(1);
 	var sharedCallback = __webpack_require__(5).sharedCallback;
 	var voucherCallback = __webpack_require__(5).voucherCallback;
+	var _utils = __webpack_require__(6);
 
 	/** instantiate moveRewards object */
 	var moveRewards = {};
@@ -77,7 +78,7 @@ var aquto =
 	      data.channel = options.channel
 	    }
 	    jsonp({
-	      url: '//app.kickbit.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
+	      url: '//app.aquto.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -101,7 +102,7 @@ var aquto =
 	    data.phoneNumber = options.phoneNumber
 	  }
 	  jsonp({
-	    url: '//app.kickbit.com/api/datarewards/eligibility',
+	    url: '//app.aquto.com/api/datarewards/eligibility',
 	    callbackName: 'jsonp',
 	    data: data,
 	    success: function(response) {
@@ -132,7 +133,7 @@ var aquto =
 	      data.channel = options.channel
 	    }
 	    jsonp({
-	      url: '//app.kickbit.com/api/campaign/datarewards/eligibility/'+options.campaignId,
+	      url: '//app.aquto.com/api/campaign/datarewards/eligibility/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -158,7 +159,7 @@ var aquto =
 	      data.phoneNumber = options.phoneNumber
 	    }
 	    jsonp({
-	      url: '//app.kickbit.com/api/datarewards/voucher/eligibility',
+	      url: '//app.aquto.com/api/datarewards/voucher/eligibility',
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -184,7 +185,7 @@ var aquto =
 	      data.userToken = options.userToken
 	    }
 	    jsonp({
-	      url: '//app.kickbit.com/api/campaign/datarewards/applyreward/'+options.campaignId,
+	      url: '//app.aquto.com/api/campaign/datarewards/applyreward/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -214,7 +215,7 @@ var aquto =
 	      data.phoneNumber = options.phoneNumber
 	    }
 	    jsonp({
-	      url: '//app.kickbit.com/api/datarewards/voucher/reward',
+	      url: '//app.aquto.com/api/datarewards/voucher/reward',
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -245,6 +246,9 @@ var aquto =
 	// assign redemption static methods
 	moveRewards.complete = complete;
 	moveRewards.redeemVoucher = redeemVoucher;
+
+	// helper functions
+	moveRewards._utils = _utils
 
 	/*--------------------------------------------------------------------------*/
 
@@ -601,6 +605,27 @@ var aquto =
 	module.exports = {
 	  sharedCallback:sharedCallback,
 	  voucherCallback: voucherCallback
+	}
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	/**
+	 * Creates and loads an image element in order to determine of a user is online or offline
+	 * @param  {Function} callback - returns a boolean to determine if the user is online or offline
+	 */
+	function isOnline(callback) {
+	  var url = '//d1y0qivfpuylge.cloudfront.net/images/pixel.gif'
+	  var img = new Image()
+	  img.onload = function() { callback(true) }
+	  img.onerror = function() { callback(false) }
+	  img.src = url + '?rcb=' + Math.floor((1 + Math.random()) * 0x10000).toString(16)
+	}
+
+	module.exports = {
+	  isOnline: isOnline
 	}
 
 

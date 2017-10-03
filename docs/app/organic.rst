@@ -24,7 +24,7 @@ The check eligibility call make take a few seconds due to communication with the
 
 .. code-block:: html
 
-  <img src="http://app.kickbit.com/api/campaign/datarewards/pixel" height="1" width="1" border="0">
+  <img src="http://app.aquto.com/api/campaign/datarewards/pixel" height="1" width="1" border="0">
 
 
 Check Eligibility
