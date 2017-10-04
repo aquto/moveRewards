@@ -114,6 +114,43 @@ var aquto =
 	}
 
 	/**
+	 * Check if user is eligible for the Aquto Offer Wall
+	 *
+	 * @param {function} callback Callback function on success or error
+	 * @param {String} [carrier] The phone number of the subscriber
+	 *
+	 */
+	function checkOfferWallEligibility(options) {
+	  var data = { apiVersion: 'v8' }
+	  if(options.carrier) {
+	    data.operatorCode = options.carrier
+	  }
+	  jsonp({
+	    //TODO: swap out /eligibilityresult with /eligibility once backend fixes bug
+	    url: '//app.aquto.com/api/datarewards/offerwall/eligibilityresult',
+	    callbackName: 'jsonp',
+	    data: data,
+	    success: function(response) {
+	      if (options.callback &&  typeof options.callback === 'function') {
+	        if (response.response.eligible) {
+	          options.callback({
+	            eligible: true,
+	            offerWallHref: '//ow.aquto.com/#/' + response.response.opCode + '/offers',
+	            numberOfOffers: response.response.offerCount
+	          });
+	        } else {
+	          options.callback({
+	            eligible: false,
+	            identified: !(response.response.opCode === 'unknown'),
+	            numberOfOffers: 0
+	          });
+	        }
+	      }
+	    }
+	  });
+	}
+
+	/**
 	 * Check eligibility for the current device
 	 * Campaign id is used to determine configured reward, and operator
 	 *
@@ -242,6 +279,7 @@ var aquto =
 	moveRewards.checkEligibilitySinglePage = checkAppEligibility;
 	moveRewards.checkAppEligibility = checkAppEligibility;
 	moveRewards.checkVoucherEligibility = checkVoucherEligibility;
+	moveRewards.checkOfferWallEligibility = checkOfferWallEligibility;
 
 	// assign redemption static methods
 	moveRewards.complete = complete;

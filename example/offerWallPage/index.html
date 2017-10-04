@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+
+    <title>Offer Wall Eligibility</title>
+
+    <style>
+    h1 {
+      font-size: 2em;
+      margin: 0 0 40px 0;
+    }
+    </style>
+  </head>
+  <body>
+
+    <h1>Welcome</h1>
+
+    <a class="offerWallLink" style="display:none;"></a>
+
+    <div class="offerWallNotEligible" style="display:none;">Sorry you are not eligible for the Aquto Offer Wall</div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/jquery-1.9.1.min.js"><\/script>')</script>
+
+    <script src="../../aquto.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        aquto.checkOfferWallEligibility({
+          callback: function(response) {
+            if (response.eligible) {
+              var $offerWallLink = $('.offerWallLink');
+              $offerWallLink.text('Aquto Offer Wall: Number of Offers ' + response.numberOfOffers);
+              $offerWallLink.attr('href', response.offerWallHref);
+              $offerWallLink.show();
+            } else {
+              $('.offerWallNotEligible').show();
+            }
+          }
+        })
+      });
+    </script>
+  </body>
+</html>
