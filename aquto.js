@@ -518,7 +518,7 @@ var aquto =
 	        }
 	        rewardText = response.response.displayText;
 
-	        rewardText = rewardText.replace('$$operator$$', operatorName);
+	        rewardText = rewardText.replace('$$operator$$', operatorInfo.operatorName);
 	        rewardText = rewardText.replace('$$rewardAmount$$', rewardAmountFormatted);
 	      }
 	      callbackObject.rewardText = rewardText;
