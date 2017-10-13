@@ -22,6 +22,7 @@ The `checkOfferWallEligibility` method determines if the current user is eligibl
 |---|:----:|:--------:|-----------|
 |callback|function|yes|Function called after checking eligibility on the server|
 |carrier|function|false|Unique carrier code that is assigned by Aquto|
+|phoneNumber|string|false|Phone number to check for eligibility|
 
 ### Response properties
 |Key|Type|Optional|Description|

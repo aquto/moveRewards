@@ -78,6 +78,9 @@ function checkOfferWallEligibility(options) {
   if(options.carrier) {
     data.operatorCode = options.carrier
   }
+  if(options.phoneNumber) {
+    data.phoneNumber = options.phoneNumber
+  }
   jsonp({
     //TODO: swap out /eligibilityresult with /eligibility once backend fixes bug
     url: '//app.aquto.com/api/datarewards/offerwall/eligibilityresult',
