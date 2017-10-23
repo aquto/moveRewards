@@ -129,8 +129,7 @@ var aquto =
 	    data.phoneNumber = options.phoneNumber
 	  }
 	  jsonp({
-	    //TODO: swap out /eligibilityresult with /eligibility once backend fixes bug
-	    url: '//app.aquto.com/api/datarewards/offerwall/eligibilityresult',
+	    url: '//app.aquto.com/api/datarewards/offerwall/eligibility',
 	    callbackName: 'jsonp',
 	    data: data,
 	    success: function(response) {
