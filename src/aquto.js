@@ -81,6 +81,9 @@ function checkOfferWallEligibility(options) {
   if(options.phoneNumber) {
     data.phoneNumber = options.phoneNumber
   }
+  if(options.countryCode) {
+    data.countryCode = options.countryCode
+  }
   jsonp({
     url: '//app.aquto.com/api/datarewards/offerwall/eligibility',
     callbackName: 'jsonp',
@@ -88,9 +91,13 @@ function checkOfferWallEligibility(options) {
     success: function(response) {
       if (options.callback &&  typeof options.callback === 'function') {
         if (response.response.eligible) {
+          var offerWallHref = '//ow.aquto.com/#/' + response.response.opCode + '/offers'
+          if(options.phoneNumber) {
+            offerWallHref = offerWallHref + '?pn=' + options.phoneNumber
+          }
           options.callback({
             eligible: true,
-            offerWallHref: '//ow.aquto.com/#/' + response.response.opCode + '/offers',
+            offerWallHref: offerWallHref,
             numberOfOffers: response.response.offerCount
           });
         } else {
