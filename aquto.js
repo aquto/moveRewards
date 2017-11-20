@@ -48,15 +48,20 @@ var aquto =
 	/*!
 	 * Aquto Move Rewards v0.1.0 <http://aquto.com>
 	 */
-	'use strict';
+	'use strict'
 
-	var jsonp = __webpack_require__(1);
-	var sharedCallback = __webpack_require__(5).sharedCallback;
-	var voucherCallback = __webpack_require__(5).voucherCallback;
-	var _utils = __webpack_require__(6);
+	var jsonp = __webpack_require__(1)
+	var sharedCallback = __webpack_require__(5).sharedCallback
+	var voucherCallback = __webpack_require__(5).voucherCallback
+	var utils = __webpack_require__(6)
 
 	/** instantiate moveRewards object */
-	var moveRewards = {};
+	var moveRewards = {}
+
+	/** Check if Aquto backend hostname has been passed in */
+	var scriptParams = utils._parseScriptQuery(document.getElementById('aquto-api'))
+	var be = scriptParams.be || '//app.aquto.com/api'
+	var ow = scriptParams.ow || '//ow.aquto.com'
 
 	/**
 	 * Check eligibility for the current device
@@ -78,13 +83,13 @@ var aquto =
 	      data.channel = options.channel
 	    }
 	    jsonp({
-	      url: '//app.aquto.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
+	      url: be + '/campaign/datarewards/identifyandcheck/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
-	        sharedCallback(response, options.callback);
+	        sharedCallback(response, options.callback)
 	      }
-	    });
+	    })
 	  }
 	}
 
@@ -102,7 +107,7 @@ var aquto =
 	    data.phoneNumber = options.phoneNumber
 	  }
 	  jsonp({
-	    url: '//app.aquto.com/api/datarewards/eligibility',
+	    url: be + '/datarewards/eligibility',
 	    callbackName: 'jsonp',
 	    data: data,
 	    success: function(response) {
@@ -110,7 +115,7 @@ var aquto =
 	        options.callback(response.response)
 	      }
 	    }
-	  });
+	  })
 	}
 
 	/**
@@ -132,13 +137,13 @@ var aquto =
 	    data.countryCode = options.countryCode
 	  }
 	  jsonp({
-	    url: '//app.aquto.com/api/datarewards/offerwall/eligibility',
+	    url: be + '/datarewards/offerwall/eligibility',
 	    callbackName: 'jsonp',
 	    data: data,
 	    success: function(response) {
 	      if (options.callback &&  typeof options.callback === 'function') {
 	        if (response.response.eligible) {
-	          var offerWallHref = '//ow.aquto.com/#/' + response.response.opCode + '/offers'
+	          var offerWallHref = ow + '/#/' + response.response.opCode + '/offers'
 	          if(options.phoneNumber) {
 	            offerWallHref = offerWallHref + '?pn=' + options.phoneNumber
 	          }
@@ -146,17 +151,17 @@ var aquto =
 	            eligible: true,
 	            offerWallHref: offerWallHref,
 	            numberOfOffers: response.response.offerCount
-	          });
+	          })
 	        } else {
 	          options.callback({
 	            eligible: false,
 	            identified: !(response.response.opCode === 'unknown'),
 	            numberOfOffers: 0
-	          });
+	          })
 	        }
 	      }
 	    }
-	  });
+	  })
 	}
 
 	/**
@@ -179,13 +184,13 @@ var aquto =
 	      data.channel = options.channel
 	    }
 	    jsonp({
-	      url: '//app.aquto.com/api/campaign/datarewards/eligibility/'+options.campaignId,
+	      url: be + '/campaign/datarewards/eligibility/' + options.campaignId,
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
-	        sharedCallback(response, options.callback);
+	        sharedCallback(response, options.callback)
 	      }
-	    });
+	    })
 	  }
 	}
 
@@ -205,13 +210,13 @@ var aquto =
 	      data.phoneNumber = options.phoneNumber
 	    }
 	    jsonp({
-	      url: '//app.aquto.com/api/datarewards/voucher/eligibility',
+	      url: be + '/datarewards/voucher/eligibility',
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
-	        sharedCallback(response, options.callback);
+	        sharedCallback(response, options.callback)
 	      }
-	    });
+	    })
 	  }
 	}
 
@@ -231,13 +236,13 @@ var aquto =
 	      data.userToken = options.userToken
 	    }
 	    jsonp({
-	      url: '//app.aquto.com/api/campaign/datarewards/applyreward/'+options.campaignId,
+	      url: be + '/campaign/datarewards/applyreward/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
-	        sharedCallback(response, options.callback);
+	        sharedCallback(response, options.callback)
 	      }
-	    });
+	    })
 	  }
 	}
 
@@ -261,13 +266,13 @@ var aquto =
 	      data.phoneNumber = options.phoneNumber
 	    }
 	    jsonp({
-	      url: '//app.aquto.com/api/datarewards/voucher/reward',
+	      url: be + '/datarewards/voucher/reward',
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
-	        voucherCallback(response, options.callback);
+	        voucherCallback(response, options.callback)
 	      }
-	    });
+	    })
 	  }
 	}
 
@@ -280,26 +285,26 @@ var aquto =
 	 * @memberOf _
 	 * @type String
 	 */
-	moveRewards.VERSION = '0.1.0';
+	moveRewards.VERSION = '0.1.0'
 
 	// assign eligibility static methods
-	moveRewards.genericCheckEligibility = genericCheckEligibility;
-	moveRewards.checkEligibility = checkEligibility;
-	moveRewards.checkEligibilitySinglePage = checkAppEligibility;
-	moveRewards.checkAppEligibility = checkAppEligibility;
-	moveRewards.checkVoucherEligibility = checkVoucherEligibility;
-	moveRewards.checkOfferWallEligibility = checkOfferWallEligibility;
+	moveRewards.genericCheckEligibility = genericCheckEligibility
+	moveRewards.checkEligibility = checkEligibility
+	moveRewards.checkEligibilitySinglePage = checkAppEligibility
+	moveRewards.checkAppEligibility = checkAppEligibility
+	moveRewards.checkVoucherEligibility = checkVoucherEligibility
+	moveRewards.checkOfferWallEligibility = checkOfferWallEligibility
 
 	// assign redemption static methods
-	moveRewards.complete = complete;
-	moveRewards.redeemVoucher = redeemVoucher;
+	moveRewards.complete = complete
+	moveRewards.redeemVoucher = redeemVoucher
 
 	// helper functions
-	moveRewards._utils = _utils
+	moveRewards.utils = utils
 
 	/*--------------------------------------------------------------------------*/
 
-	module.exports = moveRewards;
+	module.exports = moveRewards
 
 
 /***/ },
@@ -474,23 +479,6 @@ var aquto =
 /***/ function(module, exports) {
 
 	/**
-	 * Format reward amount
-	 * Adds MB or GB as broadway-devropriate
-	 *
-	 * @param {Integer} rewardAmount Reward amount in MB
-	 *
-	 */
-	function formatData(rewardAmount) {
-	  var dataNum = rewardAmount;
-	  var dataLabel = 'MB';
-	  if (dataNum > 9999) {
-	    dataNum = Math.floor(dataNum/1024);
-	    dataLabel = 'GB';
-	  }
-	  return dataNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + dataLabel;
-	}
-
-	/**
 	 * Prepare the response to be returned and fires callback
 	 * Code shared between checkEligiblity and complete that formats the reward amount,
 	 * prepares the returned strings, and fires the callback
@@ -507,42 +495,42 @@ var aquto =
 	        eligible: true,
 	        rewardAmount: response.response.rewardAmountMB,
 	        userToken: response.response.userToken
-	      };
+	      }
 
 	      var operatorInfo = getOperatorInfo(response.response.operatorCode)
 	      if (!operatorInfo) {
-	        return;
+	        return
 	      }
-	      callbackObject.carrier = operatorInfo.operatorCode;
-	      callbackObject.carrierName = operatorInfo.operatorName;
+	      callbackObject.carrier = operatorInfo.operatorCode
+	      callbackObject.carrierName = operatorInfo.operatorName
 
-	      var rewardText;
+	      var rewardText
 	      if (response.response.displayText) {
-	        var rewardAmountFormatted;
+	        var rewardAmountFormatted
 	        if (response.response.rewardAmountMB) {
-	          rewardAmountFormatted = response.response.rewardAmountMB + '\xa0MB';
+	          rewardAmountFormatted = response.response.rewardAmountMB + '\xa0MB'
 	        }
 	        else {
-	          return;
+	          return
 	        }
-	        rewardText = response.response.displayText;
+	        rewardText = response.response.displayText
 
-	        rewardText = rewardText.replace('$$operator$$', operatorInfo.operatorName);
-	        rewardText = rewardText.replace('$$rewardAmount$$', rewardAmountFormatted);
+	        rewardText = rewardText.replace('$$operator$$', operatorInfo.operatorName)
+	        rewardText = rewardText.replace('$$rewardAmount$$', rewardAmountFormatted)
 	      }
-	      callbackObject.rewardText = rewardText;
+	      callbackObject.rewardText = rewardText
 
 	      if (response.response.offerUrl) {
-	        callbackObject.clickUrl = response.response.offerUrl;
+	        callbackObject.clickUrl = response.response.offerUrl
 	      }
 
-	      callback(callbackObject);
+	      callback(callbackObject)
 	    }
 	    else {
 	      callback({
 	        eligible: false,
 	        identified: !(response.response.operatorCode === 'unknown')
-	      });
+	      })
 	    }
 	  }
 	}
@@ -562,39 +550,39 @@ var aquto =
 	        success: true,
 	        status: 'success',
 	        rewardAmount: response.response.rewardAmountMB,
-	      };
+	      }
 
 	      var operatorInfo = getOperatorInfo(response.response.operatorCode)
 	      if (!operatorInfo) {
-	        return;
+	        return
 	      }
-	      callbackObject.carrier = operatorInfo.operatorCode;
-	      callbackObject.carrierName = operatorInfo.operatorName;
+	      callbackObject.carrier = operatorInfo.operatorCode
+	      callbackObject.carrierName = operatorInfo.operatorName
 
-	      callback(callbackObject);
+	      callback(callbackObject)
 	    }
 	    else if (response && response.response && response.response.status) {
 	      var callbackObject = {
 	        success: false
-	      };
+	      }
 
 	      if (response.response.status !== 'unabletoidentify') {
 	        var operatorInfo = getOperatorInfo(response.response.operatorCode)
 	        if (!operatorInfo) {
-	          return;
+	          return
 	        }
-	        callbackObject.carrier = operatorInfo.operatorCode;
-	        callbackObject.carrierName = operatorInfo.operatorName;
+	        callbackObject.carrier = operatorInfo.operatorCode
+	        callbackObject.carrierName = operatorInfo.operatorName
 	      }
 
-	      var status;
+	      var status
 	      switch (response.response.status) {
 	        case 'unabletoidentify':
 	        case 'ineligible':
 	        case 'unabletoconvert':
 	        case 'generalerror':
 	          status = 'ineligible'
-	          break;
+	          break
 	        // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
 	        default:
 	          status = response.response.status
@@ -607,37 +595,37 @@ var aquto =
 	}
 
 	function getOperatorInfo(operatorCode) {
-	  var operatorName;
+	  var operatorName
 
 	  if (
 	    operatorCode === 'attmb' ||
 	    operatorCode === 'attsim' ||
 	    operatorCode === 'attrw'
 	  ) {
-	    operatorName = "AT&T";
-	    operatorCode = 'att';
+	    operatorName = "AT&T"
+	    operatorCode = 'att'
 	  }
 	  else if (operatorCode === 'vzwrw') {
-	    operatorName = "Verizon";
-	    operatorCode = 'vzw';
+	    operatorName = "Verizon"
+	    operatorCode = 'vzw'
 	  }
 	  else if (operatorCode === 'vzwrw') {
-	    operatorName = "Verizon";
-	    operatorCode = 'vzw';
+	    operatorName = "Verizon"
+	    operatorCode = 'vzw'
 	  }
 	  else if (operatorCode === 'movirw') {
-	    operatorName = "Movistar";
-	    operatorCode = 'movi';
+	    operatorName = "Movistar"
+	    operatorCode = 'movi'
 	  }
 	  else if (operatorCode === 'telcelrw') {
-	    operatorName = "Telcel";
-	    operatorCode = 'telcel';
+	    operatorName = "Telcel"
+	    operatorCode = 'telcel'
 	  }
 	  else if (operatorCode === 'tigogtrw') {
-	    operatorName = 'Tigo';
-	    operatorCode = 'tigogt';
+	    operatorName = 'Tigo'
+	    operatorCode = 'tigogt'
 	  } else {
-	    return;
+	    return
 	  }
 
 	  return {
@@ -671,8 +659,46 @@ var aquto =
 	  img.src = url + '?rcb=' + Math.floor((1 + Math.random()) * 0x10000).toString(16)
 	}
 
+	/**
+	 * Format reward amount
+	 * Adds MB or GB as broadway-devropriate
+	 *
+	 * @param {Integer} rewardAmount Reward amount in MB
+	 *
+	 */
+	function formatData(rewardAmount) {
+	  var dataNum = rewardAmount
+	  var dataLabel = 'MB'
+	  if (dataNum > 9999) {
+	    dataNum = Math.floor(dataNum/1024)
+	    dataLabel = 'GB'
+	  }
+	  return dataNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + dataLabel
+	}
+
+	/**
+	 *
+	 *
+	 */
+	function parseScriptQuery(scriptTag) {
+	  var args = {}
+	  if (scriptTag) {
+	    var query = scriptTag.src.replace(/^[^\?]+\??/,'')
+
+	    var vars = query.split("&")
+	    for (var i=0; i<vars.length; i++) {
+	      var pair = vars[i].split("=")
+	      // decodeURI doesn't expand "+" to a space.
+	      args[pair[0]] = decodeURI(pair[1]).replace(/\+/g, ' ')
+	    }
+	  }
+	  return args
+	}
+
 	module.exports = {
-	  isOnline: isOnline
+	  isOnline: isOnline,
+	  formatData: formatData,
+	  _parseScriptQuery: parseScriptQuery
 	}
 
 

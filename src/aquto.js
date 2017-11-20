@@ -1,15 +1,20 @@
 /*!
  * Aquto Move Rewards v0.1.0 <http://aquto.com>
  */
-'use strict';
+'use strict'
 
-var jsonp = require('browser-jsonp');
-var sharedCallback = require('./sharedCallback').sharedCallback;
-var voucherCallback = require('./sharedCallback').voucherCallback;
-var _utils = require('./utils');
+var jsonp = require('browser-jsonp')
+var sharedCallback = require('./sharedCallback').sharedCallback
+var voucherCallback = require('./sharedCallback').voucherCallback
+var utils = require('./utils')
 
 /** instantiate moveRewards object */
-var moveRewards = {};
+var moveRewards = {}
+
+/** Check if Aquto backend hostname has been passed in */
+var scriptParams = utils._parseScriptQuery(document.getElementById('aquto-api'))
+var be = scriptParams.be || '//app.aquto.com/api'
+var ow = scriptParams.ow || '//ow.aquto.com'
 
 /**
  * Check eligibility for the current device
@@ -31,13 +36,13 @@ function checkEligibility(options) {
       data.channel = options.channel
     }
     jsonp({
-      url: '//app.aquto.com/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
+      url: be + '/campaign/datarewards/identifyandcheck/'+options.campaignId,
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
-        sharedCallback(response, options.callback);
+        sharedCallback(response, options.callback)
       }
-    });
+    })
   }
 }
 
@@ -55,7 +60,7 @@ function genericCheckEligibility(options) {
     data.phoneNumber = options.phoneNumber
   }
   jsonp({
-    url: '//app.aquto.com/api/datarewards/eligibility',
+    url: be + '/datarewards/eligibility',
     callbackName: 'jsonp',
     data: data,
     success: function(response) {
@@ -63,7 +68,7 @@ function genericCheckEligibility(options) {
         options.callback(response.response)
       }
     }
-  });
+  })
 }
 
 /**
@@ -85,13 +90,13 @@ function checkOfferWallEligibility(options) {
     data.countryCode = options.countryCode
   }
   jsonp({
-    url: '//app.aquto.com/api/datarewards/offerwall/eligibility',
+    url: be + '/datarewards/offerwall/eligibility',
     callbackName: 'jsonp',
     data: data,
     success: function(response) {
       if (options.callback &&  typeof options.callback === 'function') {
         if (response.response.eligible) {
-          var offerWallHref = '//ow.aquto.com/#/' + response.response.opCode + '/offers'
+          var offerWallHref = ow + '/#/' + response.response.opCode + '/offers'
           if(options.phoneNumber) {
             offerWallHref = offerWallHref + '?pn=' + options.phoneNumber
           }
@@ -99,17 +104,17 @@ function checkOfferWallEligibility(options) {
             eligible: true,
             offerWallHref: offerWallHref,
             numberOfOffers: response.response.offerCount
-          });
+          })
         } else {
           options.callback({
             eligible: false,
             identified: !(response.response.opCode === 'unknown'),
             numberOfOffers: 0
-          });
+          })
         }
       }
     }
-  });
+  })
 }
 
 /**
@@ -132,13 +137,13 @@ function checkAppEligibility(options) {
       data.channel = options.channel
     }
     jsonp({
-      url: '//app.aquto.com/api/campaign/datarewards/eligibility/'+options.campaignId,
+      url: be + '/campaign/datarewards/eligibility/' + options.campaignId,
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
-        sharedCallback(response, options.callback);
+        sharedCallback(response, options.callback)
       }
-    });
+    })
   }
 }
 
@@ -158,13 +163,13 @@ function checkVoucherEligibility(options) {
       data.phoneNumber = options.phoneNumber
     }
     jsonp({
-      url: '//app.aquto.com/api/datarewards/voucher/eligibility',
+      url: be + '/datarewards/voucher/eligibility',
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
-        sharedCallback(response, options.callback);
+        sharedCallback(response, options.callback)
       }
-    });
+    })
   }
 }
 
@@ -184,13 +189,13 @@ function complete(options) {
       data.userToken = options.userToken
     }
     jsonp({
-      url: '//app.aquto.com/api/campaign/datarewards/applyreward/'+options.campaignId,
+      url: be + '/campaign/datarewards/applyreward/'+options.campaignId,
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
-        sharedCallback(response, options.callback);
+        sharedCallback(response, options.callback)
       }
-    });
+    })
   }
 }
 
@@ -214,13 +219,13 @@ function redeemVoucher(options) {
       data.phoneNumber = options.phoneNumber
     }
     jsonp({
-      url: '//app.aquto.com/api/datarewards/voucher/reward',
+      url: be + '/datarewards/voucher/reward',
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
-        voucherCallback(response, options.callback);
+        voucherCallback(response, options.callback)
       }
-    });
+    })
   }
 }
 
@@ -233,23 +238,23 @@ function redeemVoucher(options) {
  * @memberOf _
  * @type String
  */
-moveRewards.VERSION = '0.1.0';
+moveRewards.VERSION = '0.1.0'
 
 // assign eligibility static methods
-moveRewards.genericCheckEligibility = genericCheckEligibility;
-moveRewards.checkEligibility = checkEligibility;
-moveRewards.checkEligibilitySinglePage = checkAppEligibility;
-moveRewards.checkAppEligibility = checkAppEligibility;
-moveRewards.checkVoucherEligibility = checkVoucherEligibility;
-moveRewards.checkOfferWallEligibility = checkOfferWallEligibility;
+moveRewards.genericCheckEligibility = genericCheckEligibility
+moveRewards.checkEligibility = checkEligibility
+moveRewards.checkEligibilitySinglePage = checkAppEligibility
+moveRewards.checkAppEligibility = checkAppEligibility
+moveRewards.checkVoucherEligibility = checkVoucherEligibility
+moveRewards.checkOfferWallEligibility = checkOfferWallEligibility
 
 // assign redemption static methods
-moveRewards.complete = complete;
-moveRewards.redeemVoucher = redeemVoucher;
+moveRewards.complete = complete
+moveRewards.redeemVoucher = redeemVoucher
 
 // helper functions
-moveRewards._utils = _utils
+moveRewards.utils = utils
 
 /*--------------------------------------------------------------------------*/
 
-module.exports = moveRewards;
+module.exports = moveRewards
