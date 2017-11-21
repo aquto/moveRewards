@@ -60,8 +60,9 @@ var aquto =
 
 	/** Check if Aquto backend hostname has been passed in */
 	var scriptParams = utils._parseScriptQuery(document.getElementById('aquto-api'))
-	var be = scriptParams.be || '//app.aquto.com/api'
-	var ow = scriptParams.ow || '//ow.aquto.com'
+	var be = scriptParams.be || 'app.aquto.com'
+	var ow = scriptParams.ow || 'ow.aquto.com'
+
 
 	/**
 	 * Check eligibility for the current device
@@ -83,7 +84,7 @@ var aquto =
 	      data.channel = options.channel
 	    }
 	    jsonp({
-	      url: be + '/campaign/datarewards/identifyandcheck/'+options.campaignId,
+	      url: '//' + be + '/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -107,7 +108,7 @@ var aquto =
 	    data.phoneNumber = options.phoneNumber
 	  }
 	  jsonp({
-	    url: be + '/datarewards/eligibility',
+	    url: '//' + be + '/api/datarewards/eligibility',
 	    callbackName: 'jsonp',
 	    data: data,
 	    success: function(response) {
@@ -137,13 +138,13 @@ var aquto =
 	    data.countryCode = options.countryCode
 	  }
 	  jsonp({
-	    url: be + '/datarewards/offerwall/eligibility',
+	    url: '//' + be + '/api/datarewards/offerwall/eligibility',
 	    callbackName: 'jsonp',
 	    data: data,
 	    success: function(response) {
 	      if (options.callback &&  typeof options.callback === 'function') {
 	        if (response.response.eligible) {
-	          var offerWallHref = ow + '/#/' + response.response.opCode + '/offers'
+	          var offerWallHref = '//' + ow + '/#/' + response.response.opCode + '/offers'
 	          if(options.phoneNumber) {
 	            offerWallHref = offerWallHref + '?pn=' + options.phoneNumber
 	          }
@@ -184,7 +185,7 @@ var aquto =
 	      data.channel = options.channel
 	    }
 	    jsonp({
-	      url: be + '/campaign/datarewards/eligibility/' + options.campaignId,
+	      url: '//' + be + '/api/campaign/datarewards/eligibility/' + options.campaignId,
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -210,7 +211,7 @@ var aquto =
 	      data.phoneNumber = options.phoneNumber
 	    }
 	    jsonp({
-	      url: be + '/datarewards/voucher/eligibility',
+	      url: '//' + be + '/api/datarewards/voucher/eligibility',
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -236,7 +237,7 @@ var aquto =
 	      data.userToken = options.userToken
 	    }
 	    jsonp({
-	      url: be + '/campaign/datarewards/applyreward/'+options.campaignId,
+	      url: '//' + be + '/api/campaign/datarewards/applyreward/'+options.campaignId,
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
@@ -266,7 +267,7 @@ var aquto =
 	      data.phoneNumber = options.phoneNumber
 	    }
 	    jsonp({
-	      url: be + '/datarewards/voucher/reward',
+	      url: '//' + be + '/api/datarewards/voucher/reward',
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
