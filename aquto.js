@@ -137,6 +137,9 @@ var aquto =
 	  if(options.countryCode) {
 	    data.countryCode = options.countryCode
 	  }
+	  if(options.publisherSiteUuid) {
+	    data.publisherSiteUuid = options.publisherSiteUuid
+	  }
 	  jsonp({
 	    url: '//' + be + '/api/datarewards/offerwall/eligibility',
 	    callbackName: 'jsonp',
@@ -144,9 +147,12 @@ var aquto =
 	    success: function(response) {
 	      if (options.callback &&  typeof options.callback === 'function') {
 	        if (response.response.eligible) {
-	          var offerWallHref = '//' + ow + '/#/' + response.response.opCode + '/offers'
+	          var offerWallHref = '//' + ow + '/#/' + response.response.opCode + '/offers?'
 	          if(options.phoneNumber) {
-	            offerWallHref = offerWallHref + '?pn=' + options.phoneNumber
+	            offerWallHref = offerWallHref + 'pn=' + options.phoneNumber + '&'
+	          }
+	          if(options.publisherSiteUuid) {
+	            offerWallHref = offerWallHref + 'psu=' + options.publisherSiteUuid + '&'
 	          }
 	          options.callback({
 	            eligible: true,
