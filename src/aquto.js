@@ -105,7 +105,7 @@ function checkOfferWallEligibility(options) {
             offerWallHref = offerWallHref + 'pn=' + options.phoneNumber + '&'
           }
           if(options.publisherSiteUuid) {
-            offerWallHref = offerWallHref + 'psu=' + options.publisherSiteUuid + '&'
+            offerWallHref = offerWallHref + 'publisherSiteUuid=' + options.publisherSiteUuid + '&'
           }
           options.callback({
             eligible: true,
