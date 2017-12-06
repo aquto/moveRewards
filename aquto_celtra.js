@@ -274,7 +274,10 @@ var aquto =
 	    operatorName = "Verizon"
 	    operatorCode = 'vzw'
 	  }
-	  else if (operatorCode === 'movirw') {
+	  else if (
+	    operatorCode === 'movirw' ||
+	    operatorCode === 'moviperw'
+	  ) {
 	    operatorName = "Movistar"
 	    operatorCode = 'movi'
 	  }
@@ -285,6 +288,10 @@ var aquto =
 	  else if (operatorCode === 'tigogtrw') {
 	    operatorName = 'Tigo'
 	    operatorCode = 'tigogt'
+	  }
+	  else if (operatorCode === 'oibrrw'){
+	    operatorName = 'Oi'
+	    operatorCode = 'oibr'
 	  } else {
 	    return
 	  }

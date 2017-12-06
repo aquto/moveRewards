@@ -133,7 +133,10 @@ function getOperatorInfo(operatorCode) {
     operatorName = "Verizon"
     operatorCode = 'vzw'
   }
-  else if (operatorCode === 'movirw') {
+  else if (
+    operatorCode === 'movirw' ||
+    operatorCode === 'moviperw'
+  ) {
     operatorName = "Movistar"
     operatorCode = 'movi'
   }
@@ -144,6 +147,10 @@ function getOperatorInfo(operatorCode) {
   else if (operatorCode === 'tigogtrw') {
     operatorName = 'Tigo'
     operatorCode = 'tigogt'
+  }
+  else if (operatorCode === 'oibrrw'){
+    operatorName = 'Oi'
+    operatorCode = 'oibr'
   } else {
     return
   }
