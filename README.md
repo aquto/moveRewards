@@ -133,7 +133,7 @@ The `checkEligibilitySinglePage` method determines if the current user is eligib
 |Key|Type|Optional|Description|
 |---|:--:|:------:|-----------|
 |eligible|boolean|false|Is the current user eligible for the reward?|
-|userToken|string|false| Token that must be passed back to server when offer is completed|
+|userToken|string|false| Token that must be passed back to server when offer is completed. Valid for 25 days.|
 |rewardAmount|integer|true|Reward amount in MB|
 |rewardText|string|true|Server configured string containing carrier and reward amount. Ex: Purchase any subscription and get 1GB added to your AT&T data plan.|
 |carrier|string|true|Code for user's carrier|
