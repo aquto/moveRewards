@@ -93,6 +93,10 @@ function checkOfferWallEligibility(options) {
   if(options.publisherSiteUuid) {
     data.publisherSiteUuid = options.publisherSiteUuid
   }
+  if(options.channel) {
+    data.publisherSiteUuid = options.channel
+  }
+
   jsonp({
     url: '//' + be + '/api/datarewards/offerwall/eligibility',
     callbackName: 'jsonp',
@@ -107,6 +111,10 @@ function checkOfferWallEligibility(options) {
           if(options.publisherSiteUuid) {
             offerWallHref = offerWallHref + 'publisherSiteUuid=' + options.publisherSiteUuid + '&'
           }
+          if(options.channel) {
+            offerWallHref = offerWallHref + 'channel=' + options.channel + '&'
+          }
+
           options.callback({
             eligible: true,
             offerWallHref: offerWallHref,
