@@ -38,3 +38,5 @@ node_modules
 # sphinx build folder
 _build
 _build_html
+
+.idea
