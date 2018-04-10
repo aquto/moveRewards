@@ -54,8 +54,8 @@ aquto.offerWall.render({
 | styleTitleFont       | String | No  | Font family to use for headings. This should equal the CSS font-family value e.g. "Verdana" |
 | styleTextColor       | String | No  | Text color e.g. "#ff0000" or "red" |
 | styleTextFont        | String | No  | Font family to use for text. This should equal the CSS font-family value e.g. "Verdana" |
-| publisherSiteUuid    | String | No  | Publisher site identifier |
-| channel              | String | No  | Publisher channel |
+| publisherSiteUuid    | String | No  | Unique tracking code assigned by Aquto |
+| channel              | String | No  | Incent channel string is used for reporting purposes |
 
 ### Notes
 - If no offer is available or the user cannot be identified, nothing will be rendered
