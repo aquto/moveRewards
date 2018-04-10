@@ -16,13 +16,14 @@ domain use that instead of ow.aquto.com:
 Then add the following div tag on the page where the offers should be rendered:
 ```html
 <div id="aquto-offerwall-embed"
-  data-opcode="<opcode>"
   data-offerwall-domain="<offerwallDomain>"
   data-style-background-color="<styleBackgroundColor>"
   data-style-title-color="<styleTitleColor>"
   data-style-title-font="<styleTitleFont>"
   data-style-text-color="<styleTextColor>"
   data-style-text-font="<styleTextFont>"
+  data-publisher-site-uuid="<publisherSiteUuid>"
+  data-channel="<channel>"
 ></div>
 ```
 
@@ -32,13 +33,14 @@ If you need more control over when the offers get loaded you can use our javascr
 ```javascript
 aquto.offerWall.render({
   id: "<id>",
-  opcode: "<opcode>",
   offerwallDomain: "<offerwallDomain>",
   styleBackgroundColor: "<styleBackgroundColor>",
   styleTitleColor: "<styleTitleColor>",
   styleTitleFont: "<styleTitleFont>",
   styleTextColor: "<styleTextColor>",
-  styleTextFont: "<styleTextFont>"
+  styleTextFont: "<styleTextFont>",
+  publisherSiteUuid: "<publisherSiteUuid>",
+  channel: "<channel>"
 });
 ```
 
@@ -46,13 +48,14 @@ aquto.offerWall.render({
 | Field                | Type   | Required | Description |
 |----------------------|--------|----------|-------------|
 | id                   | String | Yes | For div tag integration this should always be "aquto-offerwall-embed". For API integration this is the ID of the div tag to embed the offer in |
-| opcode               | String | Yes | This is the operator code for the offerwall and will be provided by Aquto |
 | offerwallDomain      | String | No  | The domain of the offerwall you are integrated with. This defaults to ow.aquto.com |
 | styleBackgroundColor | String | No  | Background color e.g. "#ff0000" or "red" |
 | styleTitleColor      | String | No  | Heading color e.g. "#ff0000" or "red" |
 | styleTitleFont       | String | No  | Font family to use for headings. This should equal the CSS font-family value e.g. "Verdana" |
 | styleTextColor       | String | No  | Text color e.g. "#ff0000" or "red" |
 | styleTextFont        | String | No  | Font family to use for text. This should equal the CSS font-family value e.g. "Verdana" |
+| publisherSiteUuid    | String | No  | Publisher site identifier |
+| channel              | String | No  | Publisher channel |
 
 ### Notes
 - If no offer is available or the user cannot be identified, nothing will be rendered
