@@ -33,13 +33,13 @@ The `checkEligibility` method determines if the current user if eligible to rece
 |campaignId|string|yes|ID for campaign setup by Aquto|
 |callback|function|yes|Function called after checking eligibility on the server|
 |phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
-|publisherSiteUuid|string|false|Unique tracking code assigned by Aquto|
+|publisherSiteUuid|string|no|Unique tracking code assigned by Aquto|
 |channel|string|no|Optional channel of the inventory|
 
 ### Response properties
 |Key|Type|Optional|Description|
 |---|:--:|:------:|-----------|
-|eligible|boolean|false|Is the current user eligible for the reward?|
+|eligible|boolean|no|Is the current user eligible for the reward?|
 |rewardAmount|integer|true|Reward amount in MB|
 |rewardText|string|true|Server configured string containing carrier and reward amount. Ex: Purchase any subscription and get 1GB added to your AT&T data plan.|
 |carrier|string|true|Code for user's carrier|
