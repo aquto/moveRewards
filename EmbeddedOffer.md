@@ -1,6 +1,6 @@
 Embedded Offer Wall Offer
 =========================
-The embedded offer wall allows an offer to be embedded into any website. Following the instructions below to integrate.
+The embedded offer wall allows an offer to be embedded into any website. Follow the instructions below to integrate.
 
 ## Setup
 To embed an offer on a website, include the javascript library and an HTML tag in the page where the offers should be 
