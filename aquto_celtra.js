@@ -44,7 +44,7 @@ var aquto =
 /******/ ({
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/*!
 	 * Aquto Move Rewards v0.1.0 <http://aquto.com>
@@ -134,10 +134,10 @@ var aquto =
 	module.exports = moveRewards;
 
 
-/***/ },
+/***/ }),
 
 /***/ 5:
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/**
 	 * Prepare the response to be returned and fires callback
@@ -311,6 +311,6 @@ var aquto =
 	}
 
 
-/***/ }
+/***/ })
 
 /******/ });
