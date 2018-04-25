@@ -6,11 +6,12 @@ The embedded offer wall allows an offer to be embedded into any website. Follow 
 To embed an offer on a website, include the javascript library and an HTML tag in the page where the offers should be 
 loaded.
 
-Place the following script tag in the head of your page (between \<head\> and \</head\>). If you have a custom integration 
+Place the following style and script tags in the head of your page (between \<head\> and \</head\>). If you have a custom integration 
 domain use that instead of ow.aquto.com:
 
 ```html
-<script src="http://ow.aquto.com/scripts/embed.min.js"></script>
+<link rel="stylesheet" href="http://ow.aquto.com/embed/embed.min.css" />
+<script src="http://ow.aquto.com/embed/embed.min.js"></script>
 ```
 
 Then add the following div tag on the page where the offers should be rendered:
