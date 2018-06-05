@@ -25,6 +25,10 @@ Then add the following div tag on the page where the offers should be rendered:
   data-style-text-font="<styleTextFont>"
   data-publisher-site-uuid="<publisherSiteUuid>"
   data-channel="<channel>"
+  data-hide-offerwall-link="<hideOfferwallLink>"
+  data-hide-terms="<hideTerms>"
+  data-fixed-card-height="<fixedCardHeight>"
+  data-offer-types="<offerTypes>"
 ></div>
 ```
 
@@ -41,22 +45,31 @@ aquto.offerWall.render({
   styleTextColor: "<styleTextColor>",
   styleTextFont: "<styleTextFont>",
   publisherSiteUuid: "<publisherSiteUuid>",
-  channel: "<channel>"
+  channel: "<channel>",
+  phoneNunber: "<phoneNumber",
+  hideOfferwallLink: <hideOfferwallLink>,
+  hideTerms: <hideTerms>,
+  fixedCardHeight: <fixedCardHeight>,
+  offerTypes: "<offerTypes>"
 });
 ```
 
 ### Available Attributes:
-| Field                | Type   | Required | Description |
-|----------------------|--------|----------|-------------|
-| id                   | String | Yes | For div tag integration this should always be "aquto-offerwall-embed". For API integration this is the ID of the div tag to embed the offer in |
-| offerwallDomain      | String | No  | The domain of the offerwall you are integrated with. This defaults to ow.aquto.com |
-| styleBackgroundColor | String | No  | Background color e.g. "#ff0000" or "red" |
-| styleTitleColor      | String | No  | Heading color e.g. "#ff0000" or "red" |
-| styleTitleFont       | String | No  | Font family to use for headings. This should equal the CSS font-family value e.g. "Verdana" |
-| styleTextColor       | String | No  | Text color e.g. "#ff0000" or "red" |
-| styleTextFont        | String | No  | Font family to use for text. This should equal the CSS font-family value e.g. "Verdana" |
-| publisherSiteUuid    | String | No  | Unique tracking code assigned by Aquto |
-| channel              | String | No  | Incent channel string is used for reporting purposes |
+| Field                | Type    | Required | Description |
+|----------------------|---------|----------|-------------|
+| id                   | String  | Yes | For div tag integration this should always be "aquto-offerwall-embed". For API integration this is the ID of the div tag to embed the offer in |
+| offerwallDomain      | String  | No  | The domain of the offerwall you are integrated with. This defaults to ow.aquto.com |
+| styleBackgroundColor | String  | No  | Background color e.g. "#ff0000" or "red" |
+| styleTitleColor      | String  | No  | Heading color e.g. "#ff0000" or "red" |
+| styleTitleFont       | String  | No  | Font family to use for headings. This should equal the CSS font-family value e.g. "Verdana" |
+| styleTextColor       | String  | No  | Text color e.g. "#ff0000" or "red" |
+| styleTextFont        | String  | No  | Font family to use for text. This should equal the CSS font-family value e.g. "Verdana" |
+| publisherSiteUuid    | String  | No  | Unique tracking code assigned by Aquto |
+| channel              | String  | No  | Incent channel string is used for reporting purposes |
+| hideOfferwallLink    | Boolean | No  | Whether to hide link to offerwall. This defaults to false |
+| hideTerms            | Boolean | No  | Whether to hide link to terms and conditions. This defaults to false |
+| fixedCardHeight      | Boolean | No  | Whether to keep a fixed card size so all offers will have the same div height. This defaults to false |
+| offerTypes           | String  | No  | Comma delimited list of offer types to include. Valid types are video, leadgen & apps (external offer). If left empty all types will be included |
 
 ### Notes
 - If no offer is available or the user cannot be identified, nothing will be rendered
