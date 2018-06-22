@@ -155,7 +155,7 @@ var aquto =
 	    success: function(response) {
 	      if (options.callback &&  typeof options.callback === 'function') {
 	        if (response.response.eligible) {
-	          var offerWallHref = '//' + ow + '/#/' + response.response.opCode + '/offers?'
+	          var offerWallHref = '//' + ow + '/?opCode=' + response.response.opCode + '&'
 	          if(options.phoneNumber) {
 	            offerWallHref = offerWallHref + 'pn=' + options.phoneNumber + '&'
 	          }
