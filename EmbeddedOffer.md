@@ -80,3 +80,4 @@ aquto.offerWall.render({
 ### Notes
 - If no offer is available or the user cannot be identified, nothing will be rendered
 - For div tag integration the offer loading will be initiated on DOMContentLoaded
+- The rendered offers will fill the containing element but will stay within the range of 310px - 430px wide. The height will span from 444px - 512px including carousel navigation.
