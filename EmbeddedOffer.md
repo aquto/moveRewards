@@ -26,6 +26,8 @@ Then add the following div tag on the page where the offers should be rendered:
   data-style-theme="<styleTheme>"
   data-publisher-site-uuid="<publisherSiteUuid>"
   data-channel="<channel>"
+  data-phone-number="<phoneNumber>"
+  data-operator-code="<operatorCode>"
   data-hide-offerwall-link="<hideOfferwallLink>"
   data-hide-terms="<hideTerms>"
   data-fixed-card-height="<fixedCardHeight>"
@@ -49,7 +51,8 @@ aquto.offerWall.render({
   styleTheme: "<styleTheme>",
   publisherSiteUuid: "<publisherSiteUuid>",
   channel: "<channel>",
-  phoneNunber: "<phoneNumber",
+  phoneNumber: "<phoneNumber",
+  operatorCode: "<operatorCode>",
   hideOfferwallLink: <hideOfferwallLink>,
   hideTerms: <hideTerms>,
   fixedCardHeight: <fixedCardHeight>,
@@ -71,6 +74,8 @@ aquto.offerWall.render({
 | styleTheme           | String  | No  | Color theme to use. Available themes are "dark", "light" and "default" |
 | publisherSiteUuid    | String  | No  | Unique tracking code assigned by Aquto |
 | channel              | String  | No  | Incent channel string is used for reporting purposes |
+| phoneNumber          | String  | No  | Phone number of subscriber |
+| operatorCode         | String  | No  | Operator code of subscriber |
 | hideOfferwallLink    | Boolean | No  | Whether to hide link to offerwall. This defaults to false |
 | hideTerms            | Boolean | No  | Whether to hide link to terms and conditions. This defaults to false |
 | fixedCardHeight      | Boolean | No  | Whether to keep a fixed card size so all offers will have the same div height. This defaults to false. When using carousel it is recommended to set this value to true so that all the offer cards have the same height |
