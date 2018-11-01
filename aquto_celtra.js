@@ -149,31 +149,23 @@ var aquto =
 	 *
 	 */
 	function sharedCallback(response, callback) {
-	  if (callback &&  typeof callback === 'function') {
-	    if (response && response.response && response.response.eligible) {
+	  if (callback && typeof callback === 'function') {
+	    var callbackObject;
 
-	      var callbackObject = {
+	    if (response && response.response && response.response.eligible) {
+	      callbackObject = {
 	        eligible: true,
 	        rewardAmount: response.response.rewardAmountMB,
 	        userToken: response.response.userToken
 	      }
 
 	      var operatorInfo = getOperatorInfo(response.response.operatorCode)
-	      if (!operatorInfo) {
-	        return
-	      }
 	      callbackObject.carrier = operatorInfo.operatorCode
 	      callbackObject.carrierName = operatorInfo.operatorName
 
 	      var rewardText
 	      if (response.response.displayText) {
-	        var rewardAmountFormatted
-	        if (response.response.rewardAmountMB) {
-	          rewardAmountFormatted = response.response.rewardAmountMB + '\xa0MB'
-	        }
-	        else {
-	          return
-	        }
+	        var rewardAmountFormatted = response.response.rewardAmountMB ? response.response.rewardAmountMB + '\xa0MB' : ''
 	        rewardText = response.response.displayText
 
 	        rewardText = rewardText.replace('$$operator$$', operatorInfo.operatorName)
@@ -185,14 +177,50 @@ var aquto =
 	        callbackObject.clickUrl = response.response.offerUrl
 	      }
 
-	      callback(callbackObject)
-	    }
-	    else {
-	      callback({
+	    } else {
+	      callbackObject = {
 	        eligible: false,
-	        identified: !(response.response.operatorCode === 'unknown')
-	      })
+	        identified: !!(response.response && response.response.operatorCode !== 'unknown')
+	      }
 	    }
+
+	    callback(callbackObject)
+	  }
+	}
+
+	function prepareCompleteCallback(response) {
+	  var callbackObject;
+
+	  if (response && response.response) {
+	    callbackObject = {
+	      success: !!response.response.successful,
+	      status: response.response.status,
+	      rewardAmount: response.response.rewardAmountMB
+	    }
+
+	    var operatorInfo = getOperatorInfo(response.response.operatorCode)
+	    callbackObject.carrier = operatorInfo.operatorCode
+	    callbackObject.carrierName = operatorInfo.operatorName
+	  } else {
+	    callbackObject = {
+	      success: false,
+	      status: 'generalerror'
+	    }
+	  }
+
+	  return callbackObject
+	}
+
+	/**
+	 * Prepares the reward response to be returned and fires callback
+	 *
+	 * @param {Object} response JSON response from server
+	 * @param {Object} callback Optional callback to be fired after response from server
+	 *
+	 */
+	function completeCallback(response, callback) {
+	  if (callback && typeof callback === 'function') {
+	    callback(prepareCompleteCallback(response))
 	  }
 	}
 
@@ -204,54 +232,21 @@ var aquto =
 	 *
 	 */
 	function voucherCallback(response, callback) {
-	  if (callback &&  typeof callback === 'function') {
-	    if (response && response.response && response.response.status === 'success') {
+	  if (callback && typeof callback === 'function') {
+	    var callbackObject = prepareCompleteCallback(response)
 
-	      var callbackObject = {
-	        success: true,
-	        status: 'success',
-	        rewardAmount: response.response.rewardAmountMB,
-	      }
+	    // Group some statuses into ineligible
+      switch (callbackObject.status) {
+        case 'unabletoidentify':
+        case 'ineligible':
+        case 'unabletoconvert':
+        case 'generalerror':
+          callbackObject.status = 'ineligible'
+          break
+        // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
+      }
 
-	      var operatorInfo = getOperatorInfo(response.response.operatorCode)
-	      if (!operatorInfo) {
-	        return
-	      }
-	      callbackObject.carrier = operatorInfo.operatorCode
-	      callbackObject.carrierName = operatorInfo.operatorName
-
-	      callback(callbackObject)
-	    }
-	    else if (response && response.response && response.response.status) {
-	      var callbackObject = {
-	        success: false
-	      }
-
-	      if (response.response.status !== 'unabletoidentify') {
-	        var operatorInfo = getOperatorInfo(response.response.operatorCode)
-	        if (!operatorInfo) {
-	          return
-	        }
-	        callbackObject.carrier = operatorInfo.operatorCode
-	        callbackObject.carrierName = operatorInfo.operatorName
-	      }
-
-	      var status
-	      switch (response.response.status) {
-	        case 'unabletoidentify':
-	        case 'ineligible':
-	        case 'unabletoconvert':
-	        case 'generalerror':
-	          status = 'ineligible'
-	          break
-	        // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
-	        default:
-	          status = response.response.status
-	      }
-
-	      callbackObject.status = status
-	      callback(callbackObject)
-	    }
+	    callback(callbackObject)
 	  }
 	}
 
@@ -292,8 +287,10 @@ var aquto =
 	  else if (operatorCode === 'oibrrw'){
 	    operatorName = 'Oi'
 	    operatorCode = 'oibr'
-	  } else {
-	    return
+	  }
+	  else {
+	    operatorName = 'N/A'
+	    operatorCode = 'na'
 	  }
 
 	  return {
@@ -303,11 +300,10 @@ var aquto =
 	}
 
 
-
-
 	module.exports = {
-	  sharedCallback:sharedCallback,
-	  voucherCallback: voucherCallback
+	  sharedCallback: sharedCallback,
+	  voucherCallback: voucherCallback,
+	  completeCallback: completeCallback
 	}
 
 

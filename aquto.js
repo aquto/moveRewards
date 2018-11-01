@@ -53,6 +53,7 @@ var aquto =
 	var jsonp = __webpack_require__(1)
 	var sharedCallback = __webpack_require__(5).sharedCallback
 	var voucherCallback = __webpack_require__(5).voucherCallback
+	var completeCallback = __webpack_require__(5).completeCallback
 	var utils = __webpack_require__(6)
 
 	/** instantiate moveRewards object */
@@ -92,6 +93,9 @@ var aquto =
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
+	        sharedCallback(response, options.callback)
+	      },
+	      error: function(response) {
 	        sharedCallback(response, options.callback)
 	      }
 	    })
@@ -174,7 +178,7 @@ var aquto =
 	        } else {
 	          options.callback({
 	            eligible: false,
-	            identified: !(response.response.opCode === 'unknown'),
+	            identified: !!(response.response && response.response.opCode !== 'unknown'),
 	            numberOfOffers: 0
 	          })
 	        }
@@ -213,6 +217,9 @@ var aquto =
 	      data: data,
 	      success: function(response) {
 	        sharedCallback(response, options.callback)
+	      },
+	      error: function(response) {
+	        sharedCallback(response, options.callback)
 	      }
 	    })
 	  }
@@ -246,6 +253,34 @@ var aquto =
 	      data: data,
 	      success: function(response) {
 	        sharedCallback(response, options.callback)
+	      },
+	      error: function(response) {
+	        sharedCallback(response, options.callback)
+	      }
+	    })
+	  }
+	}
+
+	/**
+	 * Check if a qualified user is eligible for a specific campaign
+	 *
+	 * @param {String} campaignId Aquto campaign id
+	 * @param {function} callback Callback function on success or error
+	 *
+	 */
+	function checkQualified(options) {
+	  if (options && options.campaignId) {
+	    var data = { apiVersion: 'v8' }
+
+	    jsonp({
+	      url: '//' + be + '/api/datarewards/webconvert/eligibility/'+options.campaignId,
+	      callbackName: 'jsonp',
+	      data: data,
+	      success: function(response) {
+	        sharedCallback(response, options.callback)
+	      },
+	      error: function(response) {
+	        sharedCallback(response, options.callback)
 	      }
 	    })
 	  }
@@ -271,6 +306,9 @@ var aquto =
 	      callbackName: 'jsonp',
 	      data: data,
 	      success: function(response) {
+	        sharedCallback(response, options.callback)
+	      },
+	      error: function(response) {
 	        sharedCallback(response, options.callback)
 	      }
 	    })
@@ -309,9 +347,139 @@ var aquto =
 	      data: data,
 	      success: function(response) {
 	        voucherCallback(response, options.callback)
+	      },
+	      error: function(response) {
+	        voucherCallback(response, options.callback)
 	      }
 	    })
 	  }
+	}
+
+	/**
+	 * Complete the conversion for a qualified user
+	 *
+	 * @param {String} campaignId Aquto campaign id
+	 * @param {String} callback Callback function on success or error
+	 *
+	 */
+	function completeQualified(options) {
+	  if (options && options.campaignId) {
+	    var data = { apiVersion: 'v8' }
+
+	    jsonp({
+	      url: '//' + be + '/api/datarewards/webconvert/reward/'+options.campaignId,
+	      callbackName: 'jsonp',
+	      data: data,
+	      success: function(response) {
+	        completeCallback(response, options.callback)
+	      },
+	      error: function(response) {
+	        completeCallback(response, options.callback)
+	      }
+	    })
+	  }
+	}
+
+	/*--------------------------------------------------------------------------*/
+
+	var defaultEligibleMessage = 'Complete the offer and receive $$rewardAmount$$MB'
+	var defaultRewardMessage = 'Congratulations! You have received $$rewardAmount$$MB'
+	var defaultJBoxOptions = {
+	  color: 'blue',
+	  position: {x: 'center', y: 'bottom'},
+	  offset: {x: 0, y: -10},
+	  // zoomIn, zoomOut, pulse, move, slide, flip, tada
+	  animation: {open: 'tada', close: 'zoomIn'},
+	  autoClose: 7000
+	}
+
+	/**
+	 * Replace placeholders in message. Parameters are surrounded by double dollar signs e.g. $$param1$$
+	 *
+	 * @param {String} text The text to replace placeholders in
+	 * @param {Object} params Named parameters to replace in message
+	 */
+	function replaceParams(text, params) {
+	  if (params) {
+	    for (var k in params) {
+	      text = text.replace('$$' + k + '$$', params[k])
+	    }
+	  }
+	  return text
+	}
+
+	/**
+	 * Show popup notice with specified message
+	 *
+	 * @param {String} message Message to display with optional parameter placeholders in format $$param1$$
+	 * @param {Object} params Named parameters to replace in message
+	 * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
+	 * @param {String} jBoxOptions jBox Options
+	 */
+	function showNotice(options) {
+	  if (!window.jBox) {
+	    console.log("jBox is required to show notices")
+	  } else {
+	    // https://stephanwagner.me/jBox/options
+	    var jBoxType = options.jBoxType || 'Notice'
+	    var jBoxOptions = Object.assign({
+	      content: replaceParams(options.message, options.params),
+	    }, defaultJBoxOptions, options.jBoxOptions)
+
+	    new jBox(jBoxType, jBoxOptions)
+	  }
+	}
+
+	function toNoticeOptions(options, response, defaultMessage) {
+	  return {
+	    message: options.message || defaultMessage,
+	    params: {
+	      rewardAmount: response.rewardAmount,
+	      carrier: response.carrier
+	    },
+	    jBoxType: options.jBoxType,
+	    jBoxOptions: options.jBoxOptions
+	  }
+	}
+
+	/**
+	 * Show popup notice with specified message if user is eligible for campaign
+	 *
+	 * @param {String} campaignId Aquto campaign id
+	 * @param {String} message Message to display with optional parameter placeholders in format $$rewardAmount$$
+	 * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
+	 * @param {String} jBoxOptions jBox Options
+	 *
+	 */
+	function checkQualifiedAndNotify(options) {
+	  aquto.checkQualified({
+	    campaignId: options.campaignId,
+	    callback: function(response) {
+	      if (response && response.eligible) {
+	        showNotice(toNoticeOptions(options, response, defaultEligibleMessage))
+	      }
+	    }
+	  })
+	}
+
+	/**
+	 * Reward user if eligible for campaign and show popup notice with specified message
+	 *
+	 * @param {String} campaignId Aquto campaign id
+	 * @param {String} message Message to display with optional parameter placeholders in format $$rewardAmount$$
+	 * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
+	 * @param {String} jBoxOptions jBox Options
+	 *
+	 */
+	function completeQualifiedAndNotify(options) {
+	  aquto.completeQualified({
+	    campaignId: options.campaignId,
+	    callback: function(response) {
+	      if (response && response.success) {
+	        showNotice(toNoticeOptions(options, response, defaultRewardMessage))
+	      }
+	    }
+	  })
 	}
 
 	/*--------------------------------------------------------------------------*/
@@ -332,13 +500,20 @@ var aquto =
 	moveRewards.checkAppEligibility = checkAppEligibility
 	moveRewards.checkVoucherEligibility = checkVoucherEligibility
 	moveRewards.checkOfferWallEligibility = checkOfferWallEligibility
+	moveRewards.checkQualified = checkQualified
 
 	// assign redemption static methods
 	moveRewards.complete = complete
 	moveRewards.redeemVoucher = redeemVoucher
+	moveRewards.completeQualified = completeQualified
 
 	// helper functions
 	moveRewards.utils = utils
+
+	// show notice methods
+	moveRewards.checkQualifiedAndNotify = checkQualifiedAndNotify
+	moveRewards.completeQualifiedAndNotify = completeQualifiedAndNotify
+	moveRewards.showNotice = showNotice
 
 	/*--------------------------------------------------------------------------*/
 
@@ -526,31 +701,23 @@ var aquto =
 	 *
 	 */
 	function sharedCallback(response, callback) {
-	  if (callback &&  typeof callback === 'function') {
-	    if (response && response.response && response.response.eligible) {
+	  if (callback && typeof callback === 'function') {
+	    var callbackObject;
 
-	      var callbackObject = {
+	    if (response && response.response && response.response.eligible) {
+	      callbackObject = {
 	        eligible: true,
 	        rewardAmount: response.response.rewardAmountMB,
 	        userToken: response.response.userToken
 	      }
 
 	      var operatorInfo = getOperatorInfo(response.response.operatorCode)
-	      if (!operatorInfo) {
-	        return
-	      }
 	      callbackObject.carrier = operatorInfo.operatorCode
 	      callbackObject.carrierName = operatorInfo.operatorName
 
 	      var rewardText
 	      if (response.response.displayText) {
-	        var rewardAmountFormatted
-	        if (response.response.rewardAmountMB) {
-	          rewardAmountFormatted = response.response.rewardAmountMB + '\xa0MB'
-	        }
-	        else {
-	          return
-	        }
+	        var rewardAmountFormatted = response.response.rewardAmountMB ? response.response.rewardAmountMB + '\xa0MB' : ''
 	        rewardText = response.response.displayText
 
 	        rewardText = rewardText.replace('$$operator$$', operatorInfo.operatorName)
@@ -562,14 +729,50 @@ var aquto =
 	        callbackObject.clickUrl = response.response.offerUrl
 	      }
 
-	      callback(callbackObject)
-	    }
-	    else {
-	      callback({
+	    } else {
+	      callbackObject = {
 	        eligible: false,
-	        identified: !(response.response.operatorCode === 'unknown')
-	      })
+	        identified: !!(response.response && response.response.operatorCode !== 'unknown')
+	      }
 	    }
+
+	    callback(callbackObject)
+	  }
+	}
+
+	function prepareCompleteCallback(response) {
+	  var callbackObject;
+
+	  if (response && response.response) {
+	    callbackObject = {
+	      success: !!response.response.successful,
+	      status: response.response.status,
+	      rewardAmount: response.response.rewardAmountMB
+	    }
+
+	    var operatorInfo = getOperatorInfo(response.response.operatorCode)
+	    callbackObject.carrier = operatorInfo.operatorCode
+	    callbackObject.carrierName = operatorInfo.operatorName
+	  } else {
+	    callbackObject = {
+	      success: false,
+	      status: 'generalerror'
+	    }
+	  }
+
+	  return callbackObject
+	}
+
+	/**
+	 * Prepares the reward response to be returned and fires callback
+	 *
+	 * @param {Object} response JSON response from server
+	 * @param {Object} callback Optional callback to be fired after response from server
+	 *
+	 */
+	function completeCallback(response, callback) {
+	  if (callback && typeof callback === 'function') {
+	    callback(prepareCompleteCallback(response))
 	  }
 	}
 
@@ -581,54 +784,21 @@ var aquto =
 	 *
 	 */
 	function voucherCallback(response, callback) {
-	  if (callback &&  typeof callback === 'function') {
-	    if (response && response.response && response.response.status === 'success') {
+	  if (callback && typeof callback === 'function') {
+	    var callbackObject = prepareCompleteCallback(response)
 
-	      var callbackObject = {
-	        success: true,
-	        status: 'success',
-	        rewardAmount: response.response.rewardAmountMB,
-	      }
-
-	      var operatorInfo = getOperatorInfo(response.response.operatorCode)
-	      if (!operatorInfo) {
-	        return
-	      }
-	      callbackObject.carrier = operatorInfo.operatorCode
-	      callbackObject.carrierName = operatorInfo.operatorName
-
-	      callback(callbackObject)
+	    // Group some statuses into ineligible
+	    switch (response.response.status) {
+	      case 'unabletoidentify':
+	      case 'ineligible':
+	      case 'unabletoconvert':
+	      case 'generalerror':
+	        callbackObject.status = 'ineligible'
+	        break
+	      // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
 	    }
-	    else if (response && response.response && response.response.status) {
-	      var callbackObject = {
-	        success: false
-	      }
 
-	      if (response.response.status !== 'unabletoidentify') {
-	        var operatorInfo = getOperatorInfo(response.response.operatorCode)
-	        if (!operatorInfo) {
-	          return
-	        }
-	        callbackObject.carrier = operatorInfo.operatorCode
-	        callbackObject.carrierName = operatorInfo.operatorName
-	      }
-
-	      var status
-	      switch (response.response.status) {
-	        case 'unabletoidentify':
-	        case 'ineligible':
-	        case 'unabletoconvert':
-	        case 'generalerror':
-	          status = 'ineligible'
-	          break
-	        // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
-	        default:
-	          status = response.response.status
-	      }
-
-	      callbackObject.status = status
-	      callback(callbackObject)
-	    }
+	    callback(callbackObject)
 	  }
 	}
 
@@ -670,7 +840,8 @@ var aquto =
 	    operatorName = 'Oi'
 	    operatorCode = 'oibr'
 	  } else {
-	    return
+	    operatorName = 'N/A'
+	    operatorCode = 'na'
 	  }
 
 	  return {
@@ -680,11 +851,10 @@ var aquto =
 	}
 
 
-
-
 	module.exports = {
-	  sharedCallback:sharedCallback,
-	  voucherCallback: voucherCallback
+	  sharedCallback: sharedCallback,
+	  voucherCallback: voucherCallback,
+	  completeCallback: completeCallback
 	}
 
 

@@ -6,6 +6,7 @@
 var jsonp = require('browser-jsonp')
 var sharedCallback = require('./sharedCallback').sharedCallback
 var voucherCallback = require('./sharedCallback').voucherCallback
+var completeCallback = require('./sharedCallback').completeCallback
 var utils = require('./utils')
 
 /** instantiate moveRewards object */
@@ -45,6 +46,9 @@ function checkEligibility(options) {
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
+        sharedCallback(response, options.callback)
+      },
+      error: function(response) {
         sharedCallback(response, options.callback)
       }
     })
@@ -127,7 +131,7 @@ function checkOfferWallEligibility(options) {
         } else {
           options.callback({
             eligible: false,
-            identified: !(response.response.opCode === 'unknown'),
+            identified: !!(response.response && response.response.opCode !== 'unknown'),
             numberOfOffers: 0
           })
         }
@@ -166,6 +170,9 @@ function checkAppEligibility(options) {
       data: data,
       success: function(response) {
         sharedCallback(response, options.callback)
+      },
+      error: function(response) {
+        sharedCallback(response, options.callback)
       }
     })
   }
@@ -199,6 +206,34 @@ function checkVoucherEligibility(options) {
       data: data,
       success: function(response) {
         sharedCallback(response, options.callback)
+      },
+      error: function(response) {
+        sharedCallback(response, options.callback)
+      }
+    })
+  }
+}
+
+/**
+ * Check if a qualified user is eligible for a specific campaign
+ *
+ * @param {String} campaignId Aquto campaign id
+ * @param {function} callback Callback function on success or error
+ *
+ */
+function checkQualified(options) {
+  if (options && options.campaignId) {
+    var data = { apiVersion: 'v8' }
+
+    jsonp({
+      url: '//' + be + '/api/datarewards/webconvert/eligibility/'+options.campaignId,
+      callbackName: 'jsonp',
+      data: data,
+      success: function(response) {
+        sharedCallback(response, options.callback)
+      },
+      error: function(response) {
+        sharedCallback(response, options.callback)
       }
     })
   }
@@ -224,6 +259,9 @@ function complete(options) {
       callbackName: 'jsonp',
       data: data,
       success: function(response) {
+        sharedCallback(response, options.callback)
+      },
+      error: function(response) {
         sharedCallback(response, options.callback)
       }
     })
@@ -262,9 +300,139 @@ function redeemVoucher(options) {
       data: data,
       success: function(response) {
         voucherCallback(response, options.callback)
+      },
+      error: function(response) {
+        voucherCallback(response, options.callback)
       }
     })
   }
+}
+
+/**
+ * Complete the conversion for a qualified user
+ *
+ * @param {String} campaignId Aquto campaign id
+ * @param {String} callback Callback function on success or error
+ *
+ */
+function completeQualified(options) {
+  if (options && options.campaignId) {
+    var data = { apiVersion: 'v8' }
+
+    jsonp({
+      url: '//' + be + '/api/datarewards/webconvert/reward/'+options.campaignId,
+      callbackName: 'jsonp',
+      data: data,
+      success: function(response) {
+        completeCallback(response, options.callback)
+      },
+      error: function(response) {
+        completeCallback(response, options.callback)
+      }
+    })
+  }
+}
+
+/*--------------------------------------------------------------------------*/
+
+var defaultEligibleMessage = 'Complete the offer and receive $$rewardAmount$$MB'
+var defaultRewardMessage = 'Congratulations! You have received $$rewardAmount$$MB'
+var defaultJBoxOptions = {
+  color: 'blue',
+  position: {x: 'center', y: 'bottom'},
+  offset: {x: 0, y: -10},
+  // zoomIn, zoomOut, pulse, move, slide, flip, tada
+  animation: {open: 'tada', close: 'zoomIn'},
+  autoClose: 7000
+}
+
+/**
+ * Replace placeholders in message. Parameters are surrounded by double dollar signs e.g. $$param1$$
+ *
+ * @param {String} text The text to replace placeholders in
+ * @param {Object} params Named parameters to replace in message
+ */
+function replaceParams(text, params) {
+  if (params) {
+    for (var k in params) {
+      text = text.replace('$$' + k + '$$', params[k])
+    }
+  }
+  return text
+}
+
+/**
+ * Show popup notice with specified message
+ *
+ * @param {String} message Message to display with optional parameter placeholders in format $$param1$$
+ * @param {Object} params Named parameters to replace in message
+ * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
+ * @param {String} jBoxOptions jBox Options
+ */
+function showNotice(options) {
+  if (!window.jBox) {
+    console.log("jBox is required to show notices")
+  } else {
+    // https://stephanwagner.me/jBox/options
+    var jBoxType = options.jBoxType || 'Notice'
+    var jBoxOptions = Object.assign({
+      content: replaceParams(options.message, options.params),
+    }, defaultJBoxOptions, options.jBoxOptions)
+
+    new jBox(jBoxType, jBoxOptions)
+  }
+}
+
+function toNoticeOptions(options, response, defaultMessage) {
+  return {
+    message: options.message || defaultMessage,
+    params: {
+      rewardAmount: response.rewardAmount,
+      carrier: response.carrier
+    },
+    jBoxType: options.jBoxType,
+    jBoxOptions: options.jBoxOptions
+  }
+}
+
+/**
+ * Show popup notice with specified message if user is eligible for campaign
+ *
+ * @param {String} campaignId Aquto campaign id
+ * @param {String} message Message to display with optional parameter placeholders in format $$rewardAmount$$
+ * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
+ * @param {String} jBoxOptions jBox Options
+ *
+ */
+function checkQualifiedAndNotify(options) {
+  aquto.checkQualified({
+    campaignId: options.campaignId,
+    callback: function(response) {
+      if (response && response.eligible) {
+        showNotice(toNoticeOptions(options, response, defaultEligibleMessage))
+      }
+    }
+  })
+}
+
+/**
+ * Reward user if eligible for campaign and show popup notice with specified message
+ *
+ * @param {String} campaignId Aquto campaign id
+ * @param {String} message Message to display with optional parameter placeholders in format $$rewardAmount$$
+ * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
+ * @param {String} jBoxOptions jBox Options
+ *
+ */
+function completeQualifiedAndNotify(options) {
+  aquto.completeQualified({
+    campaignId: options.campaignId,
+    callback: function(response) {
+      if (response && response.success) {
+        showNotice(toNoticeOptions(options, response, defaultRewardMessage))
+      }
+    }
+  })
 }
 
 /*--------------------------------------------------------------------------*/
@@ -285,13 +453,20 @@ moveRewards.checkEligibilitySinglePage = checkAppEligibility
 moveRewards.checkAppEligibility = checkAppEligibility
 moveRewards.checkVoucherEligibility = checkVoucherEligibility
 moveRewards.checkOfferWallEligibility = checkOfferWallEligibility
+moveRewards.checkQualified = checkQualified
 
 // assign redemption static methods
 moveRewards.complete = complete
 moveRewards.redeemVoucher = redeemVoucher
+moveRewards.completeQualified = completeQualified
 
 // helper functions
 moveRewards.utils = utils
+
+// show notice methods
+moveRewards.checkQualifiedAndNotify = checkQualifiedAndNotify
+moveRewards.completeQualifiedAndNotify = completeQualifiedAndNotify
+moveRewards.showNotice = showNotice
 
 /*--------------------------------------------------------------------------*/
 

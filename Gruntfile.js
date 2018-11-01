@@ -1,12 +1,12 @@
 module.exports = function(grunt) {
 
-  // Project configuration.
+  // Project configuration
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     connect: {
       server: {
         options: {
-          index: './example/index.html',
+          index: './example/',
           port: 8040,
           hostname: '*'
         }
@@ -19,10 +19,10 @@ module.exports = function(grunt) {
           aquto_celtra: "./src/aquto.celtra.js"
         },
         output: {
-            path: "./",
-            filename: "[name].js",
-            library: ["aquto"],
-            libraryTarget: "var"
+          path: "./",
+          filename: "[name].js",
+          library: ["aquto"],
+          libraryTarget: "var"
         }
       },
       watch: {
@@ -31,10 +31,10 @@ module.exports = function(grunt) {
           aquto_celtra: "./src/aquto.celtra.js"
         },
         output: {
-            path: "./",
-            filename: "[name].js",
-            library: ["aquto"],
-            libraryTarget: "var"
+          path: "./",
+          filename: "[name].js",
+          library: ["aquto"],
+          libraryTarget: "var"
         },
         watch: true,
         keepalive: true

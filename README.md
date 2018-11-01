@@ -349,7 +349,7 @@ aquto.genericCheckEligibility({
 ```
 
 # MoVE for Voucher Redemptions
- With MoVE Reward Vouchers user's enter voucher codes, configured by Aquto, in order to receive a data reward. Aquto provides the voucher codes in CSV format on a per campaign bases. This flow can utilize 3rd party cookies like the Multi-page MoVE Reward Commerce Flow, or a `userToken` (received from the eligibility call) to identify a user. Another option is to pass the phone number in directly to `checkVoucherEligibility` or `redeemVoucher`. A call to `checkVoucherEligibility` is not required.
+With MoVE Reward Vouchers users enter voucher codes, configured by Aquto, in order to receive a data reward. Aquto provides the voucher codes in CSV format on a per campaign bases. This flow can utilize 3rd party cookies like the Multi-page MoVE Reward Commerce Flow, or a `userToken` (received from the eligibility call) to identify a user. Another option is to pass the phone number in directly to `checkVoucherEligibility` or `redeemVoucher`. A call to `checkVoucherEligibility` is not required.
 
 ## Setup
 
@@ -449,4 +449,89 @@ var redeemVoucher = function() {
     }
   });
 }
+```
+
+
+# MoVE for Qualified Redemptions (Multi-Page flow)
+
+With MoVE for Qualified Redemptions you can check eligibility and reward users that have initiated the offer prior
+to reaching your website.
+
+The integration for the Multi-page MoVE Reward Qualified flow will occur in two places, the landing page, where a notice
+is displayed to the subscriber if they are eligible for reward, and the thank you page, where the reward confirmation
+is displayed to the subscriber (if user was eligible).
+
+![Move Rewards User Flow](./MoveRewardsUserFlow.png)
+
+## Setup
+
+This library must be included on the page. It can be embedded as a script tag:
+
+```html
+<script src="http://assets.aquto.com/moveRewards/aquto.min.js"></script>
+```
+
+When embedded as a script tag, it exposes the `aquto` global object.
+
+This implementation also depends on jQuery and jBox for displaying the notices to the user. See 
+https://stephanwagner.me/jBox/get_started for more details. All jBox options available can be passed to these functions
+to customize how to display the notices: 
+
+```html
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v0.5.0/dist/jBox.all.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v0.5.0/dist/jBox.all.min.css" rel="stylesheet">
+```
+
+
+All examples below will assume jQuery $ syntax and should be called in `$(document).ready()` block.
+
+## Check Eligibility
+
+The `checkQualifiedAndNotify` method determines if the current user if eligible to receive a reward for the configured 
+campaign and if so displays a notice to the user using jBox.
+
+### Input arguments
+|Key|Type|Required|Description|
+|---|:----:|:--------:|-----------|
+|campaignId|string|yes|ID for campaign setup by Aquto|
+|message|string|no|Message to display with optional parameter placeholders in format $$param1$$. Available parameters: rewardAmount, carrier|
+|jBoxType|string|no|Type of jBox notification, defaults to 'Notice'|
+|jBoxOptions|string|no|jBox Options|
+
+```javascript
+aquto.checkQualifiedAndNotify({
+  campaignId: '12345',
+  message: 'Complete the offer and you will receive $$rewardAmount$$MB of data',
+  jBoxOptions: {
+    title: 'Data Rewards',
+    color: 'green',
+    position: {x: 'center', y: 'center'}
+  }
+});
+```
+
+
+## Complete Reward
+
+The `completeQualifiedAndNotify` method completes the reward (if user is eligible) and displays notification to the
+user using jBox.
+
+### Input arguments
+|Key|Type|Required|Description|
+|---|:----:|:--------:|-----------|
+|campaignId|string|yes|ID for campaign setup by Aquto|
+|message|string|no|Message to display with optional parameter placeholders in format $$param1$$. Available parameters: rewardAmount, carrier|
+|jBoxType|string|no|Type of jBox notification, defaults to 'Notice'|
+|jBoxOptions|string|no|jBox Options|
+
+```javascript
+aquto.completeQualifiedAndNotify({
+  campaignId: '12345',
+  message: 'Congratulations! You will shortly receive $$rewardAmount$$MB of data',
+  jBoxOptions: {
+    color: 'green',
+    autoClose: false
+  }
+});
 ```
