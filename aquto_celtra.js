@@ -236,15 +236,15 @@ var aquto =
 	    var callbackObject = prepareCompleteCallback(response)
 
 	    // Group some statuses into ineligible
-      switch (callbackObject.status) {
-        case 'unabletoidentify':
-        case 'ineligible':
-        case 'unabletoconvert':
-        case 'generalerror':
-          callbackObject.status = 'ineligible'
-          break
-        // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
-      }
+	    switch (response.response.status) {
+	      case 'unabletoidentify':
+	      case 'ineligible':
+	      case 'unabletoconvert':
+	      case 'generalerror':
+	        callbackObject.status = 'ineligible'
+	        break
+	      // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
+	    }
 
 	    callback(callbackObject)
 	  }
@@ -287,8 +287,7 @@ var aquto =
 	  else if (operatorCode === 'oibrrw'){
 	    operatorName = 'Oi'
 	    operatorCode = 'oibr'
-	  }
-	  else {
+	  } else {
 	    operatorName = 'N/A'
 	    operatorCode = 'na'
 	  }
