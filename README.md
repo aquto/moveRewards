@@ -521,7 +521,7 @@ user using jBox.
 |Key|Type|Required|Description|
 |---|:----:|:--------:|-----------|
 |campaignId|string|yes|ID for campaign setup by Aquto|
-|message|string|no|Message to display with optional parameter placeholders in format $$param1$$. Available parameters: rewardAmount, carrier|
+|message|string|no|Message to display with optional parameter placeholders in format $$param1$$. Available parameters: rewardAmount, operator|
 |jBoxType|string|no|Type of jBox notification, defaults to 'Notice'|
 |jBoxOptions|string|no|jBox Options|
 
@@ -529,6 +529,33 @@ user using jBox.
 aquto.completeQualifiedAndNotify({
   campaignId: '12345',
   message: 'Congratulations! You will shortly receive $$rewardAmount$$MB of data',
+  jBoxOptions: {
+    color: 'green',
+    autoClose: false
+  }
+});
+```
+
+
+## Show Notice
+
+The `showNotice` method will display a notification to the user using jBox.
+
+### Input arguments
+|Key|Type|Required|Description|
+|---|:----:|:--------:|-----------|
+|message|string|no|Message to display with optional parameter placeholders in format $$param1$$|
+|params|object|no|Named parameters to replace in message|
+|jBoxType|string|no|Type of jBox notification, defaults to 'Notice'|
+|jBoxOptions|string|no|jBox Options|
+|response|object|no|Response object from eligibility check or reward callback that will set $$rewardAmount$$ and $$operator$$ parameters|
+
+```javascript
+aquto.showNotice({
+  message: 'Congratulations! You will shortly receive $$rewardAmount$$MB of data',
+  params: {
+    rewardAmount: 15
+  },
   jBoxOptions: {
     color: 'green',
     autoClose: false

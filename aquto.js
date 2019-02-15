@@ -415,30 +415,21 @@ var aquto =
 	 * @param {Object} params Named parameters to replace in message
 	 * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
 	 * @param {String} jBoxOptions jBox Options
+	 * @param {Object} response Optional response object from eligibility check or reward callback that will set $$rewardAmount$$ parameter
 	 */
 	function showNotice(options) {
 	  if (!window.jBox) {
 	    console.log("jBox is required to show notices")
 	  } else {
+	    var noticeOptions = toNoticeOptions(options)
+
 	    // https://stephanwagner.me/jBox/options
-	    var jBoxType = options.jBoxType || 'Notice'
+	    var jBoxType = noticeOptions.jBoxType || 'Notice'
 	    var jBoxOptions = Object.assign({
-	      content: replaceParams(options.message, options.params),
-	    }, defaultJBoxOptions, options.jBoxOptions)
+	      content: replaceParams(noticeOptions.message, noticeOptions.params),
+	    }, defaultJBoxOptions, noticeOptions.jBoxOptions)
 
 	    new jBox(jBoxType, jBoxOptions)
-	  }
-	}
-
-	function toNoticeOptions(options, response, defaultMessage) {
-	  return {
-	    message: options.message || defaultMessage,
-	    params: {
-	      rewardAmount: response.rewardAmount,
-	      carrier: response.carrier
-	    },
-	    jBoxType: options.jBoxType,
-	    jBoxOptions: options.jBoxOptions
 	  }
 	}
 
@@ -456,7 +447,7 @@ var aquto =
 	    campaignId: options.campaignId,
 	    callback: function(response) {
 	      if (response && response.eligible) {
-	        showNotice(toNoticeOptions(options, response, defaultEligibleMessage))
+	        showNotice(Object.assign({}, options, { response: response, defaultMessage: defaultEligibleMessage }))
 	      }
 	    }
 	  })
@@ -476,10 +467,26 @@ var aquto =
 	    campaignId: options.campaignId,
 	    callback: function(response) {
 	      if (response && response.success) {
-	        showNotice(toNoticeOptions(options, response, defaultRewardMessage))
+	        showNotice(Object.assign({}, options, { response: response, defaultMessage: defaultRewardMessage }))
 	      }
 	    }
 	  })
+	}
+
+	function toNoticeOptions(options) {
+	  var response = options.response
+
+	  // Set params if response object is available
+	  var responseParams = response && {
+	    rewardAmount: response.rewardAmount,
+	    carrier: response.carrier
+	  } || {}
+
+	  // Merge with other params if set
+	  var params = options.params ? Object.assign(responseParams, options.params) : responseParams
+
+	  // Add default message and the params
+	  return Object.assign({ message: options.defaultMessage }, options, { params: params })
 	}
 
 	/*--------------------------------------------------------------------------*/
@@ -701,6 +708,8 @@ var aquto =
 	 *
 	 */
 	function sharedCallback(response, callback) {
+	  console.log(response)
+
 	  if (callback && typeof callback === 'function') {
 	    var callbackObject;
 

@@ -149,6 +149,8 @@ var aquto =
 	 *
 	 */
 	function sharedCallback(response, callback) {
+	  console.log(response)
+
 	  if (callback && typeof callback === 'function') {
 	    var callbackObject;
 
