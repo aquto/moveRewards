@@ -35,6 +35,9 @@ Then add the following div tag on the page where the offers should be rendered:
   data-max-offers="<maxOffers>"
   data-allow-vpaid-offers="<allowVpaidOffers>"
   data-zero-rate-vpaid-offers="<zeroRateVpaidOffers>"
+  data-format="<format>"
+  data-on-no-offers="<callOnNoOffers>"
+  data-on-offers-available="<callOnOffersAvailable>"
 ></div>
 ```
 
@@ -61,7 +64,10 @@ aquto.offerWall.render({
   offerTypes: "<offerTypes>",
   maxOffers: "<maxOffers>",
   allowVpaidOffers: <allowVpaidOffers>,
-  zeroRateVpaidOffers: <zeroRateVpaidOffers>
+  zeroRateVpaidOffers: <zeroRateVpaidOffers>,
+  format: <format>,
+  onNoOffers: <callOnNoOffers>,
+  onOffersAvailable: <callOnOffersAvailable>
 });
 ```
 
@@ -86,7 +92,10 @@ aquto.offerWall.render({
 | offerTypes           | String  | No  | Comma delimited list of offer types to include. Valid types are video, leadgen & apps (external offer). If left empty all types will be included |
 | maxOffers            | Integer | No  | Maximum number of offers to display. If this number is greater than 1 a carousel will be displayed with the available offers. Default: 10, Max: 10 |
 | allowVpaidOffers     | Boolean | No  | Set to true to include VPAID offers. This defaults to false |
-| zeroRateVpaidOffers  | Boolean | No  | Set to true to proxy all external resources when playing a VPAID offer. This defaults to false. It is recommened to load the widget in a iframe if this is set as it will capture all external requests so could interfere with other parts of the page. | 
+| zeroRateVpaidOffers  | Boolean | No  | Set to true to proxy all external resources when playing a VPAID offer. This defaults to false. It is recommened to load the widget in a iframe if this is set as it will capture all external requests so could interfere with other parts of the page. |
+| format     | String | No  | Set format size of Embedded Offerwall ('ad300x250'). This defaults to undefined |
+| onNoOffers     | Function | No  | Set callback function to be executed when there are NO Offers Available. This defaults to undefined |
+| onOffersAvailable     | Function | No  | Set callback function to be executed when there are Offers Available. This defaults to undefined |
 
 ### Notes
 - If no offer is available or the user cannot be identified, nothing will be rendered
