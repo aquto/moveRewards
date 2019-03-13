@@ -273,6 +273,7 @@ function complete(options) {
  * Campaign id is used to link with existing checkVoucherEligibility
  *
  * @param {String} callback Callback function on success or error
+ * @param {String} campaignId Aquto campaign id
  * @param {String} code Voucher code
  * @param {String} [userToken] User identifier received from eligibility request can be used instead of a phone number
  * @param {String} [phoneNumber] The phone number of the subscriber.
@@ -281,6 +282,9 @@ function complete(options) {
 function redeemVoucher(options) {
   if (options && options.code) {
     var data = { apiVersion: 'v8', code: options.code }
+    if(options.campaignId) {
+      data.campaignId = options.campaignId
+    }
     if(options.userToken) {
       data.userToken = options.userToken
     }

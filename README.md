@@ -413,6 +413,7 @@ is being called on it's own and the user's phone number is known, then it can be
 ### Input arguments
 |Key|Type|Required|Description|
 |---|:----:|:--------:|-----------|
+|campaignId|string|no|ID for campaign setup by Aquto. This field is required if voucher version is greater than 1|
 |code|string|yes|Voucher code entered by the user|
 |callback|function|yes|Function called after completing the reward on the server|
 |userToken|string|no|Stored string that is returned by eligibility call|
@@ -440,6 +441,7 @@ is being called on it's own and the user's phone number is known, then it can be
 var redeemVoucher = function() {
   var code = $('#voucherCode').val()
   aquto.redeemVoucher({
+    campaignId: '12345',
     code: code,
     userToken: userToken,
     callback: function(response) {
