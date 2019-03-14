@@ -65,7 +65,7 @@ aquto.offerWall.render({
   maxOffers: "<maxOffers>",
   allowVpaidOffers: <allowVpaidOffers>,
   zeroRateVpaidOffers: <zeroRateVpaidOffers>,
-  format: <format>,
+  format: "<format>",
   onNoOffers: <onNoOffersCallback>,
   onOffersAvailable: <onOffersAvailableCallback>
 });
