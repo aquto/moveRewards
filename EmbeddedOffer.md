@@ -36,8 +36,8 @@ Then add the following div tag on the page where the offers should be rendered:
   data-allow-vpaid-offers="<allowVpaidOffers>"
   data-zero-rate-vpaid-offers="<zeroRateVpaidOffers>"
   data-format="<format>"
-  data-on-no-offers="<callOnNoOffers>"
-  data-on-offers-available="<callOnOffersAvailable>"
+  data-on-no-offers="<OnNoOffersCallback>"
+  data-on-offers-available="<OnOffersAvailableCallback>"
 ></div>
 ```
 
@@ -66,8 +66,8 @@ aquto.offerWall.render({
   allowVpaidOffers: <allowVpaidOffers>,
   zeroRateVpaidOffers: <zeroRateVpaidOffers>,
   format: <format>,
-  onNoOffers: <callOnNoOffers>,
-  onOffersAvailable: <callOnOffersAvailable>
+  onNoOffers: <OnNoOffersCallback>,
+  onOffersAvailable: <OnOffersAvailableCallback>
 });
 ```
 
