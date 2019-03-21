@@ -93,7 +93,7 @@ aquto.offerWall.render({
 | maxOffers            | Integer | No  | Maximum number of offers to display. If this number is greater than 1 a carousel will be displayed with the available offers. Default: 10, Max: 10 |
 | allowVpaidOffers     | Boolean | No  | Set to true to include VPAID offers. This defaults to false |
 | zeroRateVpaidOffers  | Boolean | No  | Set to true to proxy all external resources when playing a VPAID offer. This defaults to false. It is recommened to load the widget in a iframe if this is set as it will capture all external requests so could interfere with other parts of the page. |
-| format     | String | No  | Set format size of Embedded Offer Wall. Available formats: ad300x250, default. If omitted default format will be used |
+| format     | String | No  | Set format size of Embedded Offer Wall. Available formats: au300x250, default. If omitted default format will be used |
 | onNoOffers     | Function | No  | Set callback function to be executed when there are NO offers available |
 | onOffersAvailable     | Function | No  | Set callback function to be executed when there are offers available |
 
