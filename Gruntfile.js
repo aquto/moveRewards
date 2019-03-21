@@ -19,11 +19,12 @@ module.exports = function(grunt) {
           aquto_celtra: "./src/aquto.celtra.js"
         },
         output: {
-          path: "./",
+          path: __dirname,
           filename: "[name].js",
           library: ["aquto"],
           libraryTarget: "var"
-        }
+        },
+        mode: 'production'
       },
       watch: {
         entry: {
@@ -31,13 +32,14 @@ module.exports = function(grunt) {
           aquto_celtra: "./src/aquto.celtra.js"
         },
         output: {
-          path: "./",
+          path: __dirname,
           filename: "[name].js",
           library: ["aquto"],
           libraryTarget: "var"
         },
         watch: true,
-        keepalive: true
+        keepalive: true,
+        mode: 'development'
       }
     },
     uglify: {

@@ -2,931 +2,167 @@ var aquto =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
+/******/ 		module.l = true;
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/aquto.js");
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ "./node_modules/browser-jsonp/lib/jsonp.js":
+/*!*************************************************!*\
+  !*** ./node_modules/browser-jsonp/lib/jsonp.js ***!
+  \*************************************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/*!
-	 * Aquto Move Rewards v0.1.0 <http://aquto.com>
-	 */
-	'use strict'
-
-	var jsonp = __webpack_require__(1)
-	var sharedCallback = __webpack_require__(5).sharedCallback
-	var voucherCallback = __webpack_require__(5).voucherCallback
-	var completeCallback = __webpack_require__(5).completeCallback
-	var utils = __webpack_require__(6)
-
-	/** instantiate moveRewards object */
-	var moveRewards = {}
-
-	/** Check if Aquto backend hostname has been passed in */
-	var scriptParams = utils._parseScriptQuery(document.getElementById('aquto-api'))
-	var be = scriptParams.be || 'app.aquto.com'
-	var ow = scriptParams.ow || 'ow.aquto.com'
-
-
-	/**
-	 * Check eligibility for the current device
-	 * Campaign id is used to determine configured reward, and operator
-	 *
-	 * @param {String} campaignId Aquto campaign id
-	 * @param {function} callback Callback function on success or error
-	 * @param {String} [phoneNumber] The phone number of the subscriber
-	 * @param {String} [publisherSiteUuid] Optional publisherSiteUuid of the inventory (generated by Aquto)
-	 * @param {String} [channel] Optional channel of the inventory
-	 *
-	 */
-	function checkEligibility(options) {
-	  if (options && options.campaignId) {
-	    var data = { apiVersion: 'v8' }
-	    if(options.phoneNumber) {
-	      data.phoneNumber = options.phoneNumber
-	    }
-	    if(options.publisherSiteUuid) {
-	      data.publisherSiteUuid = options.publisherSiteUuid
-	    }
-	    if(options.channel) {
-	      data.channel = options.channel
-	    }
-	    jsonp({
-	      url: '//' + be + '/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
-	      callbackName: 'jsonp',
-	      data: data,
-	      success: function(response) {
-	        sharedCallback(response, options.callback)
-	      },
-	      error: function(response) {
-	        sharedCallback(response, options.callback)
-	      }
-	    })
-	  }
-	}
-
-	/**
-	 * Check eligibility for the current device
-	 * Doesn't require a campaignId
-	 *
-	 * @param {function} callback Callback function on success or error
-	 * @param {String} [phoneNumber] The phone number of the subscriber
-	 *
-	 */
-	function genericCheckEligibility(options) {
-	  var data = { apiVersion: 'v8' }
-	  if(options.phoneNumber) {
-	    data.phoneNumber = options.phoneNumber
-	  }
-	  jsonp({
-	    url: '//' + be + '/api/datarewards/eligibility',
-	    callbackName: 'jsonp',
-	    data: data,
-	    success: function(response) {
-	      if (options.callback &&  typeof options.callback === 'function') {
-	        options.callback(response.response)
-	      }
-	    }
-	  })
-	}
-
-	/**
-	 * Check if user is eligible for the Aquto Offer Wall
-	 *
-	 * @param {function} callback Callback function on success or error
-	 * @param {String} [carrier] The phone number of the subscriber
-	 *
-	 */
-	function checkOfferWallEligibility(options) {
-	  var data = { apiVersion: 'v8' }
-	  if(options.carrier) {
-	    data.operatorCode = options.carrier
-	  }
-	  if(options.phoneNumber) {
-	    data.phoneNumber = options.phoneNumber
-	  }
-	  if(options.countryCode) {
-	    data.countryCode = options.countryCode
-	  }
-	  if(options.publisherSiteUuid) {
-	    data.publisherSiteUuid = options.publisherSiteUuid
-	  }
-	  if(options.channel) {
-	    data.publisherSiteUuid = options.channel
-	  }
-
-	  jsonp({
-	    url: '//' + be + '/api/datarewards/offerwall/eligibility',
-	    callbackName: 'jsonp',
-	    data: data,
-	    success: function(response) {
-	      if (options.callback &&  typeof options.callback === 'function') {
-	        if (response.response.eligible) {
-	          var offerWallHref = '//' + ow + '/?opCode=' + response.response.opCode + '&'
-	          if(options.phoneNumber) {
-	            offerWallHref = offerWallHref + 'pn=' + options.phoneNumber + '&'
-	          }
-	          if(options.publisherSiteUuid) {
-	            offerWallHref = offerWallHref + 'publisherSiteUuid=' + options.publisherSiteUuid + '&'
-	          }
-	          if(options.channel) {
-	            offerWallHref = offerWallHref + 'channel=' + options.channel + '&'
-	          }
-
-	          options.callback({
-	            eligible: true,
-	            offerWallHref: offerWallHref,
-	            numberOfOffers: response.response.offerCount
-	          })
-	        } else {
-	          options.callback({
-	            eligible: false,
-	            identified: !!(response.response && response.response.opCode !== 'unknown'),
-	            numberOfOffers: 0
-	          })
-	        }
-	      }
-	    }
-	  })
-	}
-
-	/**
-	 * Check eligibility for the current device
-	 * Campaign id is used to determine configured reward, and operator
-	 *
-	 * @param {String} campaignId Aquto campaign id
-	 * @param {function} callback Callback function on success or error
-	 * @param {String} [phoneNumber] The phone number of the subscriber
-	 * @param {String} [publisherSiteUuid] Optional publisherSiteUuid of the inventory (generated by Aquto)
-	 * @param {String} [channel] Optional channel of the inventory
-	 *
-	 */
-	function checkAppEligibility(options) {
-	  if (options && options.campaignId) {
-	    var data = { apiVersion: 'v8' }
-	    if(options.phoneNumber) {
-	      data.phoneNumber = options.phoneNumber
-	    }
-	    if(options.publisherSiteUuid) {
-	      data.publisherSiteUuid = options.publisherSiteUuid
-	    }
-	    if(options.channel) {
-	      data.channel = options.channel
-	    }
-
-	    jsonp({
-	      url: '//' + be + '/api/campaign/datarewards/eligibility/' + options.campaignId,
-	      callbackName: 'jsonp',
-	      data: data,
-	      success: function(response) {
-	        sharedCallback(response, options.callback)
-	      },
-	      error: function(response) {
-	        sharedCallback(response, options.callback)
-	      }
-	    })
-	  }
-	}
-
-	/**
-	 * Check eligibility for the current device
-	 * Campaign id is used to determine configured reward, and operator
-	 *
-	 * @param {String} campaignId Aquto campaign id
-	 * @param {function} callback Callback function on success or error
-	 * @param {String} phoneNumber The phone number of the subscriber
-	 *
-	 */
-	function checkVoucherEligibility(options) {
-	  if (options && options.campaignId) {
-	    var data = { apiVersion: 'v8', campaignId: options.campaignId }
-	    if(options.phoneNumber) {
-	      data.phoneNumber = options.phoneNumber
-	    }
-	    if(options.publisherSiteUuid) {
-	      data.publisherSiteUuid = options.publisherSiteUuid
-	    }
-	    if(options.channel) {
-	      data.channel = options.channel
-	    }
-
-	    jsonp({
-	      url: '//' + be + '/api/datarewards/voucher/eligibility',
-	      callbackName: 'jsonp',
-	      data: data,
-	      success: function(response) {
-	        sharedCallback(response, options.callback)
-	      },
-	      error: function(response) {
-	        sharedCallback(response, options.callback)
-	      }
-	    })
-	  }
-	}
-
-	/**
-	 * Check if a qualified user is eligible for a specific campaign
-	 *
-	 * @param {String} campaignId Aquto campaign id
-	 * @param {function} callback Callback function on success or error
-	 *
-	 */
-	function checkQualified(options) {
-	  if (options && options.campaignId) {
-	    var data = { apiVersion: 'v8' }
-
-	    jsonp({
-	      url: '//' + be + '/api/datarewards/webconvert/eligibility/'+options.campaignId,
-	      callbackName: 'jsonp',
-	      data: data,
-	      success: function(response) {
-	        sharedCallback(response, options.callback)
-	      },
-	      error: function(response) {
-	        sharedCallback(response, options.callback)
-	      }
-	    })
-	  }
-	}
-
-
-	/**
-	 * Complete the conversion for the last checkEligibility call
-	 * Campaign id is used to link with existing checkEligibility calls
-	 *
-	 * @param {String} campaignId Aquto campaign id
-	 * @param {function} callback Callback function on success or error
-	 *
-	 */
-	function complete(options) {
-	  if (options && options.campaignId) {
-	    var data = { apiVersion: 'v8' }
-	    if(options.userToken) {
-	      data.userToken = options.userToken
-	    }
-	    jsonp({
-	      url: '//' + be + '/api/campaign/datarewards/applyreward/'+options.campaignId,
-	      callbackName: 'jsonp',
-	      data: data,
-	      success: function(response) {
-	        sharedCallback(response, options.callback)
-	      },
-	      error: function(response) {
-	        sharedCallback(response, options.callback)
-	      }
-	    })
-	  }
-	}
-
-	/**
-	 * Redeem a voucher for an eligible user
-	 * Campaign id is used to link with existing checkVoucherEligibility
-	 *
-	 * @param {String} callback Callback function on success or error
-	 * @param {String} campaignId Aquto campaign id
-	 * @param {String} code Voucher code
-	 * @param {String} [userToken] User identifier received from eligibility request can be used instead of a phone number
-	 * @param {String} [phoneNumber] The phone number of the subscriber.
-	 *
-	 */
-	function redeemVoucher(options) {
-	  if (options && options.code) {
-	    var data = { apiVersion: 'v8', code: options.code }
-	    if(options.campaignId) {
-	      data.campaignId = options.campaignId
-	    }
-	    if(options.userToken) {
-	      data.userToken = options.userToken
-	    }
-	    if(options.phoneNumber) {
-	      data.phoneNumber = options.phoneNumber
-	    }
-	    if(options.publisherSiteUuid) {
-	      data.publisherSiteUuid = options.publisherSiteUuid
-	    }
-	    if(options.channel) {
-	      data.channel = options.channel
-	    }
-
-	    jsonp({
-	      url: '//' + be + '/api/datarewards/voucher/reward',
-	      callbackName: 'jsonp',
-	      data: data,
-	      success: function(response) {
-	        voucherCallback(response, options.callback)
-	      },
-	      error: function(response) {
-	        voucherCallback(response, options.callback)
-	      }
-	    })
-	  }
-	}
-
-	/**
-	 * Complete the conversion for a qualified user
-	 *
-	 * @param {String} campaignId Aquto campaign id
-	 * @param {String} callback Callback function on success or error
-	 *
-	 */
-	function completeQualified(options) {
-	  if (options && options.campaignId) {
-	    var data = { apiVersion: 'v8' }
-
-	    jsonp({
-	      url: '//' + be + '/api/datarewards/webconvert/reward/'+options.campaignId,
-	      callbackName: 'jsonp',
-	      data: data,
-	      success: function(response) {
-	        completeCallback(response, options.callback)
-	      },
-	      error: function(response) {
-	        completeCallback(response, options.callback)
-	      }
-	    })
-	  }
-	}
-
-	/*--------------------------------------------------------------------------*/
-
-	var defaultEligibleMessage = 'Complete the offer and receive $$rewardAmount$$MB'
-	var defaultRewardMessage = 'Congratulations! You have received $$rewardAmount$$MB'
-	var defaultJBoxOptions = {
-	  color: 'blue',
-	  position: {x: 'center', y: 'bottom'},
-	  offset: {x: 0, y: -10},
-	  // zoomIn, zoomOut, pulse, move, slide, flip, tada
-	  animation: {open: 'tada', close: 'zoomIn'},
-	  autoClose: 7000
-	}
-
-	/**
-	 * Replace placeholders in message. Parameters are surrounded by double dollar signs e.g. $$param1$$
-	 *
-	 * @param {String} text The text to replace placeholders in
-	 * @param {Object} params Named parameters to replace in message
-	 */
-	function replaceParams(text, params) {
-	  if (params) {
-	    for (var k in params) {
-	      text = text.replace('$$' + k + '$$', params[k])
-	    }
-	  }
-	  return text
-	}
-
-	/**
-	 * Show popup notice with specified message
-	 *
-	 * @param {String} message Message to display with optional parameter placeholders in format $$param1$$
-	 * @param {Object} params Named parameters to replace in message
-	 * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
-	 * @param {String} jBoxOptions jBox Options
-	 * @param {Object} response Optional response object from eligibility check or reward callback that will set $$rewardAmount$$ parameter
-	 */
-	function showNotice(options) {
-	  if (!window.jBox) {
-	    console.log("jBox is required to show notices")
-	  } else {
-	    var noticeOptions = toNoticeOptions(options)
-
-	    // https://stephanwagner.me/jBox/options
-	    var jBoxType = noticeOptions.jBoxType || 'Notice'
-	    var jBoxOptions = Object.assign({
-	      content: replaceParams(noticeOptions.message, noticeOptions.params),
-	    }, defaultJBoxOptions, noticeOptions.jBoxOptions)
-
-	    new jBox(jBoxType, jBoxOptions)
-	  }
-	}
-
-	/**
-	 * Show popup notice with specified message if user is eligible for campaign
-	 *
-	 * @param {String} campaignId Aquto campaign id
-	 * @param {String} message Message to display with optional parameter placeholders in format $$rewardAmount$$
-	 * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
-	 * @param {String} jBoxOptions jBox Options
-	 *
-	 */
-	function checkQualifiedAndNotify(options) {
-	  aquto.checkQualified({
-	    campaignId: options.campaignId,
-	    callback: function(response) {
-	      if (response && response.eligible) {
-	        showNotice(Object.assign({}, options, { response: response, defaultMessage: defaultEligibleMessage }))
-	      }
-	    }
-	  })
-	}
-
-	/**
-	 * Reward user if eligible for campaign and show popup notice with specified message
-	 *
-	 * @param {String} campaignId Aquto campaign id
-	 * @param {String} message Message to display with optional parameter placeholders in format $$rewardAmount$$
-	 * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'
-	 * @param {String} jBoxOptions jBox Options
-	 *
-	 */
-	function completeQualifiedAndNotify(options) {
-	  aquto.completeQualified({
-	    campaignId: options.campaignId,
-	    callback: function(response) {
-	      if (response && response.success) {
-	        showNotice(Object.assign({}, options, { response: response, defaultMessage: defaultRewardMessage }))
-	      }
-	    }
-	  })
-	}
-
-	function toNoticeOptions(options) {
-	  var response = options.response
-
-	  // Set params if response object is available
-	  var responseParams = response && {
-	    rewardAmount: response.rewardAmount,
-	    carrier: response.carrier
-	  } || {}
-
-	  // Merge with other params if set
-	  var params = options.params ? Object.assign(responseParams, options.params) : responseParams
-
-	  // Add default message and the params
-	  return Object.assign({ message: options.defaultMessage }, options, { params: params })
-	}
-
-	/*--------------------------------------------------------------------------*/
-
-	/**
-	 * The semantic version number.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @type String
-	 */
-	moveRewards.VERSION = '0.1.0'
-
-	// assign eligibility static methods
-	moveRewards.genericCheckEligibility = genericCheckEligibility
-	moveRewards.checkEligibility = checkEligibility
-	moveRewards.checkEligibilitySinglePage = checkAppEligibility
-	moveRewards.checkAppEligibility = checkAppEligibility
-	moveRewards.checkVoucherEligibility = checkVoucherEligibility
-	moveRewards.checkOfferWallEligibility = checkOfferWallEligibility
-	moveRewards.checkQualified = checkQualified
-
-	// assign redemption static methods
-	moveRewards.complete = complete
-	moveRewards.redeemVoucher = redeemVoucher
-	moveRewards.completeQualified = completeQualified
-
-	// helper functions
-	moveRewards.utils = utils
-
-	// show notice methods
-	moveRewards.checkQualifiedAndNotify = checkQualifiedAndNotify
-	moveRewards.completeQualifiedAndNotify = completeQualifiedAndNotify
-	moveRewards.showNotice = showNotice
-
-	/*--------------------------------------------------------------------------*/
-
-	module.exports = moveRewards
-
+eval("/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;(function() {\n  var JSONP, computedUrl, createElement, encode, noop, objectToURI, random, randomString;\n\n  createElement = function(tag) {\n    return window.document.createElement(tag);\n  };\n\n  encode = window.encodeURIComponent;\n\n  random = Math.random;\n\n  JSONP = function(options) {\n    var callback, callbackFunc, callbackName, done, head, params, script;\n    if (options == null) {\n      options = {};\n    }\n    params = {\n      data: options.data || {},\n      error: options.error || noop,\n      success: options.success || noop,\n      beforeSend: options.beforeSend || noop,\n      complete: options.complete || noop,\n      url: options.url || ''\n    };\n    params.computedUrl = computedUrl(params);\n    if (params.url.length === 0) {\n      throw new Error('MissingUrl');\n    }\n    done = false;\n    if (params.beforeSend({}, params) !== false) {\n      callbackName = options.callbackName || 'callback';\n      callbackFunc = options.callbackFunc || 'jsonp_' + randomString(15);\n      callback = params.data[callbackName] = callbackFunc;\n      window[callback] = function(data) {\n        window[callback] = null;\n        params.success(data, params);\n        return params.complete(data, params);\n      };\n      script = createElement('script');\n      script.src = computedUrl(params);\n      script.async = true;\n      script.onerror = function(evt) {\n        params.error({\n          url: script.src,\n          event: evt\n        });\n        return params.complete({\n          url: script.src,\n          event: evt\n        }, params);\n      };\n      script.onload = script.onreadystatechange = function() {\n        var ref, ref1;\n        if (done || ((ref = this.readyState) !== 'loaded' && ref !== 'complete')) {\n          return;\n        }\n        done = true;\n        if (script) {\n          script.onload = script.onreadystatechange = null;\n          if ((ref1 = script.parentNode) != null) {\n            ref1.removeChild(script);\n          }\n          return script = null;\n        }\n      };\n      head = window.document.getElementsByTagName('head')[0] || window.document.documentElement;\n      head.insertBefore(script, head.firstChild);\n    }\n    return {\n      abort: function() {\n        window[callback] = function() {\n          return window[callback] = null;\n        };\n        done = true;\n        if (script != null ? script.parentNode : void 0) {\n          script.onload = script.onreadystatechange = null;\n          script.parentNode.removeChild(script);\n          return script = null;\n        }\n      }\n    };\n  };\n\n  noop = function() {\n    return void 0;\n  };\n\n  computedUrl = function(params) {\n    var url;\n    url = params.url;\n    url += params.url.indexOf('?') < 0 ? '?' : '&';\n    url += objectToURI(params.data);\n    return url;\n  };\n\n  randomString = function(length) {\n    var str;\n    str = '';\n    while (str.length < length) {\n      str += random().toString(36).slice(2, 3);\n    }\n    return str;\n  };\n\n  objectToURI = function(obj) {\n    var data, key, value;\n    data = (function() {\n      var results;\n      results = [];\n      for (key in obj) {\n        value = obj[key];\n        results.push(encode(key) + '=' + encode(value));\n      }\n      return results;\n    })();\n    return data.join('&');\n  };\n\n  if ( true && __webpack_require__(/*! !webpack amd define */ \"./node_modules/webpack/buildin/amd-define.js\") !== null ? __webpack_require__(/*! !webpack amd options */ \"./node_modules/webpack/buildin/amd-options.js\") : void 0) {\n    !(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {\n      return JSONP;\n    }).call(exports, __webpack_require__, exports, module),\n\t\t\t\t__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));\n  } else if ( true && module !== null ? module.exports : void 0) {\n    module.exports = JSONP;\n  } else {\n    this.JSONP = JSONP;\n  }\n\n}).call(this);\n\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/module.js */ \"./node_modules/webpack/buildin/module.js\")(module)))\n\n//# sourceURL=webpack://aquto/./node_modules/browser-jsonp/lib/jsonp.js?");
 
 /***/ }),
-/* 1 */
+
+/***/ "./node_modules/webpack/buildin/amd-define.js":
+/*!***************************************!*\
+  !*** (webpack)/buildin/amd-define.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = function() {\n\tthrow new Error(\"define cannot be used indirect\");\n};\n\n\n//# sourceURL=webpack://aquto/(webpack)/buildin/amd-define.js?");
+
+/***/ }),
+
+/***/ "./node_modules/webpack/buildin/amd-options.js":
+/*!****************************************!*\
+  !*** (webpack)/buildin/amd-options.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */\nmodule.exports = __webpack_amd_options__;\n\n/* WEBPACK VAR INJECTION */}.call(this, {}))\n\n//# sourceURL=webpack://aquto/(webpack)/buildin/amd-options.js?");
+
+/***/ }),
+
+/***/ "./node_modules/webpack/buildin/module.js":
+/*!***********************************!*\
+  !*** (webpack)/buildin/module.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = function(module) {\n\tif (!module.webpackPolyfill) {\n\t\tmodule.deprecate = function() {};\n\t\tmodule.paths = [];\n\t\t// module.parent = undefined by default\n\t\tif (!module.children) module.children = [];\n\t\tObject.defineProperty(module, \"loaded\", {\n\t\t\tenumerable: true,\n\t\t\tget: function() {\n\t\t\t\treturn module.l;\n\t\t\t}\n\t\t});\n\t\tObject.defineProperty(module, \"id\", {\n\t\t\tenumerable: true,\n\t\t\tget: function() {\n\t\t\t\treturn module.i;\n\t\t\t}\n\t\t});\n\t\tmodule.webpackPolyfill = 1;\n\t}\n\treturn module;\n};\n\n\n//# sourceURL=webpack://aquto/(webpack)/buildin/module.js?");
+
+/***/ }),
+
+/***/ "./src/aquto.js":
+/*!**********************!*\
+  !*** ./src/aquto.js ***!
+  \**********************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {(function() {
-	  var JSONP, computedUrl, createElement, encode, noop, objectToURI, random, randomString;
-
-	  createElement = function(tag) {
-	    return window.document.createElement(tag);
-	  };
-
-	  encode = window.encodeURIComponent;
-
-	  random = Math.random;
-
-	  JSONP = function(options) {
-	    var callback, callbackFunc, callbackName, done, head, params, script;
-	    if (options == null) {
-	      options = {};
-	    }
-	    params = {
-	      data: options.data || {},
-	      error: options.error || noop,
-	      success: options.success || noop,
-	      beforeSend: options.beforeSend || noop,
-	      complete: options.complete || noop,
-	      url: options.url || ''
-	    };
-	    params.computedUrl = computedUrl(params);
-	    if (params.url.length === 0) {
-	      throw new Error('MissingUrl');
-	    }
-	    done = false;
-	    if (params.beforeSend({}, params) !== false) {
-	      callbackName = options.callbackName || 'callback';
-	      callbackFunc = options.callbackFunc || 'jsonp_' + randomString(15);
-	      callback = params.data[callbackName] = callbackFunc;
-	      window[callback] = function(data) {
-	        window[callback] = null;
-	        params.success(data, params);
-	        return params.complete(data, params);
-	      };
-	      script = createElement('script');
-	      script.src = computedUrl(params);
-	      script.async = true;
-	      script.onerror = function(evt) {
-	        params.error({
-	          url: script.src,
-	          event: evt
-	        });
-	        return params.complete({
-	          url: script.src,
-	          event: evt
-	        }, params);
-	      };
-	      script.onload = script.onreadystatechange = function() {
-	        var ref, ref1;
-	        if (done || ((ref = this.readyState) !== 'loaded' && ref !== 'complete')) {
-	          return;
-	        }
-	        done = true;
-	        if (script) {
-	          script.onload = script.onreadystatechange = null;
-	          if ((ref1 = script.parentNode) != null) {
-	            ref1.removeChild(script);
-	          }
-	          return script = null;
-	        }
-	      };
-	      head = window.document.getElementsByTagName('head')[0] || window.document.documentElement;
-	      head.insertBefore(script, head.firstChild);
-	    }
-	    return {
-	      abort: function() {
-	        window[callback] = function() {
-	          return window[callback] = null;
-	        };
-	        done = true;
-	        if (script != null ? script.parentNode : void 0) {
-	          script.onload = script.onreadystatechange = null;
-	          script.parentNode.removeChild(script);
-	          return script = null;
-	        }
-	      }
-	    };
-	  };
-
-	  noop = function() {
-	    return void 0;
-	  };
-
-	  computedUrl = function(params) {
-	    var url;
-	    url = params.url;
-	    url += params.url.indexOf('?') < 0 ? '?' : '&';
-	    url += objectToURI(params.data);
-	    return url;
-	  };
-
-	  randomString = function(length) {
-	    var str;
-	    str = '';
-	    while (str.length < length) {
-	      str += random().toString(36).slice(2, 3);
-	    }
-	    return str;
-	  };
-
-	  objectToURI = function(obj) {
-	    var data, key, value;
-	    data = (function() {
-	      var results;
-	      results = [];
-	      for (key in obj) {
-	        value = obj[key];
-	        results.push(encode(key) + '=' + encode(value));
-	      }
-	      return results;
-	    })();
-	    return data.join('&');
-	  };
-
-	  if ("function" !== "undefined" && __webpack_require__(3) !== null ? __webpack_require__(4) : void 0) {
-	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
-	      return JSONP;
-	    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	  } else if (typeof module !== "undefined" && module !== null ? module.exports : void 0) {
-	    module.exports = JSONP;
-	  } else {
-	    this.JSONP = JSONP;
-	  }
-
-	}).call(this);
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+"use strict";
+eval("/*!\n * Aquto Move Rewards v0.1.0 <http://aquto.com>\n */\n\n\nvar jsonp = __webpack_require__(/*! browser-jsonp */ \"./node_modules/browser-jsonp/lib/jsonp.js\")\nvar sharedCallback = __webpack_require__(/*! ./sharedCallback */ \"./src/sharedCallback.js\").sharedCallback\nvar voucherCallback = __webpack_require__(/*! ./sharedCallback */ \"./src/sharedCallback.js\").voucherCallback\nvar completeCallback = __webpack_require__(/*! ./sharedCallback */ \"./src/sharedCallback.js\").completeCallback\nvar utils = __webpack_require__(/*! ./utils */ \"./src/utils.js\")\n\n/** instantiate moveRewards object */\nvar moveRewards = {}\n\n/** Check if Aquto backend hostname has been passed in */\nvar scriptParams = utils._parseScriptQuery(document.getElementById('aquto-api'))\nvar be = scriptParams.be || 'app.aquto.com'\nvar ow = scriptParams.ow || 'ow.aquto.com'\n\n\n/**\n * Check eligibility for the current device\n * Campaign id is used to determine configured reward, and operator\n *\n * @param {String} campaignId Aquto campaign id\n * @param {function} callback Callback function on success or error\n * @param {String} [phoneNumber] The phone number of the subscriber\n * @param {String} [publisherSiteUuid] Optional publisherSiteUuid of the inventory (generated by Aquto)\n * @param {String} [channel] Optional channel of the inventory\n *\n */\nfunction checkEligibility(options) {\n  if (options && options.campaignId) {\n    var data = { apiVersion: 'v8' }\n    if(options.phoneNumber) {\n      data.phoneNumber = options.phoneNumber\n    }\n    if(options.publisherSiteUuid) {\n      data.publisherSiteUuid = options.publisherSiteUuid\n    }\n    if(options.channel) {\n      data.channel = options.channel\n    }\n    jsonp({\n      url: '//' + be + '/api/campaign/datarewards/identifyandcheck/'+options.campaignId,\n      callbackName: 'jsonp',\n      data: data,\n      success: function(response) {\n        sharedCallback(response, options.callback)\n      },\n      error: function(response) {\n        sharedCallback(response, options.callback)\n      }\n    })\n  }\n}\n\n/**\n * Check eligibility for the current device\n * Doesn't require a campaignId\n *\n * @param {function} callback Callback function on success or error\n * @param {String} [phoneNumber] The phone number of the subscriber\n *\n */\nfunction genericCheckEligibility(options) {\n  var data = { apiVersion: 'v8' }\n  if(options.phoneNumber) {\n    data.phoneNumber = options.phoneNumber\n  }\n  jsonp({\n    url: '//' + be + '/api/datarewards/eligibility',\n    callbackName: 'jsonp',\n    data: data,\n    success: function(response) {\n      if (options.callback &&  typeof options.callback === 'function') {\n        options.callback(response.response)\n      }\n    }\n  })\n}\n\n/**\n * Check if user is eligible for the Aquto Offer Wall\n *\n * @param {function} callback Callback function on success or error\n * @param {String} [carrier] The phone number of the subscriber\n *\n */\nfunction checkOfferWallEligibility(options) {\n  var data = { apiVersion: 'v8' }\n  if(options.carrier) {\n    data.operatorCode = options.carrier\n  }\n  if(options.phoneNumber) {\n    data.phoneNumber = options.phoneNumber\n  }\n  if(options.countryCode) {\n    data.countryCode = options.countryCode\n  }\n  if(options.publisherSiteUuid) {\n    data.publisherSiteUuid = options.publisherSiteUuid\n  }\n  if(options.channel) {\n    data.publisherSiteUuid = options.channel\n  }\n\n  jsonp({\n    url: '//' + be + '/api/datarewards/offerwall/eligibility',\n    callbackName: 'jsonp',\n    data: data,\n    success: function(response) {\n      if (options.callback &&  typeof options.callback === 'function') {\n        if (response.response.eligible) {\n          var offerWallHref = '//' + ow + '/?opCode=' + response.response.opCode + '&'\n          if(options.phoneNumber) {\n            offerWallHref = offerWallHref + 'pn=' + options.phoneNumber + '&'\n          }\n          if(options.publisherSiteUuid) {\n            offerWallHref = offerWallHref + 'publisherSiteUuid=' + options.publisherSiteUuid + '&'\n          }\n          if(options.channel) {\n            offerWallHref = offerWallHref + 'channel=' + options.channel + '&'\n          }\n\n          options.callback({\n            eligible: true,\n            offerWallHref: offerWallHref,\n            numberOfOffers: response.response.offerCount\n          })\n        } else {\n          options.callback({\n            eligible: false,\n            identified: !!(response.response && response.response.opCode !== 'unknown'),\n            numberOfOffers: 0\n          })\n        }\n      }\n    }\n  })\n}\n\n/**\n * Check eligibility for the current device\n * Campaign id is used to determine configured reward, and operator\n *\n * @param {String} campaignId Aquto campaign id\n * @param {function} callback Callback function on success or error\n * @param {String} [phoneNumber] The phone number of the subscriber\n * @param {String} [publisherSiteUuid] Optional publisherSiteUuid of the inventory (generated by Aquto)\n * @param {String} [channel] Optional channel of the inventory\n *\n */\nfunction checkAppEligibility(options) {\n  if (options && options.campaignId) {\n    var data = { apiVersion: 'v8' }\n    if(options.phoneNumber) {\n      data.phoneNumber = options.phoneNumber\n    }\n    if(options.publisherSiteUuid) {\n      data.publisherSiteUuid = options.publisherSiteUuid\n    }\n    if(options.channel) {\n      data.channel = options.channel\n    }\n\n    jsonp({\n      url: '//' + be + '/api/campaign/datarewards/eligibility/' + options.campaignId,\n      callbackName: 'jsonp',\n      data: data,\n      success: function(response) {\n        sharedCallback(response, options.callback)\n      },\n      error: function(response) {\n        sharedCallback(response, options.callback)\n      }\n    })\n  }\n}\n\n/**\n * Check eligibility for the current device\n * Campaign id is used to determine configured reward, and operator\n *\n * @param {String} campaignId Aquto campaign id\n * @param {function} callback Callback function on success or error\n * @param {String} phoneNumber The phone number of the subscriber\n *\n */\nfunction checkVoucherEligibility(options) {\n  if (options && options.campaignId) {\n    var data = { apiVersion: 'v8', campaignId: options.campaignId }\n    if(options.phoneNumber) {\n      data.phoneNumber = options.phoneNumber\n    }\n    if(options.publisherSiteUuid) {\n      data.publisherSiteUuid = options.publisherSiteUuid\n    }\n    if(options.channel) {\n      data.channel = options.channel\n    }\n\n    jsonp({\n      url: '//' + be + '/api/datarewards/voucher/eligibility',\n      callbackName: 'jsonp',\n      data: data,\n      success: function(response) {\n        sharedCallback(response, options.callback)\n      },\n      error: function(response) {\n        sharedCallback(response, options.callback)\n      }\n    })\n  }\n}\n\n/**\n * Check if a qualified user is eligible for a specific campaign\n *\n * @param {String} campaignId Aquto campaign id\n * @param {function} callback Callback function on success or error\n *\n */\nfunction checkQualified(options) {\n  if (options && options.campaignId) {\n    var data = { apiVersion: 'v8' }\n\n    jsonp({\n      url: '//' + be + '/api/datarewards/webconvert/eligibility/'+options.campaignId,\n      callbackName: 'jsonp',\n      data: data,\n      success: function(response) {\n        sharedCallback(response, options.callback)\n      },\n      error: function(response) {\n        sharedCallback(response, options.callback)\n      }\n    })\n  }\n}\n\n\n/**\n * Complete the conversion for the last checkEligibility call\n * Campaign id is used to link with existing checkEligibility calls\n *\n * @param {String} campaignId Aquto campaign id\n * @param {function} callback Callback function on success or error\n *\n */\nfunction complete(options) {\n  if (options && options.campaignId) {\n    var data = { apiVersion: 'v8' }\n    if(options.userToken) {\n      data.userToken = options.userToken\n    }\n    jsonp({\n      url: '//' + be + '/api/campaign/datarewards/applyreward/'+options.campaignId,\n      callbackName: 'jsonp',\n      data: data,\n      success: function(response) {\n        sharedCallback(response, options.callback)\n      },\n      error: function(response) {\n        sharedCallback(response, options.callback)\n      }\n    })\n  }\n}\n\n/**\n * Redeem a voucher for an eligible user\n * Campaign id is used to link with existing checkVoucherEligibility\n *\n * @param {String} callback Callback function on success or error\n * @param {String} campaignId Aquto campaign id\n * @param {String} code Voucher code\n * @param {String} [userToken] User identifier received from eligibility request can be used instead of a phone number\n * @param {String} [phoneNumber] The phone number of the subscriber.\n *\n */\nfunction redeemVoucher(options) {\n  if (options && options.code) {\n    var data = { apiVersion: 'v8', code: options.code }\n    if(options.campaignId) {\n      data.campaignId = options.campaignId\n    }\n    if(options.userToken) {\n      data.userToken = options.userToken\n    }\n    if(options.phoneNumber) {\n      data.phoneNumber = options.phoneNumber\n    }\n    if(options.publisherSiteUuid) {\n      data.publisherSiteUuid = options.publisherSiteUuid\n    }\n    if(options.channel) {\n      data.channel = options.channel\n    }\n\n    jsonp({\n      url: '//' + be + '/api/datarewards/voucher/reward',\n      callbackName: 'jsonp',\n      data: data,\n      success: function(response) {\n        voucherCallback(response, options.callback)\n      },\n      error: function(response) {\n        voucherCallback(response, options.callback)\n      }\n    })\n  }\n}\n\n/**\n * Complete the conversion for a qualified user\n *\n * @param {String} campaignId Aquto campaign id\n * @param {String} callback Callback function on success or error\n *\n */\nfunction completeQualified(options) {\n  if (options && options.campaignId) {\n    var data = { apiVersion: 'v8' }\n\n    jsonp({\n      url: '//' + be + '/api/datarewards/webconvert/reward/'+options.campaignId,\n      callbackName: 'jsonp',\n      data: data,\n      success: function(response) {\n        completeCallback(response, options.callback)\n      },\n      error: function(response) {\n        completeCallback(response, options.callback)\n      }\n    })\n  }\n}\n\n/*--------------------------------------------------------------------------*/\n\nvar defaultEligibleMessage = 'Complete the offer and receive $$rewardAmount$$MB'\nvar defaultRewardMessage = 'Congratulations! You have received $$rewardAmount$$MB'\nvar defaultJBoxOptions = {\n  color: 'blue',\n  position: {x: 'center', y: 'bottom'},\n  offset: {x: 0, y: -10},\n  // zoomIn, zoomOut, pulse, move, slide, flip, tada\n  animation: {open: 'tada', close: 'zoomIn'},\n  autoClose: 7000\n}\n\n/**\n * Replace placeholders in message. Parameters are surrounded by double dollar signs e.g. $$param1$$\n *\n * @param {String} text The text to replace placeholders in\n * @param {Object} params Named parameters to replace in message\n */\nfunction replaceParams(text, params) {\n  if (params) {\n    for (var k in params) {\n      text = text.replace('$$' + k + '$$', params[k])\n    }\n  }\n  return text\n}\n\n/**\n * Show popup notice with specified message\n *\n * @param {String} message Message to display with optional parameter placeholders in format $$param1$$\n * @param {Object} params Named parameters to replace in message\n * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'\n * @param {String} jBoxOptions jBox Options\n * @param {Object} response Optional response object from eligibility check or reward callback that will set $$rewardAmount$$ parameter\n */\nfunction showNotice(options) {\n  if (!window.jBox) {\n    console.log(\"jBox is required to show notices\")\n  } else {\n    var noticeOptions = toNoticeOptions(options)\n\n    // https://stephanwagner.me/jBox/options\n    var jBoxType = noticeOptions.jBoxType || 'Notice'\n    var jBoxOptions = Object.assign({\n      content: replaceParams(noticeOptions.message, noticeOptions.params),\n    }, defaultJBoxOptions, noticeOptions.jBoxOptions)\n\n    new jBox(jBoxType, jBoxOptions)\n  }\n}\n\n/**\n * Show popup notice with specified message if user is eligible for campaign\n *\n * @param {String} campaignId Aquto campaign id\n * @param {String} message Message to display with optional parameter placeholders in format $$rewardAmount$$\n * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'\n * @param {String} jBoxOptions jBox Options\n *\n */\nfunction checkQualifiedAndNotify(options) {\n  aquto.checkQualified({\n    campaignId: options.campaignId,\n    callback: function(response) {\n      if (response && response.eligible) {\n        showNotice(Object.assign({}, options, { response: response, defaultMessage: defaultEligibleMessage }))\n      }\n    }\n  })\n}\n\n/**\n * Reward user if eligible for campaign and show popup notice with specified message\n *\n * @param {String} campaignId Aquto campaign id\n * @param {String} message Message to display with optional parameter placeholders in format $$rewardAmount$$\n * @param {String} jBoxType Type of jBox notification, defaults to 'Notice'\n * @param {String} jBoxOptions jBox Options\n *\n */\nfunction completeQualifiedAndNotify(options) {\n  aquto.completeQualified({\n    campaignId: options.campaignId,\n    callback: function(response) {\n      if (response && response.success) {\n        showNotice(Object.assign({}, options, { response: response, defaultMessage: defaultRewardMessage }))\n      }\n    }\n  })\n}\n\nfunction toNoticeOptions(options) {\n  var response = options.response\n\n  // Set params if response object is available\n  var responseParams = response && {\n    rewardAmount: response.rewardAmount,\n    carrier: response.carrier\n  } || {}\n\n  // Merge with other params if set\n  var params = options.params ? Object.assign(responseParams, options.params) : responseParams\n\n  // Add default message and the params\n  return Object.assign({ message: options.defaultMessage }, options, { params: params })\n}\n\n/*--------------------------------------------------------------------------*/\n\n/**\n * The semantic version number.\n *\n * @static\n * @memberOf _\n * @type String\n */\nmoveRewards.VERSION = '0.1.0'\n\n// assign eligibility static methods\nmoveRewards.genericCheckEligibility = genericCheckEligibility\nmoveRewards.checkEligibility = checkEligibility\nmoveRewards.checkEligibilitySinglePage = checkAppEligibility\nmoveRewards.checkAppEligibility = checkAppEligibility\nmoveRewards.checkVoucherEligibility = checkVoucherEligibility\nmoveRewards.checkOfferWallEligibility = checkOfferWallEligibility\nmoveRewards.checkQualified = checkQualified\n\n// assign redemption static methods\nmoveRewards.complete = complete\nmoveRewards.redeemVoucher = redeemVoucher\nmoveRewards.completeQualified = completeQualified\n\n// helper functions\nmoveRewards.utils = utils\n\n// show notice methods\nmoveRewards.checkQualifiedAndNotify = checkQualifiedAndNotify\nmoveRewards.completeQualifiedAndNotify = completeQualifiedAndNotify\nmoveRewards.showNotice = showNotice\n\n/*--------------------------------------------------------------------------*/\n\nmodule.exports = moveRewards\n\n\n//# sourceURL=webpack://aquto/./src/aquto.js?");
 
 /***/ }),
-/* 2 */
+
+/***/ "./src/sharedCallback.js":
+/*!*******************************!*\
+  !*** ./src/sharedCallback.js ***!
+  \*******************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
+eval("/**\n * Prepare the response to be returned and fires callback\n * Code shared between checkEligiblity and complete that formats the reward amount,\n * prepares the returned strings, and fires the callback\n *\n * @param {Object} response JSON response from server\n * @param {Object} callback Optional callback to be fired after response from server\n *\n */\nfunction sharedCallback(response, callback) {\n  if (callback && typeof callback === 'function') {\n    var callbackObject;\n\n    if (response && response.response && response.response.eligible) {\n      callbackObject = {\n        eligible: true,\n        rewardAmount: response.response.rewardAmountMB,\n        userToken: response.response.userToken\n      }\n\n      var operatorInfo = getOperatorInfo(response.response.operatorCode)\n      callbackObject.carrier = operatorInfo.operatorCode\n      callbackObject.carrierName = operatorInfo.operatorName\n\n      var rewardText\n      if (response.response.displayText) {\n        var rewardAmountFormatted = response.response.rewardAmountMB ? response.response.rewardAmountMB + '\\xa0MB' : ''\n        rewardText = response.response.displayText\n\n        rewardText = rewardText.replace('$$operator$$', operatorInfo.operatorName)\n        rewardText = rewardText.replace('$$rewardAmount$$', rewardAmountFormatted)\n      }\n      callbackObject.rewardText = rewardText\n\n      if (response.response.offerUrl) {\n        callbackObject.clickUrl = response.response.offerUrl\n      }\n\n    } else {\n      callbackObject = {\n        eligible: false,\n        identified: !!(response.response && response.response.operatorCode !== 'unknown')\n      }\n    }\n\n    callback(callbackObject)\n  }\n}\n\nfunction prepareCompleteCallback(response) {\n  var callbackObject;\n\n  if (response && response.response) {\n    callbackObject = {\n      success: !!response.response.successful,\n      status: response.response.status,\n      rewardAmount: response.response.rewardAmountMB\n    }\n\n    var operatorInfo = getOperatorInfo(response.response.operatorCode)\n    callbackObject.carrier = operatorInfo.operatorCode\n    callbackObject.carrierName = operatorInfo.operatorName\n  } else {\n    callbackObject = {\n      success: false,\n      status: 'generalerror'\n    }\n  }\n\n  return callbackObject\n}\n\n/**\n * Prepares the reward response to be returned and fires callback\n *\n * @param {Object} response JSON response from server\n * @param {Object} callback Optional callback to be fired after response from server\n *\n */\nfunction completeCallback(response, callback) {\n  if (callback && typeof callback === 'function') {\n    callback(prepareCompleteCallback(response))\n  }\n}\n\n/**\n * Prepares the voucher response to be returned and fires callback\n *\n * @param {Object} response JSON response from server\n * @param {Object} callback Optional callback to be fired after response from server\n *\n */\nfunction voucherCallback(response, callback) {\n  if (callback && typeof callback === 'function') {\n    var callbackObject = prepareCompleteCallback(response)\n\n    // Group some statuses into ineligible\n    switch (response.response.status) {\n      case 'unabletoidentify':\n      case 'ineligible':\n      case 'unabletoconvert':\n      case 'generalerror':\n        callbackObject.status = 'ineligible'\n        break\n      // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'\n    }\n\n    callback(callbackObject)\n  }\n}\n\nfunction getOperatorInfo(operatorCode) {\n  var operatorName\n\n  if (\n    operatorCode === 'attmb' ||\n    operatorCode === 'attsim' ||\n    operatorCode === 'attrw'\n  ) {\n    operatorName = \"AT&T\"\n    operatorCode = 'att'\n  }\n  else if (operatorCode === 'vzwrw') {\n    operatorName = \"Verizon\"\n    operatorCode = 'vzw'\n  }\n  else if (operatorCode === 'vzwrw') {\n    operatorName = \"Verizon\"\n    operatorCode = 'vzw'\n  }\n  else if (\n    operatorCode === 'movirw' ||\n    operatorCode === 'moviperw'\n  ) {\n    operatorName = \"Movistar\"\n    operatorCode = 'movi'\n  }\n  else if (operatorCode === 'telcelrw') {\n    operatorName = \"Telcel\"\n    operatorCode = 'telcel'\n  }\n  else if (operatorCode === 'tigogtrw') {\n    operatorName = 'Tigo'\n    operatorCode = 'tigogt'\n  }\n  else if (operatorCode === 'oibrrw'){\n    operatorName = 'Oi'\n    operatorCode = 'oibr'\n  } else {\n    operatorName = 'N/A'\n    operatorCode = 'na'\n  }\n\n  return {\n    operatorCode: operatorCode,\n    operatorName: operatorName\n  }\n}\n\n\nmodule.exports = {\n  sharedCallback: sharedCallback,\n  voucherCallback: voucherCallback,\n  completeCallback: completeCallback\n}\n\n\n//# sourceURL=webpack://aquto/./src/sharedCallback.js?");
 
 /***/ }),
-/* 3 */
+
+/***/ "./src/utils.js":
+/*!**********************!*\
+  !*** ./src/utils.js ***!
+  \**********************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Prepare the response to be returned and fires callback
-	 * Code shared between checkEligiblity and complete that formats the reward amount,
-	 * prepares the returned strings, and fires the callback
-	 *
-	 * @param {Object} response JSON response from server
-	 * @param {Object} callback Optional callback to be fired after response from server
-	 *
-	 */
-	function sharedCallback(response, callback) {
-	  if (callback && typeof callback === 'function') {
-	    var callbackObject;
-
-	    if (response && response.response && response.response.eligible) {
-	      callbackObject = {
-	        eligible: true,
-	        rewardAmount: response.response.rewardAmountMB,
-	        userToken: response.response.userToken
-	      }
-
-	      var operatorInfo = getOperatorInfo(response.response.operatorCode)
-	      callbackObject.carrier = operatorInfo.operatorCode
-	      callbackObject.carrierName = operatorInfo.operatorName
-
-	      var rewardText
-	      if (response.response.displayText) {
-	        var rewardAmountFormatted = response.response.rewardAmountMB ? response.response.rewardAmountMB + '\xa0MB' : ''
-	        rewardText = response.response.displayText
-
-	        rewardText = rewardText.replace('$$operator$$', operatorInfo.operatorName)
-	        rewardText = rewardText.replace('$$rewardAmount$$', rewardAmountFormatted)
-	      }
-	      callbackObject.rewardText = rewardText
-
-	      if (response.response.offerUrl) {
-	        callbackObject.clickUrl = response.response.offerUrl
-	      }
-
-	    } else {
-	      callbackObject = {
-	        eligible: false,
-	        identified: !!(response.response && response.response.operatorCode !== 'unknown')
-	      }
-	    }
-
-	    callback(callbackObject)
-	  }
-	}
-
-	function prepareCompleteCallback(response) {
-	  var callbackObject;
-
-	  if (response && response.response) {
-	    callbackObject = {
-	      success: !!response.response.successful,
-	      status: response.response.status,
-	      rewardAmount: response.response.rewardAmountMB
-	    }
-
-	    var operatorInfo = getOperatorInfo(response.response.operatorCode)
-	    callbackObject.carrier = operatorInfo.operatorCode
-	    callbackObject.carrierName = operatorInfo.operatorName
-	  } else {
-	    callbackObject = {
-	      success: false,
-	      status: 'generalerror'
-	    }
-	  }
-
-	  return callbackObject
-	}
-
-	/**
-	 * Prepares the reward response to be returned and fires callback
-	 *
-	 * @param {Object} response JSON response from server
-	 * @param {Object} callback Optional callback to be fired after response from server
-	 *
-	 */
-	function completeCallback(response, callback) {
-	  if (callback && typeof callback === 'function') {
-	    callback(prepareCompleteCallback(response))
-	  }
-	}
-
-	/**
-	 * Prepares the voucher response to be returned and fires callback
-	 *
-	 * @param {Object} response JSON response from server
-	 * @param {Object} callback Optional callback to be fired after response from server
-	 *
-	 */
-	function voucherCallback(response, callback) {
-	  if (callback && typeof callback === 'function') {
-	    var callbackObject = prepareCompleteCallback(response)
-
-	    // Group some statuses into ineligible
-	    switch (response.response.status) {
-	      case 'unabletoidentify':
-	      case 'ineligible':
-	      case 'unabletoconvert':
-	      case 'generalerror':
-	        callbackObject.status = 'ineligible'
-	        break
-	      // NOTE: default status can be 'voucherinvalid', 'voucherexpired', or 'voucheralreadyredeemed'
-	    }
-
-	    callback(callbackObject)
-	  }
-	}
-
-	function getOperatorInfo(operatorCode) {
-	  var operatorName
-
-	  if (
-	    operatorCode === 'attmb' ||
-	    operatorCode === 'attsim' ||
-	    operatorCode === 'attrw'
-	  ) {
-	    operatorName = "AT&T"
-	    operatorCode = 'att'
-	  }
-	  else if (operatorCode === 'vzwrw') {
-	    operatorName = "Verizon"
-	    operatorCode = 'vzw'
-	  }
-	  else if (operatorCode === 'vzwrw') {
-	    operatorName = "Verizon"
-	    operatorCode = 'vzw'
-	  }
-	  else if (
-	    operatorCode === 'movirw' ||
-	    operatorCode === 'moviperw'
-	  ) {
-	    operatorName = "Movistar"
-	    operatorCode = 'movi'
-	  }
-	  else if (operatorCode === 'telcelrw') {
-	    operatorName = "Telcel"
-	    operatorCode = 'telcel'
-	  }
-	  else if (operatorCode === 'tigogtrw') {
-	    operatorName = 'Tigo'
-	    operatorCode = 'tigogt'
-	  }
-	  else if (operatorCode === 'oibrrw'){
-	    operatorName = 'Oi'
-	    operatorCode = 'oibr'
-	  } else {
-	    operatorName = 'N/A'
-	    operatorCode = 'na'
-	  }
-
-	  return {
-	    operatorCode: operatorCode,
-	    operatorName: operatorName
-	  }
-	}
-
-
-	module.exports = {
-	  sharedCallback: sharedCallback,
-	  voucherCallback: voucherCallback,
-	  completeCallback: completeCallback
-	}
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Creates and loads an image element in order to determine of a user is online or offline
-	 * @param  {Function} callback - returns a boolean to determine if the user is online or offline
-	 */
-	function isOnline(callback) {
-	  var url = '//d1y0qivfpuylge.cloudfront.net/images/pixel.gif'
-	  var img = new Image()
-	  img.onload = function() { callback(true) }
-	  img.onerror = function() { callback(false) }
-	  img.src = url + '?rcb=' + Math.floor((1 + Math.random()) * 0x10000).toString(16)
-	}
-
-	/**
-	 * Format reward amount
-	 * Adds MB or GB as broadway-devropriate
-	 *
-	 * @param {Integer} rewardAmount Reward amount in MB
-	 *
-	 */
-	function formatData(rewardAmount) {
-	  var dataNum = rewardAmount
-	  var dataLabel = 'MB'
-	  if (dataNum > 9999) {
-	    dataNum = Math.floor(dataNum/1024)
-	    dataLabel = 'GB'
-	  }
-	  return dataNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + dataLabel
-	}
-
-	/**
-	 *
-	 *
-	 */
-	function parseScriptQuery(scriptTag) {
-	  var args = {}
-	  if (scriptTag) {
-	    var query = scriptTag.src.replace(/^[^\?]+\??/,'')
-
-	    var vars = query.split("&")
-	    for (var i=0; i<vars.length; i++) {
-	      var pair = vars[i].split("=")
-	      // decodeURI doesn't expand "+" to a space.
-	      args[pair[0]] = decodeURI(pair[1]).replace(/\+/g, ' ')
-	    }
-	  }
-	  return args
-	}
-
-	module.exports = {
-	  isOnline: isOnline,
-	  formatData: formatData,
-	  _parseScriptQuery: parseScriptQuery
-	}
-
+eval("/**\n * Creates and loads an image element in order to determine of a user is online or offline\n * @param  {Function} callback - returns a boolean to determine if the user is online or offline\n */\nfunction isOnline(callback) {\n  var url = '//d1y0qivfpuylge.cloudfront.net/images/pixel.gif'\n  var img = new Image()\n  img.onload = function() { callback(true) }\n  img.onerror = function() { callback(false) }\n  img.src = url + '?rcb=' + Math.floor((1 + Math.random()) * 0x10000).toString(16)\n}\n\n/**\n * Format reward amount\n * Adds MB or GB as broadway-devropriate\n *\n * @param {Integer} rewardAmount Reward amount in MB\n *\n */\nfunction formatData(rewardAmount) {\n  var dataNum = rewardAmount\n  var dataLabel = 'MB'\n  if (dataNum > 9999) {\n    dataNum = Math.floor(dataNum/1024)\n    dataLabel = 'GB'\n  }\n  return dataNum.toString().replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\") + dataLabel\n}\n\n/**\n *\n *\n */\nfunction parseScriptQuery(scriptTag) {\n  var args = {}\n  if (scriptTag) {\n    var query = scriptTag.src.replace(/^[^\\?]+\\??/,'')\n\n    var vars = query.split(\"&\")\n    for (var i=0; i<vars.length; i++) {\n      var pair = vars[i].split(\"=\")\n      // decodeURI doesn't expand \"+\" to a space.\n      args[pair[0]] = decodeURI(pair[1]).replace(/\\+/g, ' ')\n    }\n  }\n  return args\n}\n\nmodule.exports = {\n  isOnline: isOnline,\n  formatData: formatData,\n  _parseScriptQuery: parseScriptQuery\n}\n\n\n//# sourceURL=webpack://aquto/./src/utils.js?");
 
 /***/ })
-/******/ ]);
+
+/******/ });
