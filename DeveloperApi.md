@@ -145,9 +145,8 @@ be identified.
 
 It is highly recommended that HTTP be used wherever possible.
 
-|<!-- -->| <!-- -->|
+|**Request Method**|GET|
 |:---|:---|
-|**Request Method**|GET|||
 |**Request URI**|http(s)://app.aquto.com/api/campaign/datarewards/pixel|
 
 |Query Parameter|Type|Required|Description|
@@ -176,9 +175,8 @@ identifier of the user can be either the phone number of the user or the
 sponsor's own user identifier if Network Based Subscriber Identification
 is used (see above).
 
-|<!-- -->| <!-- -->|
+|Request Method|GET|
 |:---|:---|
-|**Request Method**|GET|||
 |**Request URI**|https://app.aquto.com/api/datarewards/api/eligibility|
 
 |Query Parameter|Type|Required|Description|
@@ -189,14 +187,18 @@ is used (see above).
 | **phoneNumber**|String|Conditional|The phone number of the subscriber. Only required if the userIdentifier is not provided.|
  
  
-|Response Object|Type|Description||
+|Response Object|Type|Description|
+|:-------------:|:-------------:|:-----:|
+| **Response**|Eligibility Response|See Eligibility Response definition.|
+
+|Eligibility Response|JSON Field|Type|Description|
 |:-------------:|:-------------:|:-----:|:-----|
-| **Response**|Eligibility Response|See Eligibility Response definition.||
-| **Eligibility Response**|**JSON Field**|**Type**|**Description**|
 |<!-- -->|eligible|Boolean|True if user is eligible|
 |<!-- -->|operatorCode|String|The Aquto portal operator code. See the appendix for a list of supported operators and codes.|
 |<!-- -->|coupons|Array of Coupons|See coupon object definition.|
-|**Coupon**|**JSON Field**|**Type**|**Description**|
+
+|Coupon|JSON Field|Type|Description|
+|:-------------:|:-------------:|:-----:|:-----|
 |<!-- -->|couponId|	Boolean	|Identifier of coupon to be used for conversion.|
 |<!-- -->|rewardAmountMB|	Integer	|The amount of the coupon in MB.|
 |<!-- -->|term	|Integer|	The term of the reward (in minutes).|
@@ -253,9 +255,8 @@ wish to reward them with. The identifier of the user can be either the
 phone number of the user or the sponsors own user identifier if Network
 Based Subscriber Identification is used (see above).
 
-|<!-- -->| <!-- -->|
+|**Request Method**|POST|
 |:---|:---|
-|**Request Method**|POST|||
 |**Request URI**|https://app.aquto.com/api/datarewards/api/reward|
 
 |Query Parameter|Type|Required|Description|
@@ -267,11 +268,12 @@ Based Subscriber Identification is used (see above).
 |**couponId**|	Integer|	Yes|	Coupon identifier returned in the eligibility response. 
 |**transactionId**|	String|	Conditional|	Optional sponsor transactionId that will be logged with the transaction. Used for reconciliation purposes. 
 
+|Response Object|Type|Description|
+|:-------------:|:-------------:|:-----:|
+| **Response**|Reward Response|See Reward Response definition.|
 
-|Response Object|Type|Description||
-|:-------------:|:-------------:|:-----:|:-----|
-| **Response**|Reward Response|See Reward Response definition.||
-| **Reward Response**|**JSON Field**|**Type**|**Description**|
+|Reward Response|JSON Field|Type|Description|
+|:---:|:---:|:----:|:---|
 |<!-- -->|successful|Boolean|True if the transaction was successful.|
 |<!-- -->|status|	String| **success** - Conversion succeeded |
 |<!-- -->|<!-- -->|	<!-- -->| **unabletoidentify** - Unable to identify the user |
@@ -321,18 +323,4 @@ POST /api/datarewards/api/reward
  }
 }
 ```
-
-Appendix A - Supported Operator Codes
-======================================
-
-
-| Code   |      Country      |  Operator |
-|----------|:-------------:|:------:|
-|vzwrw| United States| Verizon Wireless Post-paid|
-|vzwmb| United States| Verizon Wireless Post-paid|
-|attmb| United States| AT&T Wireless|
-|movirw| Mexico| Movistar|
-|telcelrw| Mexico| Telcel|
-|vivirw | Brazil| Vivo|
-|tigogtrw| Guatemala| Tigo|
 
