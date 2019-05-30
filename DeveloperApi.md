@@ -150,14 +150,15 @@ It is highly recommended that HTTP be used wherever possible.
 |**Request URI**|http(s)://app.aquto.com/api/campaign/datarewards/pixel|
 
 |Query Parameter|Type|Required|Description|
-|:-------------:|:-------------:|:-----:|:-----|
-| **advertiserId**|Integer|Yes|Aquto provided advertiser identifier|
-| **userIdentifier**|String|Yes|The sponsor provided user identifier. No restrictions on length.|
-| **android_aid**|String|No|The Google Android advertising identifier of the device (AID)|
-| **ios_idfa**|String|No|The Apple IOS advertising identifier of the device (IDFA)|
-| **Response Content Type**| image/gif |  |
-| **Response Description**| The API will always return success and the response can be safely ignored. <br>**Note:** The response may result in a redirect|||
+|:---|:---|:---|:---|
+|**advertiserId**|Integer|Yes|Aquto provided advertiser identifier|
+|**userIdentifier**|String|Yes|The sponsor provided user identifier. No restrictions on length.|
+|**android_aid**|String|No|The Google Android advertising identifier of the device (AID)|
+|**ios_idfa**|String|No|The Apple IOS advertising identifier of the device (IDFA)|
 
+|**Response Content Type**|image/gif|
+|:---|:---|
+|**Response Description**|The API will always return success and the response can be safely ignored. <br>**Note:** The response may result in a redirect|
 
 ***Example***
 
@@ -180,32 +181,25 @@ is used (see above).
 |**Request URI**|https://app.aquto.com/api/datarewards/api/eligibility|
 
 |Query Parameter|Type|Required|Description|
-|:-------------:|:-------------:|:-----:|:-----|
-| **campaignId**|Integer|Yes|The Aquto portal generated campaign identifier of the sponsor’s campaign.|
-| **advertiserId**|Integer|Conditional|The sponsors Aquto portal generated advertiser identifier. Required if userIdentifier is passed.|
-| **userIdentifier**|String|Conditional|The sponsor’s user identifier. Only required if Network Based Subscriber Identification is used and phoneNumber is not provided.|
-| **phoneNumber**|String|Conditional|The phone number of the subscriber. Only required if the userIdentifier is not provided.|
- 
- 
-|Response Object|Type|Description|
-|:-------------:|:-------------:|:-----:|
-| **Response**|Eligibility Response|See Eligibility Response definition.|
+|:---|:---|:---|:---|
+|**campaignId**|Integer|Yes|The Aquto portal generated campaign identifier of the sponsor’s campaign.|
+|**advertiserId**|Integer|Conditional|The sponsors Aquto portal generated advertiser identifier. Required if userIdentifier is passed.|
+|**userIdentifier**|String|Conditional|The sponsor’s user identifier. Only required if Network Based Subscriber Identification is used and phoneNumber is not provided.|
+|**phoneNumber**|String|Conditional|The phone number of the subscriber. Only required if the userIdentifier is not provided.|
 
-|Eligibility Response|JSON Field|Type|Description|
-|:-------------:|:-------------:|:-----:|:-----|
-|<!-- -->|eligible|Boolean|True if user is eligible|
+|Response Object|JSON Field|Type|Description|
+|:---|:---|:---|:---|
+|**Response**|response|Eligibility Response|See Eligibility Response definition.|
+|**Eligibility Response**|eligible|Boolean|True if user is eligible|
 |<!-- -->|operatorCode|String|The Aquto portal operator code. See the appendix for a list of supported operators and codes.|
 |<!-- -->|coupons|Array of Coupons|See coupon object definition.|
-
-|Coupon|JSON Field|Type|Description|
-|:-------------:|:-------------:|:-----:|:-----|
-|<!-- -->|couponId|	Boolean	|Identifier of coupon to be used for conversion.|
-|<!-- -->|rewardAmountMB|	Integer	|The amount of the coupon in MB.|
-|<!-- -->|term	|Integer|	The term of the reward (in minutes).|
-|<!-- -->|price|	Double	|The price of the reward to the sponsor in the sponsor’s currency.|
-|<!-- -->|currency	|String	|The ISO-4217 currency code of the sponsor’s currency.|
-|<!-- -->|networkPrice	|Double|	The price of the reward in the network/operator’s currency.|
-|<!-- -->|networkCurrency|	String	|The ISO-4217 currency code of the operator’s currency.|
+|**Coupon**|couponId|Boolean|Identifier of coupon to be used for conversion.|
+|<!-- -->|rewardAmountMB|Integer|The amount of the coupon in MB.|
+|<!-- -->|term|Integer|The term of the reward (in minutes).|
+|<!-- -->|price|Double|The price of the reward to the sponsor in the sponsor's currency.|
+|<!-- -->|currency|String|The ISO-4217 currency code of the sponsor's currency.|
+|<!-- -->|networkPrice|Double|The price of the reward in the network/operator's currency.|
+|<!-- -->|networkCurrency|String|The ISO-4217 currency code of the operator's currency.|
 
 ***Example Request***
 
@@ -260,33 +254,30 @@ Based Subscriber Identification is used (see above).
 |**Request URI**|https://app.aquto.com/api/datarewards/api/reward|
 
 |Query Parameter|Type|Required|Description|
-|:-------------:|:-------------:|:-----:|:-----|
-|**campaignId**|	Integer	|Yes|	The Aquto portal generated campaign identifier of the sponsor’s campaign.
-|**advertiserId**|	Integer|	Conditional|	The sponsor’s Aquto portal generated advertiser identifier. Required if userIdentifer is passed.
-|**userIdentifier**|	String|	Conditional|	The sponsor’s user identifier. Only required if Network Based Subscriber Identification is used and phoneNumber is not provided.
-|**phoneNumber**|	String|	Conditional	|The phone number of the subscriber. Only required if the userIdentifier is not provided.
-|**couponId**|	Integer|	Yes|	Coupon identifier returned in the eligibility response. 
-|**transactionId**|	String|	Conditional|	Optional sponsor transactionId that will be logged with the transaction. Used for reconciliation purposes. 
+|:---|:---|:---|:---|
+|**campaignId**|Integer|Yes|The Aquto portal generated campaign identifier of the sponsor’s campaign.
+|**advertiserId**|Integer|Conditional|The sponsor’s Aquto portal generated advertiser identifier. Required if userIdentifer is passed.
+|**userIdentifier**|String|Conditional|The sponsor’s user identifier. Only required if Network Based Subscriber Identification is used and phoneNumber is not provided.
+|**phoneNumber**|String|Conditional|The phone number of the subscriber. Only required if the userIdentifier is not provided.
+|**couponId**|Integer|Yes|Coupon identifier returned in the eligibility response. 
+|**transactionId**|String|Conditional|Optional sponsor transactionId that will be logged with the transaction. Used for reconciliation purposes. 
 
-|Response Object|Type|Description|
-|:-------------:|:-------------:|:-----:|
-| **Response**|Reward Response|See Reward Response definition.|
-
-|Reward Response|JSON Field|Type|Description|
-|:---:|:---:|:----:|:---|
-|<!-- -->|successful|Boolean|True if the transaction was successful.|
-|<!-- -->|status|	String| **success** - Conversion succeeded |
-|<!-- -->|<!-- -->|	<!-- -->| **unabletoidentify** - Unable to identify the user |
-|<!-- -->|<!-- -->| <!-- -->| **ineligible** - Subscriber not eligible or campaign is inactive |
-|<!-- -->|<!-- -->|	<!-- -->| **unabletoconvert** - Unable to initiate conversion |
-|<!-- -->|<!-- -->|	<!-- -->| **generalerror** -  System error |
-|<!-- -->|operatorCode|	String|	The Aquto portal operator code. See the appendix for a list of supported operators and codes.|
-|<!-- -->|rewardAmountMB|	Integer	|The amount of the coupon in MB.|
-|<!-- -->|transactionId|	String|	The Aquto transactionId of the transaction. Can be stored by the sponsor for future reconciliation.|
-|<!-- -->|price	|Double|	The price of the reward to the sponsor in the sponsor’s currency.|
-|<!-- -->|currency|	String|	The ISO-4217 currency code of the sponsor’s currency.|
-|<!-- -->|networkPrice|	Double|	The price of the reward in the network/operator’s currency.|
-|<!-- -->|networkCurrency|	String|	The ISO-4217 currency code of the operator’s currency.|
+|Response Object|JSON Field|Type|Description|
+|:---|:---|:---|:---|
+|**Response**|response|Reward Response|See Reward Response definition.|
+|**Reward Response**|successful|Boolean|True if the transaction was successful.|
+|<!-- -->|status|String|**success** - Conversion succeeded |
+|<!-- -->|<!-- -->|<!-- -->|**unabletoidentify** - Unable to identify the user |
+|<!-- -->|<!-- -->|<!-- -->|**ineligible** - Subscriber not eligible or campaign is inactive |
+|<!-- -->|<!-- -->|<!-- -->|**unabletoconvert** - Unable to initiate conversion |
+|<!-- -->|<!-- -->|<!-- -->|**generalerror** -  System error |
+|<!-- -->|operatorCode|String|The Aquto portal operator code. See the appendix for a list of supported operators and codes.|
+|<!-- -->|rewardAmountMB|Integer|The amount of the coupon in MB.|
+|<!-- -->|transactionId|String|The Aquto transactionId of the transaction. Can be stored by the sponsor for future reconciliation.|
+|<!-- -->|price|Double|The price of the reward to the sponsor in the sponsor’s currency.|
+|<!-- -->|currency|String|The ISO-4217 currency code of the sponsor’s currency.|
+|<!-- -->|networkPrice|Double|The price of the reward in the network/operator’s currency.|
+|<!-- -->|networkCurrency|String|The ISO-4217 currency code of the operator’s currency.|
 
 
 
