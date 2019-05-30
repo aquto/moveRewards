@@ -76,7 +76,7 @@ entity contains a code and some short text that describes the issue in
 more detail. Errors **will not** contain a response entity. 
 
 
-```json
+```
 {
   "meta" : {
     "errorType" : "validation", //Indicates general category of error
@@ -95,7 +95,7 @@ Success responses always return with an HTTP status code of 200. In most
 cases (but not all), the success response will also contain a response
 entity with method specific attributes and entities.
 
-```json
+```
 {
   "meta" : {
     "code" : 200
@@ -162,7 +162,7 @@ It is highly recommended that HTTP be used wherever possible.
 
 ***Example***
 
-```html
+```
 <img src="http://app.aquto.com/api/campaign/datarewards/pixel?advertiserId=59059305&userIdentifier=4b468d14-7ef4-4f7d-a060-373cde5b5a5d&ios_idfa=3873c780-7a3e-4a7d-9572-7b1d1691b224" height="1" width="1">
 ```
 
@@ -208,7 +208,7 @@ is used (see above).
 ```
 ***Example Response***
 
-```json
+```
 {
  "meta": {
   "code": 200
@@ -286,7 +286,7 @@ Based Subscriber Identification is used (see above).
 POST /api/datarewards/api/reward
 ```
 
-```json
+```
 {
  "campaignId": 123,
  "phoneNumber": "15554441212"
@@ -296,7 +296,7 @@ POST /api/datarewards/api/reward
 
 ***Example Response***
 
-```json
+```
 {
  "meta": {
   "code": 200
