@@ -1,0 +1,122 @@
+{
+  "info": {
+    "_postman_id": "267e13f3-cc7f-4a9f-985d-5bde3a81ed98",
+    "name": "Aquto REST API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Subscriber Eligibility",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "apisecret",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "apikey",
+              "type": "string"
+            },
+            {
+              "key": "saveHelperData",
+              "type": "any"
+            },
+            {
+              "key": "showPassword",
+              "value": false,
+              "type": "boolean"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://app.aquto.com/api/datarewards/api/eligibility?campaignId=12345&phoneNumber=1234567890",
+          "protocol": "https",
+          "host": [
+            "app",
+            "aquto",
+            "com"
+          ],
+          "path": [
+            "api",
+            "datarewards",
+            "api",
+            "eligibility"
+          ],
+          "query": [
+            {
+              "key": "campaignId",
+              "value": "12345"
+            },
+            {
+              "key": "phoneNumber",
+              "value": "1234567890"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Reward Subscriber",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "apisecret",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "apikey",
+              "type": "string"
+            },
+            {
+              "key": "saveHelperData",
+              "type": "any"
+            },
+            {
+              "key": "showPassword",
+              "value": false,
+              "type": "boolean"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"campaignId\": 12345,\n    \"phoneNumber\": \"1234567890\",\n    \"couponId\": 123\n}"
+        },
+        "url": {
+          "raw": "https://app.aquto.com/api/datarewards/api/reward",
+          "protocol": "https",
+          "host": [
+            "app",
+            "aquto",
+            "com"
+          ],
+          "path": [
+            "api",
+            "datarewards",
+            "api",
+            "reward"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

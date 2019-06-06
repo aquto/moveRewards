@@ -1,10 +1,12 @@
-Aquto Developer Configurable API
+Aquto Data Rewards REST API
 ================================
 
 This document describes the Aquto Data Rewards Server-Side API and its
 functionality. The Data Reward API allows sponsors to interact with the
 Aquto Portal when they want to provide a data reward to subscriber on
 any operator supported by Aquto.
+
+![Data Rewards Api Flow](./DataRewardsApiFlow.png)
 
 How to Send Requests
 ====================
@@ -147,7 +149,7 @@ It is highly recommended that HTTP be used wherever possible.
 
 |**Request Method**|GET|
 |:---|:---|
-|**Request URI**|http(s)://app.aquto.com/api/campaign/datarewards/pixel|
+|**Request URI**|//app.aquto.com/api/campaign/datarewards/pixel|
 
 |Query Parameter|Type|Required|Description|
 |:---|:---|:---|:---|
@@ -163,7 +165,7 @@ It is highly recommended that HTTP be used wherever possible.
 ***Example***
 
 ```
-<img src="http://app.aquto.com/api/campaign/datarewards/pixel?advertiserId=59059305&userIdentifier=4b468d14-7ef4-4f7d-a060-373cde5b5a5d&ios_idfa=3873c780-7a3e-4a7d-9572-7b1d1691b224" height="1" width="1">
+<img src="//app.aquto.com/api/campaign/datarewards/pixel?advertiserId=59059305&userIdentifier=4b468d14-7ef4-4f7d-a060-373cde5b5a5d&ios_idfa=3873c780-7a3e-4a7d-9572-7b1d1691b224" height="1" width="1">
 ```
 
 Eligibility 
@@ -314,3 +316,4 @@ POST /api/datarewards/api/reward
  }
 }
 ```
+You can use Postman Collection (<https://www.getpostman.com/collection>) to manage, use and test our API Collection. Download our API Collection here [Aquto_REST_API.postman_collection.json](Aquto_REST_API.postman_collection.json)
