@@ -102,7 +102,7 @@ function checkOfferWallEligibility(options) {
     data.publisherSiteUuid = options.publisherSiteUuid
   }
   if(options.channel) {
-    data.publisherSiteUuid = options.channel
+    data.channel = options.channel
   }
 
   jsonp({
@@ -111,7 +111,7 @@ function checkOfferWallEligibility(options) {
     data: data,
     success: function(response) {
       if (options.callback &&  typeof options.callback === 'function') {
-        if (response.response.eligible) {
+        if (response && response.response && response.response.eligible) {
           var offerWallHref = '//' + ow + '/?opCode=' + response.response.opCode + '&'
           if(options.phoneNumber) {
             offerWallHref = offerWallHref + 'pn=' + options.phoneNumber + '&'
@@ -125,13 +125,16 @@ function checkOfferWallEligibility(options) {
 
           options.callback({
             eligible: true,
+            identified: true,
+            status: response.response.status,
             offerWallHref: offerWallHref,
             numberOfOffers: response.response.offerCount
           })
         } else {
           options.callback({
             eligible: false,
-            identified: !!(response.response && response.response.opCode !== 'unknown'),
+            identified: !!(response && response.response && response.response.opCode !== 'unknown'),
+            status: response && response.response ? response.response.status : 'generalerror',
             numberOfOffers: 0
           })
         }
