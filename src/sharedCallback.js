@@ -14,6 +14,8 @@ function sharedCallback(response, callback) {
     if (response && response.response && response.response.eligible) {
       callbackObject = {
         eligible: true,
+        identified: true,
+        status: response.response.status,
         rewardAmount: response.response.rewardAmountMB,
         userToken: response.response.userToken
       }
@@ -39,7 +41,8 @@ function sharedCallback(response, callback) {
     } else {
       callbackObject = {
         eligible: false,
-        identified: !!(response.response && response.response.operatorCode !== 'unknown')
+        identified: !!(response && response.response && response.response.operatorCode !== 'unknown'),
+        status: response && response.response ? response.response.status : 'generalerror'
       }
     }
 
