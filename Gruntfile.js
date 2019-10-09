@@ -16,7 +16,8 @@ module.exports = function(grunt) {
       compile: {
         entry: {
           aquto: "./src/aquto.js",
-          aquto_celtra: "./src/aquto.celtra.js"
+          aquto_celtra: "./src/aquto.celtra.js",
+          aquto_flows: "./src/aquto.flows.js"
         },
         output: {
           path: __dirname,
@@ -29,7 +30,8 @@ module.exports = function(grunt) {
       watch: {
         entry: {
           aquto: "./src/aquto.js",
-          aquto_celtra: "./src/aquto.celtra.js"
+          aquto_celtra: "./src/aquto.celtra.js",
+          aquto_flows: "./src/aquto.flows.js"
         },
         output: {
           path: __dirname,
@@ -49,7 +51,8 @@ module.exports = function(grunt) {
       build: {
         files: {
           'aquto.min.js': ['aquto.js'],
-          'aquto_celtra.min.js': ['aquto_celtra.js']
+          'aquto_celtra.min.js': ['aquto_celtra.js'],
+          'aquto_flows.min.js': ['aquto_flows.js']
         }
       }
     }

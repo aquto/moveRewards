@@ -18,6 +18,7 @@ var moveRewards = {};
  *
  */
 function checkEligibility(options) {
+  console.log('checkEligibility from aquto.celtra.js ...')
   if (options && options.campaignId) {
     var url = "//app.aquto.com/api/campaign/datarewards/identifyandcheck/"+options.campaignId+"?apiVersion=v8";
     loadJSONP(url, {paramName: 'jsonp'}, function(response) {
