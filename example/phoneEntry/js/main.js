@@ -1,5 +1,5 @@
 
-var getUrlParameter = function getUrlParameter(sParam) {
+const getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1),
         sURLVariables = sPageURL.split('&'),
         sParameterName,
@@ -14,69 +14,65 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
 };
 
-function handleCheckAppEligibility() {
-    $('.loading_wrapper').show();
-    $('.btn.pe_customize').attr('disabled', true).removeClass('btn-success').addClass('btn-secondary');
-    $('.btn_text').hide();
-
-    var pne = getUrlParameter('pne');
-    var phoneNumber;
-
-    if (getUrlParameter('phoneNumber')){
-        phoneNumber= getUrlParameter('phoneNumber');
-    }
-    if ($('#phone').val()){
-        var countryData = intlTelInput.getSelectedCountryData();
-        phoneNumber= countryData.dialCode + $('#phone').val();
-    }
+function handleCheckAppEligibilityPhoneEntry(phoneNumber){
 
     aquto.checkAppEligibilityPhoneEntry({
         campaignId: getUrlParameter('cid'),
-        publisherId: getUrlParameter('pid'),
-        publisherClickId: getUrlParameter('tid'),
-        publisherSiteUuid: getUrlParameter('psid'),
-        advertiserId: getUrlParameter('pid'),
-        ios_idfa: getUrlParameter('idfa'),
-        android_aid: getUrlParameter('aid'),
-        phoneNumber,
+        phoneNumber: phoneNumber || getUrlParameter('phoneNumber'),
         callback: (response) => {
-            const identified = response.identified
-            const eligible = response.eligible
+            const eligible = response.eligible;
+            const rewardAmount = response.rewardAmount;
 
-            // If phone number entry flag is set and not identified show phone entry (unless this is from phone entry call)
-            if (pne === "1" && !identified && !phoneNumber) {
-                setTimeout(function() {
-                    $('.banner_view').hide();
-                    $('.phoneEntry_view').show();
-                }, 1000);
-            }
-
-            // If phoneNumber exists and is NOT eligible, show Fail view
-            else if (phoneNumber && !eligible) {
+            // If phoneNumber is NOT Eligible
+            if (phoneNumber && !eligible) {
+                console.log('get first if...');
                 $('.pe_customize_two').css('visibility','visible');
-                setTimeout(function() {
-                    $('.phoneEntry_view').hide();
-                    $('.banner_view').hide();
-                    $('.fail_view').show();
-                }, 1000);
-            }
-
-            // If phoneNumber exists and is eligible, show Success view
-            else if (phoneNumber && eligible) {
                 $('.phoneEntry_view').hide();
+                $('.banner_view').hide();
+                $('.fail_view').show();
+            }
+            // If phoneNumber is Eligible
+            if (phoneNumber && eligible) {
+                console.log('get second if...');
+                $('.banner_view').hide();
+                $('.phoneEntry_view').hide();
+                $('.fail_view').hide();
+                $('#amount_reward').text(rewardAmount);
                 $('.success_view').show();
                 countdown();
             }
-
-            // Otherwise redirect to target URL (this includes ineligible if no pne flag)
-            else { // NO phoneNumber and NO pne flag
-                redirectUrl()
+            // If phoneNumber is NOT defined
+            if (!phoneNumber){
+                redirectUrl(); // just redirect to rurl for now
             }
+
         },
         error: (e) => {
             console.error(e)
         }
     });
+
+
+}
+
+function handleCheckAppEligibility() {
+    $('.loading_wrapper').show();
+    $('.btn.pe_customize').attr('disabled', true).removeClass('btn-success').addClass('btn-secondary');
+    $('.btn_text').hide();
+
+    var phoneNumber;
+
+    if ($('#phone').val()){
+        var countryData = intlTelInput.getSelectedCountryData();
+        phoneNumber= countryData.dialCode + $('#phone').val();
+        return handleCheckAppEligibilityPhoneEntry(phoneNumber);
+    }
+
+    if (getUrlParameter('phoneNumber')){
+        phoneNumber= getUrlParameter('phoneNumber');
+        return handleCheckAppEligibilityPhoneEntry(phoneNumber);
+    }
+
 }
 
 function backValidateNumber(){
@@ -89,7 +85,7 @@ function backValidateNumber(){
 
 function redirectUrl(){
     var rurl = getUrlParameter('rurl');
-    window.location.href = rurl;
+    window.location.href = rurl || 'https://aquto.com/';
 }
 
 function validateInputNumber(event) {
@@ -148,3 +144,7 @@ var intlTelInput = window.intlTelInput(input,{
 });
 
 handleChangeTheme();
+
+$( document ).ready(function() {
+    handleCheckAppEligibility();
+});
