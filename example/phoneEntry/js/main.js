@@ -1,5 +1,6 @@
+var modal;
 
-const getUrlParameter = function getUrlParameter(sParam) {
+function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1),
         sURLVariables = sPageURL.split('&'),
         sParameterName,
@@ -12,59 +13,140 @@ const getUrlParameter = function getUrlParameter(sParam) {
             return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
         }
     }
-};
+}
+
+function redirect(url, clickId){
+    const rurl = getUrlParameter('rurl');
+    const finalUrl = rurl && rurl.replace('$$clickId$$', clickId || '');
+
+    if (finalUrl) {
+        console.log('redirecting to', finalUrl)
+        window.location.href = finalUrl
+    } else {
+        modal.close();
+        alert('invalidconfig')
+    }
+}
 
 function handleCheckAppEligibilityPhoneEntry(phoneNumber){
+    showLoader();
+    const usePhoneNumberEntry = getUrlParameter('pne') === '1';
+    const autoIdentify = getUrlParameter('ai') !== '0';
 
     aquto.checkAppEligibilityPhoneEntry({
         campaignId: getUrlParameter('cid'),
         phoneNumber: phoneNumber || getUrlParameter('phoneNumber'),
+        targetUrl: 'http://nike.com/?clickId=$$clickId$$',
         callback: (response) => {
             const eligible = response.eligible;
-            const rewardAmount = response.rewardAmount;
+            const identified = response.identified && autoIdentify;
 
-            // If phoneNumber is NOT Eligible
-            if (phoneNumber && !eligible) {
-                console.log('get first if...');
-                $('.pe_customize_two').css('visibility','visible');
-                $('.phoneEntry_view').hide();
-                $('.banner_view').hide();
-                $('.fail_view').show();
+            // If phone number entry flag is set and not identified show phone entry (unless this is from phone entry call)
+            if (usePhoneNumberEntry && !identified && !phoneNumber) {
+                hideLoader();
+                showPhoneEntryForm();
             }
-            // If phoneNumber is Eligible
-            if (phoneNumber && eligible) {
-                console.log('get second if...');
-                $('.banner_view').hide();
-                $('.phoneEntry_view').hide();
-                $('.fail_view').hide();
-                $('#amount_reward').text(rewardAmount);
-                $('.success_view').show();
-                countdown();
+            // If ineligible by operator, use that otherwise use 'ineligible' error message
+            else if (phoneNumber && !eligible) {
+                hideLoader();
+                showErrorMessage();
+                hidePhoneEntryForm();
+                $('.jBox-Confirm-button.jBox-Confirm-button-cancel').text('Continuar, Sin Ganar Megas');
+                $('.jBox-Confirm-button.jBox-Confirm-button-cancel').click(function(){
+                    modal.close({ignoreDelay: true});
+                    redirect();
+                });
+                $('.jBox-Confirm-button.jBox-Confirm-button-submit').unbind('click');
+                $('.jBox-Confirm-button.jBox-Confirm-button-submit').bind('click', function(){
+                    resetModalContent();
+                });
+            } else { // Otherwise redirect to target URL (this includes ineligible if no pne flag)
+                hidePhoneEntryForm();
+                showSuccessMessage();
+                $('#amount_reward').text(response.rewardAmount);
+                const display = document.querySelector('.countdown');
+                startTimer(5, display, response.clickUrl, response.clickId);
             }
-            // If phoneNumber is NOT defined
-            if (!phoneNumber){
-                redirectUrl(); // just redirect to rurl for now
-            }
-
         },
         error: (e) => {
-            console.error(e)
+            console.error(e);
+            alert('generalerror');
         }
     });
 
 
 }
 
-function handleCheckAppEligibility() {
-    $('.loading_wrapper').show();
-    $('.btn.pe_customize').attr('disabled', true).removeClass('btn-success').addClass('btn-secondary');
-    $('.btn_text').hide();
+function showLoader(){
+    const modalContent = $(".jBox-content");
+    modalContent && modalContent.append('<div class="loader"></div>');
+}
 
-    var phoneNumber;
+function hideLoader(){
+    var loader = $(".loader");
+    loader && loader.detach();
+}
 
-    if ($('#phone').val()){
-        var countryData = intlTelInput.getSelectedCountryData();
-        phoneNumber= countryData.dialCode + $('#phone').val();
+function clearModalContent(){
+    const modalContent = $(".jBox-content");
+    modalContent.empty();
+}
+
+function resetModalContent() {
+    hideErrorMessage();
+    showPhoneEntryForm();
+    $('.jBox-Confirm-button.jBox-Confirm-button-cancel').text('No, gracias');
+    $('.jBox-Confirm-button.jBox-Confirm-button-cancel').unbind('click');
+    $('.jBox-Confirm-button.jBox-Confirm-button-submit').unbind('click');
+    $('.jBox-Confirm-button.jBox-Confirm-button-cancel').bind('click', function(){
+        modal.close();
+    });
+    $('.jBox-Confirm-button.jBox-Confirm-button-submit').bind('click', function(){
+        handleValidatePhoneNumber();
+    });
+}
+
+function showPhoneEntryForm(){
+    const phoneEntryForm = '<form>\n' +
+        '  <div class="form-group">\n' +
+        '    <p>Para participar necesitamos validar tu número de teléfono</p>\n' +
+        '    <input type="tel" class="form-control" id="phoneNumber" placeholder="+528909899890">\n' +
+        '  </div>\n' +
+        '</form>' ;
+
+    const modalContent = $(".jBox-content");
+    const appendAllowed = $('#phoneNumber').length === 0;
+    appendAllowed && modalContent && modalContent.append(phoneEntryForm);
+}
+
+function hidePhoneEntryForm(){
+    var form = $("form");
+    form && form.detach();
+}
+
+function showErrorMessage(){
+    const errorMessage = '<h2 class="fail_message">Lo sentimos tu número no participa para ganar megas.</h2>';
+    const modalContent = $(".jBox-content");
+    const appendAllowed = $('.fail_message').length === 0;
+    appendAllowed && modalContent && modalContent.append(errorMessage);
+}
+
+function hideErrorMessage(){
+    var errorMessage = $(".fail_message");
+    errorMessage && errorMessage.detach();
+}
+
+function showSuccessMessage(){
+    const successMessage = '<div class="success_message"><h2>Tu número participa para <span id="amount_reward"></span> MB</h2>\n' +
+        '<p>Redireccion en <span class="countdown"></span></p></div>';
+    const modalContent = $(".jBox-content");
+    const appendAllowed = $('.success_message').length === 0;
+    appendAllowed && modalContent && modalContent.append(successMessage);
+}
+
+function handleValidatePhoneNumber() {
+    if ($('#phoneNumber').val()){
+        const phoneNumber = $('#phoneNumber').val();
         return handleCheckAppEligibilityPhoneEntry(phoneNumber);
     }
 
@@ -73,19 +155,6 @@ function handleCheckAppEligibility() {
         return handleCheckAppEligibilityPhoneEntry(phoneNumber);
     }
 
-}
-
-function backValidateNumber(){
-    $('.fail_view').hide();
-    $('#phone').val(null);
-    $('.pe_customize_two').css('visibility','hidden');
-    $('.phoneEntry_view').show();
-    handleEnableBtn();
-}
-
-function redirectUrl(){
-    var rurl = getUrlParameter('rurl');
-    window.location.href = rurl || 'https://aquto.com/';
 }
 
 function validateInputNumber(event) {
@@ -97,54 +166,40 @@ function validateInputNumber(event) {
     }
 }
 
-function handleEnableBtn() {
-    if($('#phone').val()){
-        $('.validateBtn').attr('disabled', false);
-        $('.validateBtn').css('cursor', 'pointer');
-    } else {
-        $('.validateBtn').attr('disabled', true);
-        $('.validateBtn').css('cursor', 'not-allowed');
-    }
+function handleBannerClick(){
+    modal.open();
 }
 
-function countdown(){
-    var counter = 5;
-    $('.countdown').text(counter);
-    setInterval(function(){
-        counter--;
-        if(counter>=0){
-            $('.countdown').text(counter);
+function startTimer(duration, display, url, clickId) {
+    var timer = duration, seconds;
+    var countdown = setInterval(function () {
+        seconds = parseInt(timer % 60, 10);
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.textContent = "00:" + seconds;
+
+        if (--timer < 0) {
+            clearInterval(countdown);
+            return redirect(url, clickId);
         }
-        if(counter==0){
-            redirectUrl();
-        }
-    },1000);
+    }, 1000);
 }
-
-function handleChangeTheme(){
-    var urlbeg = 'https://maxcdn.bootstrapcdn.com/bootswatch/4.3.1/'
-    var urlend = '/bootstrap.min.css'
-    var theme = getUrlParameter('theme');
-    if (theme === 'dark'){
-        var themeurl = urlbeg + 'slate' + urlend;
-        $('link[rel="stylesheet"][href$="/bootstrap.min.css"]').attr('href', themeurl);
-    }
-}
-
-
-$('[id^=phone]').on('keypress', validateInputNumber);
-$('[id^=phone]').on('keyup', handleEnableBtn);
-$('[id^=phone]').on('paste', validateInputNumber);
-
-var input = document.querySelector("#phone");
-
-var intlTelInput = window.intlTelInput(input,{
-    separateDialCode: true,
-    preferredCountries: ['mx']
-});
-
-handleChangeTheme();
 
 $( document ).ready(function() {
-    handleCheckAppEligibility();
+    modal = new jBox('Confirm', {
+        width: 450,
+        height: 250,
+        closeButton: 'title',
+        animation: false,
+        title: 'Verificando Numero',
+        content: '',
+        cancelButton: 'No, gracias',
+        confirmButton: 'Validar número',
+        onOpen: function(){ handleValidatePhoneNumber() },
+        onClose: function(){ clearModalContent()},
+        confirm: function(){},
+        closeOnConfirm: false,
+    });
+
 });
+
+
