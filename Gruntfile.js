@@ -41,26 +41,13 @@ module.exports = function(grunt) {
       watch: {
         entry: {
           aquto: "./src/aquto.js",
-          aquto_celtra: "./src/aquto.celtra.js"
-        },
-        output: {
-          path: __dirname,
-          filename: "[name].js",
-          library: ["aquto"],
-          libraryTarget: "var"
-        },
-        watch: true,
-        keepalive: true,
-        mode: 'development'
-      },
-      watchFlows: {
-        entry: {
+          aquto_celtra: "./src/aquto.celtra.js",
           aquto_flows: "./src/aquto.flows.js"
         },
         output: {
           path: __dirname,
           filename: "[name].js",
-          library: ["aqutoFlows"],
+          library: ["aquto"],
           libraryTarget: "var"
         },
         watch: true,
@@ -75,7 +62,8 @@ module.exports = function(grunt) {
       build: {
         files: {
           'aquto.min.js': ['aquto.js'],
-          'aquto_celtra.min.js': ['aquto_celtra.js']
+          'aquto_celtra.min.js': ['aquto_celtra.js'],
+          'aquto_flows.min.js': ['aquto_flows.js']
         }
       }
     }
