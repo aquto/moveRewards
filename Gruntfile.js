@@ -76,7 +76,7 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['webpack:compile', 'webpack:compileFlows', 'uglify']);
-  grunt.registerTask('watch', ['webpack:watch', 'webpack:watchFlows']);
+  grunt.registerTask('watch', ['webpack:watch']);
   grunt.registerTask('serve', ['connect:server', 'watch']);
 
 };
