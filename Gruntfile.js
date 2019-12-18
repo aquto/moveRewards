@@ -75,8 +75,7 @@ module.exports = function(grunt) {
       build: {
         files: {
           'aquto.min.js': ['aquto.js'],
-          'aquto_celtra.min.js': ['aquto_celtra.js'],
-          'aquto_flows.min.js': ['aquto_flows.js']
+          'aquto_celtra.min.js': ['aquto_celtra.js']
         }
       }
     }
