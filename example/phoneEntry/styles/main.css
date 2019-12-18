@@ -7,6 +7,10 @@
     cursor: pointer;
 }
 
+.loader, .messageWrapper, .phoneEntry {
+    display: none;
+}
+
 .jBox-Modal.jBox-closeButton-title .jBox-title {
     text-align: center;
     padding-right: 0px !important;
