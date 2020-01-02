@@ -17,6 +17,36 @@ var scriptParams = utils._parseScriptQuery(document.getElementById('aquto-api'))
 var be = scriptParams.be || 'app.aquto.com'
 var ow = scriptParams.ow || 'ow.aquto.com'
 
+var validFields = [
+  'publisherSiteUuid',
+  'channel',
+  'advertiserId',
+  'userIdentifier',
+  'ios_idfa',
+  'android_aid',
+  'publisherId',
+  'publisherClickId',
+  'phoneNumber',
+  'operatorCode',
+  'langCode'
+]
+
+function isValidField(field){
+  return validFields.includes(field)
+}
+
+/**
+ * Copy fields from options to data if set
+ *
+ */
+function applyParams(data, options) {
+  for(var key in options) {
+    if(options[key] && isValidField(key)){
+      data[key]=options[key];
+    }
+  }
+}
+
 /**
  * Check eligibility for the current device
  * Campaign id is used to determine configured reward, and operator
@@ -31,8 +61,10 @@ var ow = scriptParams.ow || 'ow.aquto.com'
 function checkEligibility(options) {
   if (options && options.campaignId) {
     var data = { apiVersion: 'v8'}
-    utils.assignFields(data)
-    utils.applyParams(data, options)
+    if(options.campaignId) {
+      data.campaignId = options.campaignId
+    }
+    applyParams(data, options)
     jsonp({
       url: '//' + be + '/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
       callbackName: 'jsonp',
@@ -57,8 +89,7 @@ function checkEligibility(options) {
  */
 function genericCheckEligibility(options) {
   var data = { apiVersion: 'v8' }
-  utils.assignFields(data)
-  utils.applyParams(data, options)
+  applyParams(data, options)
   jsonp({
     url: '//' + be + '/api/datarewards/eligibility',
     callbackName: 'jsonp',
@@ -80,8 +111,13 @@ function genericCheckEligibility(options) {
  */
 function checkOfferWallEligibility(options) {
   var data = { apiVersion: 'v8' }
-  utils.assignFields(data)
-  utils.applyParams(data, options)
+  if(options.carrier) {
+    data.operatorCode = options.carrier
+  }
+  if(options.countryCode) {
+    data.countryCode = options.countryCode
+  }
+  applyParams(data, options)
   jsonp({
     url: '//' + be + '/api/datarewards/offerwall/eligibility',
     callbackName: 'jsonp',
@@ -131,8 +167,7 @@ function checkOfferWallEligibility(options) {
 function checkAppEligibility(options) {
   if (options && options.campaignId) {
     var data = { apiVersion: 'v8' }
-    utils.assignFields(data)
-    utils.applyParams(data, options)
+    applyParams(data, options)
     jsonp({
       url: '//' + be + '/api/campaign/datarewards/eligibility/' + options.campaignId,
       callbackName: 'jsonp',
@@ -159,8 +194,7 @@ function checkAppEligibility(options) {
 function checkVoucherEligibility(options) {
   if (options && options.campaignId) {
     var data = { apiVersion: 'v8', campaignId: options.campaignId }
-    utils.assignFields(data)
-    utils.applyParams(data, options)
+    applyParams(data, options)
     jsonp({
       url: '//' + be + '/api/datarewards/voucher/eligibility',
       callbackName: 'jsonp',
@@ -240,6 +274,7 @@ function complete(options) {
  * @param {String} [phoneNumber] The phone number of the subscriber.
  *
  */
+/** Change with applyParams**/
 function redeemVoucher(options) {
   if (options && options.code) {
     var data = { apiVersion: 'v8', code: options.code }
@@ -249,15 +284,7 @@ function redeemVoucher(options) {
     if(options.userToken) {
       data.userToken = options.userToken
     }
-    if(options.phoneNumber) {
-      data.phoneNumber = options.phoneNumber
-    }
-    if(options.publisherSiteUuid) {
-      data.publisherSiteUuid = options.publisherSiteUuid
-    }
-    if(options.channel) {
-      data.channel = options.channel
-    }
+    applyParams(data, options)
 
     jsonp({
       url: '//' + be + '/api/datarewards/voucher/reward',
