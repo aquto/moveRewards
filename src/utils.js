@@ -46,8 +46,52 @@ function parseScriptQuery(scriptTag) {
   return args
 }
 
+
+/**
+ * Includes the following fields for each eligibility method
+ * publisherSiteUuid
+ * channel
+ * advertiserId
+ * userIdentifier
+ * ios_idfa
+ * android_aid
+ * publisherId
+ * publisherClickId
+ * phoneNumber
+ * operatorCode
+ * langCode
+ *
+ */
+function assignFields(data){
+  data.publisherSiteUuid = '';
+  data.channel = '';
+  data.advertiserId = '';
+  data.userIdentifier = '';
+  data.ios_idfa = '';
+  data.android_aid = '';
+  data.publisherId = '';
+  data.publisherClickId = '';
+  data.phoneNumber = '';
+  data.operatorCode = '';
+  data.langCode = '';
+}
+
+/**
+ * Copy fields from options to data if set
+ *
+ */
+function applyParams(data, options) {
+  for(var key in options) {
+    if(options[key]){
+      data[key]=options[key];
+    }
+  }
+}
+
 module.exports = {
   isOnline: isOnline,
   formatData: formatData,
-  _parseScriptQuery: parseScriptQuery
+  _parseScriptQuery: parseScriptQuery,
+  assignFields: assignFields,
+  applyParams: applyParams
 }
