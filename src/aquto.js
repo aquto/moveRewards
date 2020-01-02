@@ -274,7 +274,6 @@ function complete(options) {
  * @param {String} [phoneNumber] The phone number of the subscriber.
  *
  */
-/** Change with applyParams**/
 function redeemVoucher(options) {
   if (options && options.code) {
     var data = { apiVersion: 'v8', code: options.code }
