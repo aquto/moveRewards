@@ -17,31 +17,26 @@ var scriptParams = utils._parseScriptQuery(document.getElementById('aquto-api'))
 var be = scriptParams.be || 'app.aquto.com'
 var ow = scriptParams.ow || 'ow.aquto.com'
 
-var validFields = [
-  'publisherSiteUuid',
-  'channel',
-  'advertiserId',
-  'userIdentifier',
-  'ios_idfa',
-  'android_aid',
-  'publisherId',
-  'publisherClickId',
-  'phoneNumber',
-  'operatorCode',
-  'langCode'
-]
-
-function isValidField(field){
-  return validFields.includes(field)
+var availableParams = {
+  publisherSiteUuid: true,
+  channel: true,
+  advertiserId: true,
+  userIdentifier: true,
+  ios_idfa: true,
+  android_aid: true,
+  publisherId: true,
+  publisherClickId: true,
+  phoneNumber: true,
+  operatorCode: true,
+  langCode: true
 }
-
 /**
  * Copy fields from options to data if set
  *
  */
 function applyParams(data, options) {
   for(var key in options) {
-    if(options[key] && isValidField(key)){
+    if(options[key] && availableParams[key]){
       data[key]=options[key];
     }
   }
@@ -61,9 +56,6 @@ function applyParams(data, options) {
 function checkEligibility(options) {
   if (options && options.campaignId) {
     var data = { apiVersion: 'v8'}
-    if(options.campaignId) {
-      data.campaignId = options.campaignId
-    }
     applyParams(data, options)
     jsonp({
       url: '//' + be + '/api/campaign/datarewards/identifyandcheck/'+options.campaignId,
