@@ -122,9 +122,9 @@ function checkOfferWallEligibility(options) {
           if(options.channel) {
             offerWallHref = offerWallHref + 'channel=' + options.channel + '&'
           }
-
           options.callback({
             eligible: true,
+            identified: true,
             offerWallHref: offerWallHref,
             numberOfOffers: response.response.offerCount
           })

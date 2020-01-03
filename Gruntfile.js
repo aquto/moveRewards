@@ -26,10 +26,23 @@ module.exports = function(grunt) {
         },
         mode: 'production'
       },
+      compileFlows: {
+        entry: {
+          aquto_flows: "./src/aquto.flows.js"
+        },
+        output: {
+          path: __dirname,
+          filename: "[name].js",
+          library: ["aqutoFlows"],
+          libraryTarget: "var"
+        },
+        mode: 'production'
+      },
       watch: {
         entry: {
           aquto: "./src/aquto.js",
-          aquto_celtra: "./src/aquto.celtra.js"
+          aquto_celtra: "./src/aquto.celtra.js",
+          aquto_flows: "./src/aquto.flows.js"
         },
         output: {
           path: __dirname,
@@ -49,7 +62,8 @@ module.exports = function(grunt) {
       build: {
         files: {
           'aquto.min.js': ['aquto.js'],
-          'aquto_celtra.min.js': ['aquto_celtra.js']
+          'aquto_celtra.min.js': ['aquto_celtra.js'],
+          'aquto_flows.min.js': ['aquto_flows.js']
         }
       }
     }
@@ -61,7 +75,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task(s).
-  grunt.registerTask('default', ['webpack:compile', 'uglify']);
+  grunt.registerTask('default', ['webpack:compile', 'webpack:compileFlows', 'uglify']);
   grunt.registerTask('watch', ['webpack:watch']);
   grunt.registerTask('serve', ['connect:server', 'watch']);
 
