@@ -49,7 +49,45 @@ module.exports = function(grunt) {
       build: {
         files: {
           'aquto.min.js': ['aquto.js'],
-          'aquto_celtra.min.js': ['aquto_celtra.js']
+          'aquto_celtra.min.js': ['aquto_celtra.js'],
+          'flows/vast/js/custom.min.js': ['flows/vast/js/custom.js']
+        }
+      }
+    },
+    concat: {
+      css: {
+        src: ['flows/vast/css/aquto.skin.css', 'flows/vast/css/loading.css', 'flows/vast/css/style.css'],
+        dest: 'flows/vast/css/styles.css'
+      }
+    },
+    inline: {
+      dist: {
+        options:{
+          cssmin: true
+        },
+        src: 'flows/vast/uncompressed.html',
+        dest: 'flows/vast/inlined.html'
+      }
+    },
+    htmlmin: {
+      dist: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true,
+          minifyJS: true
+        },
+        files: {
+          'flows/vast/tag.html': 'flows/vast/inlined.html'
+        }
+      },
+      dev: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true,
+          minifyJS: true
+        },
+        files: {
+          'flows/vast/tag.html': 'flows/vast/inlined.html'
         }
       }
     }
@@ -59,10 +97,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
+  grunt.loadNpmTasks('grunt-inline');
 
   // Default task(s).
   grunt.registerTask('default', ['webpack:compile', 'uglify']);
   grunt.registerTask('watch', ['webpack:watch']);
   grunt.registerTask('serve', ['connect:server', 'watch']);
 
+  // vast project task(s).
+  grunt.registerTask('minifyHtml', ['htmlmin']);
+  grunt.registerTask('vast', ['default', 'concat', 'inline', 'minifyHtml']);
 };

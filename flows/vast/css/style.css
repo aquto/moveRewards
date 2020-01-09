@@ -1,0 +1,94 @@
+html, body {
+  background: #eeeeee;
+  color: black;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  display: table;
+  vertical-align: middle;
+}
+
+html, body, .container {
+  margin: auto;
+  padding: 0px;
+  width: 300px;
+  height: 250px;
+  max-width: 300px;
+  max-height: 250px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+h1 {
+  font-size: 18px;
+}
+
+.container {
+  position: relative;
+  display: table-cell;
+}
+
+.row {
+  display: block;
+  text-align: center;
+  padding: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.video-js {
+  display: block !important;
+  margin: 0px;
+  padding: 0px;
+}
+
+.hide {
+  display: none;
+}
+
+.success {
+  background-color: green !important;
+  color: white;
+}
+
+.fail {
+  background-color: red !important;
+  color: white;
+}
+
+
+/* Identify Styles */
+.telefphone {
+  font-size: 14px;
+  width: 280px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.button {
+  min-width: 280px;
+  border-style: solid;
+  border-width: thin;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submit {
+  color: white;
+  background-color: #5CCD96;
+  border-width: thin;
+  border-color: white;
+}
+
+.secondary {
+  color: grey;
+  background-color: transparent;
+  border-color: grey;
+}
+
+.iti__country-list{
+  width: 170px;
+}
