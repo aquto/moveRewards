@@ -99,13 +99,17 @@ var count = 5;
 
 // Aquto checkAppEligibility method call
 function checkAppEligibility(){
-    var phone = iti.getNumber().replace('+', '') || '234234234'; // test Unidentified number, change to null
+    var phone = iti.getNumber().replace('+', '');
     event && event.preventDefault();
     aquto.checkAppEligibility({
         campaignId: campaignId,
         phoneNumber: phone,
         callback: function(response) {
             console.log('checkAppEligibility', response);
+            // Test and skip eligible & identified scenario and show phone Entry
+            // if(!phone){
+            //     response.identified = false;
+            // }
             if (response) {
                 if (response.identified) {
                     if (response.eligible) {
@@ -140,10 +144,20 @@ function checkAppEligibility(){
                         setTimeout("countDown()", 1000);
                     }
                 } else {
-                    console.log('Unidentified');
-                    isEligible = false;
-                    loading.classList.add('hide');
-                    phoneEntry.classList.remove('hide');
+                    if(response.status === 'ineligiblenet'){
+                        count = 10;
+                        ineligibleUI.classList.remove('hide');
+                        phoneCheck.classList.add('hide');
+                        if(phone){
+                            timer.classList.remove('hide');
+                            setTimeout("countDown()", 1000);
+                        }
+                    }else{
+                        console.log('Unidentified');
+                        isEligible = false;
+                        loading.classList.add('hide');
+                        phoneEntry.classList.remove('hide');
+                    }
                 }
             } else {
                 console.log('error.checkAppEligibility');
@@ -160,23 +174,21 @@ function completeReward(){
         campaignId: campaignId,
         callback: function(response) {
         console.log('complete', response);
-        response.eligible = true;
-        response.rewardText = 'Reward 100MB!';
 
         if (response) {
             loading.classList.add('hide');
             eligibleElement.classList.remove('hide');
             icon.classList.remove("fa-check-circle", "fa-times-circle");
-            if (response.eligible) { //OK
+            if (response.eligible) {
                 icon.classList.add('fa-check-circle');
                 body.classList.toggle('success');
                 text.innerHTML = response.rewardText;
-            } else { // OK
+            } else {
                 icon.classList.toggle('fa-times-circle');
                 body.classList.toggle('fail');
                 text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en éste momento';
             }
-        } else { // OK
+        } else {
             icon.classList.toggle('fa-times-circle');
             body.classList.toggle('fail');
             text.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
