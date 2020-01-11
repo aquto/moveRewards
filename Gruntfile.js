@@ -90,7 +90,8 @@ module.exports = function(grunt) {
           'flows/vast/tag/index.html': 'flows/vast/inlined.html'
         }
       }
-    }
+    },
+    clean: ['flows/vast/inlined.html']
   });
 
 
@@ -102,6 +103,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-inline');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task(s).
   grunt.registerTask('default', ['webpack:compile', 'uglify']);
@@ -110,5 +112,5 @@ module.exports = function(grunt) {
 
   // vast project task(s).
   grunt.registerTask('minifyHtml', ['htmlmin']);
-  grunt.registerTask('vast', ['default', 'concat', 'inline', 'minifyHtml']);
+  grunt.registerTask('vast', ['default', 'concat', 'inline', 'minifyHtml', 'clean']);
 };
