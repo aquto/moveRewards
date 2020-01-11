@@ -17,8 +17,10 @@ const input = document.querySelector("#phone");
 
 const campaignId = getUrlParameter('cid');
 const vastTagUrl = getUrlParameter('vu');
-var videoError = false;
-var isEligible = false;
+const d = getUrlParameter('d');
+
+let videoError = false;
+let isEligible = false;
 
 // Eligible Player Options
 const playerOptions = {
@@ -27,15 +29,15 @@ const playerOptions = {
     preload: true,
     nativeControlsForTouch: false,
     inactivityTimeout: 0,
-    poster: './images/watch-this-ineligible.png',
+    poster: './assets/images/watch-this-ineligible.png',
     sources: [{
         type: 'video/mp4',
-        src: './videos/placeholder.mp4'
+        src: './assets/videos/placeholder.mp4'
     }],
     plugins: {
         vastClient: {
-            // adTagUrl: vastTagUrl,
-            adTagUrl: 'test-01.xml', // remove After test
+            adTagUrl: vastTagUrl,
+            // adTagUrl: 'test-01.xml', // remove After test
             preferredTech: 'html5',
             adsEnabled: true
         }
@@ -43,45 +45,45 @@ const playerOptions = {
 };
 
 // Eligible Player Initialization
-var player = videojs('player', playerOptions);
+let player = videojs('player', playerOptions);
 
 // Eligible Player Events
 player.on('ready', function() {
-    checkAppEligibility();
 })
 
 player.on('play', function() {
-    console.log('play');
+    debug('play');
 })
 
 player.on('timeupdate', function(e) {
-    var current = (this.currentTime() / this.duration()) * 100;
-    console.log('update', current);
+    let current = (this.currentTime() / this.duration()) * 100;
+    debug('update', current);
 })
 
 player.on("click", function(event) {
-    console.log("click", event);
+    debug("click", event);
 });
 
 player.on("vast.adClick", function(event) {
-    console.log("vast.adClick", event);
+    debug("vast.adClick", event);
 });
 
 player.on("vast.adError", function(event) {
-    console.log("vast.adError", event.error);
+    debug("vast.adError", event.error);
     eligibleElement.classList.add('hide');
     errorElement.classList.remove('hide');
     videoError = true;
 });
 
-player.on("vast.contentEnd", function(event) {
-    console.log("vast.contentEnd");
+player.on("vast.contentEnd", function() {
+    debug("vast.contentEnd");
     video.classList.add('hide');
     if (!videoError && isEligible){ // If vast.adError Event then stop the process.
         eligibleElement.classList.remove('hide');
         completeReward();
     }
     if(!isEligible){
+        debug('is not Eligible');
         ineligibleMsgElement.classList.remove('hide');
     }
 });
@@ -95,21 +97,17 @@ const inputTelOptions = {
     separateDialCode: true
 };
 const iti = window.intlTelInput(input, inputTelOptions);
-var count = 5;
+let count = 5;
 
 // Aquto checkAppEligibility method call
-function checkAppEligibility(){
-    var phone = iti.getNumber().replace('+', '');
+function checkPhoneNumber(){
     event && event.preventDefault();
+    const phone = iti.getNumber().replace('+', '');
     aquto.checkAppEligibility({
         campaignId: campaignId,
         phoneNumber: phone,
         callback: function(response) {
-            console.log('checkAppEligibility', response);
-            // Test and skip eligible & identified scenario and show phone Entry
-            // if(!phone){
-            //     response.identified = false;
-            // }
+            debug('checkAppEligibility');
             if (response) {
                 if (response.identified) {
                     if (response.eligible) {
@@ -120,8 +118,8 @@ function checkAppEligibility(){
                             phoneCheck.classList.add('hide');
                             rewardTextEligible.innerHTML = response.rewardText;
                         } else{
-                            console.log('identified & eligible');
-                            player.poster('./images/watch-this-eligible.png');
+                            debug('identified & eligible');
+                            player.poster('./assets/images/watch-this-eligible.png');
                             loading.classList.add('hide');
                             video.classList.remove('hide');
                         }
@@ -132,7 +130,7 @@ function checkAppEligibility(){
                             ineligibleUI.classList.remove('hide');
                             phoneCheck.classList.add('hide');
                         }else{
-                            console.log('identified + ineligible')
+                            debug('identified + ineligible')
                             loading.classList.add('hide');
                             // Remove iframe from DOM
                             window.parent.document.getElementById('aqutoTag')
@@ -146,6 +144,7 @@ function checkAppEligibility(){
                 } else {
                     if(response.status === 'ineligiblenet'){
                         count = 10;
+                        isEligible = false;
                         ineligibleUI.classList.remove('hide');
                         phoneCheck.classList.add('hide');
                         if(phone){
@@ -153,14 +152,14 @@ function checkAppEligibility(){
                             setTimeout("countDown()", 1000);
                         }
                     }else{
-                        console.log('Unidentified');
+                        debug('Unidentified');
                         isEligible = false;
                         loading.classList.add('hide');
                         phoneEntry.classList.remove('hide');
                     }
                 }
             } else {
-                console.log('error.checkAppEligibility');
+                debug('error.checkAppEligibility');
                 loading.classList.add('hide');
                 errorElement.classList.remove('hide');
             }
@@ -173,7 +172,7 @@ function completeReward(){
     aquto.complete({
         campaignId: campaignId,
         callback: function(response) {
-        console.log('complete', response);
+        debug('complete');
 
         if (response) {
             loading.classList.add('hide');
@@ -202,27 +201,31 @@ function showPlayer(){
     phoneEntry.classList.add('hide');
     eligibleElement.classList.add('hide');
     video.classList.remove('hide');
+    autoPlay();
+}
+
+function autoPlay(){
     player.play();
 }
 
 function countDown() {
-    var timer = document.getElementById("timer");
+    let timer = document.getElementById("timer");
     if (count > 0) {
         count--;
         timer.innerHTML = "Ver el video en " + count + " segundos.";
         setTimeout("countDown()", 1000);
     } else {
         if (isEligible){
-          player.poster('./images/watch-this-eligible.png');
+          player.poster('./assets/images/watch-this-eligible.png');
         } else {
-            player.poster('./images/watch-this-ineligible.png');
+            player.poster('./assets/images/watch-this-ineligible.png');
         }
         showPlayer();
     }
 }
 
 function getUrlParameter(sParam) {
-    var sPageURL = window.location.search.substring(1),
+    let sPageURL = window.location.search.substring(1),
         sURLVariables = sPageURL.split('&') ,
         sParameterName,
         i;
@@ -233,4 +236,14 @@ function getUrlParameter(sParam) {
             return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
         }
     }
+}
+
+function debug(message){
+    if (d === '1'){
+        console.log(message);
+    }
+}
+
+window.onload = function(){
+    checkPhoneNumber();
 }

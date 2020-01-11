@@ -50,14 +50,14 @@ module.exports = function(grunt) {
         files: {
           'aquto.min.js': ['aquto.js'],
           'aquto_celtra.min.js': ['aquto_celtra.js'],
-          'flows/vast/js/custom.min.js': ['flows/vast/js/custom.js']
+          'flows/vast/src/js/custom.min.js': ['flows/vast/src/js/custom.js']
         }
       }
     },
     concat: {
       css: {
-        src: ['flows/vast/css/aquto.skin.css', 'flows/vast/css/loading.css', 'flows/vast/css/style.css'],
-        dest: 'flows/vast/css/styles.css'
+        src: ['flows/vast/src/css/aquto.skin.css', 'flows/vast/src/css/loading.css', 'flows/vast/src/css/style.css'],
+        dest: 'flows/vast/src/css/styles.css'
       }
     },
     inline: {
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
         options:{
           cssmin: true
         },
-        src: 'flows/vast/uncompressed.html',
+        src: 'flows/vast/src/tag.html',
         dest: 'flows/vast/inlined.html'
       }
     },
@@ -77,7 +77,7 @@ module.exports = function(grunt) {
           minifyJS: true
         },
         files: {
-          'flows/vast/tag.html': 'flows/vast/inlined.html'
+          'flows/vast/tag/index.html': 'flows/vast/inlined.html'
         }
       },
       dev: {
@@ -87,7 +87,7 @@ module.exports = function(grunt) {
           minifyJS: true
         },
         files: {
-          'flows/vast/tag.html': 'flows/vast/inlined.html'
+          'flows/vast/tag/index.html': 'flows/vast/inlined.html'
         }
       }
     }
@@ -96,7 +96,8 @@ module.exports = function(grunt) {
 
   // Load plugins
   grunt.loadNpmTasks('grunt-webpack');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  // grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-uglify-es'); // supports ES6 syntax
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');

@@ -65,11 +65,11 @@
           <div class="row" id="phoneCheck">
               <h1>Participa para ganar megas</h1>
               <p>Solo confirma tu n&uacute;mero de tel&eacute;fono<br></p>
-              <form class="phoneForm" onsubmit="checkAppEligibility()">
+              <form class="phoneForm" onsubmit="checkPhoneNumber()">
                   <p><input class="telefphone" type="tel" id="phone" name="phone" pattern="[0-9]{10}" required></p>
                   <p><input class="button submit" type="submit" value="Confirmar ahora"></p>
               </form>
-              <form action="./ineligible.html" method="get">
+              <form action="#" method="get">
                   <input type="hidden" name="play" value="true">
                   <button type="submit" class="button secondary" onclick="showPlayer()">Continuar sin ganar megas</button>
               </form>
@@ -83,7 +83,7 @@
                   Tu n&uacute;mero participa para ganar megas.
               </div>
               </p>
-              <form action="./index.html?play=true" method="get">
+              <form action="#" method="get">
                   <input type="hidden" name="play" value="true">
                   <button type="submit" class="button submit" onclick="showPlayer()">Ver el video ahora</button>
               </form>
@@ -94,9 +94,9 @@
               <i class="far fa-frown fa-3x"></i>
               <p>Lo sentimos, t&uacute; n&uacute;mero no participa para ganar megas en &eacute;ste momento.</p>
               <p>&iquest;Qui&eacute;res ver el video sin ganar megas?</p>
-              <form action="./ineligible.html" method="get">
+              <form action="#" method="get">
                   <input type="hidden" name="play" value="true">
-                  <button type="submit" class="button secondary" onclick="showPlayer()">Ver el video sin ganar megas</button>
+                  <button class="button secondary" onclick="showPlayer()">Ver el video sin ganar megas</button>
               </form>
           </div>
           <div class="row hide" id="timer"></div>
@@ -115,6 +115,6 @@
       </div>
   </div>
   <script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js?be=mp-dev.aquto.internal"></script>
-  <script type="text/javascript" src="js/custom.min.js?__inline=true"></script>
+  <script type="text/javascript" src="./js/custom.min.js?__inline=true"></script>
 </body>
 </html>
