@@ -1,0 +1,71 @@
+<html>
+<head>
+    <title>Ad test (generate)</title>
+    <style type="text/css">
+        * {
+            font: 14px "Courier New";
+        }
+        fieldset {
+            border: 1px solid;
+        }
+        label {
+            display: block;
+            width: 500px;
+            height: 30px;
+        }
+        input {
+            float: right;
+            width: 300px;
+        }
+        form div {
+            clear: both;
+        }
+        #codeArea{
+            width: 550px;
+            height: 224px;
+        }
+    </style>
+</head>
+<body>
+<form>
+    <fieldset>
+        <legend>Query</legend>
+        <label>Campaign Id <input type="text" name="cid" value=""></label>
+        <label>Vast Tag<input type="text" name="vu" value=""></label>
+        <button id="submit" onclick="return generate();">Generate</button>
+        <br/>
+        <br/>
+        <label>Generated Code</label>
+        <textarea rows="4" cols="50" id="codeArea"></textarea>
+    </fieldset>
+</form>
+<p>--- above ad ---</p>
+<div id="_target"></div>
+<div id="_script"></div>
+<p>--- below ad ---</p>
+<script>
+    function generate() {
+        var src = "index.html?targetId=_target&ts=" + (new Date().getTime()) + "&";
+        var query = [];
+        var inputs = document.getElementsByTagName("input");
+        for (var i = 0; i < inputs.length; ++i) {
+            query.push(encodeURIComponent(inputs[i].name) + "=" + encodeURIComponent(inputs[i].value));
+        }
+
+        src += query.join("&");
+        document.getElementById("_target").innerHTML = "";
+        var div = document.getElementById("_script");
+        var textArea = document.getElementById("codeArea");
+        div.innerHTML = "";
+        var iframe = document.createElement("iframe");
+        iframe.id = "__aqtest_vastTag02";
+        iframe.src = src;
+        iframe.width = "300";
+        iframe.height = "250";
+        div.appendChild(iframe);
+        textArea.value = iframe.outerHTML;
+        return false;
+    }
+</script>
+</body>
+</html>

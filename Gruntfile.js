@@ -91,7 +91,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    clean: ['flows/vast/inlined.html']
+    clean: ['flows/vast/inlined.html', 'flows/vast/src/css/styles.css', 'flows/vast/src/js/custom.min.js']
   });
 
 
