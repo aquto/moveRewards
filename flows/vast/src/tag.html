@@ -66,7 +66,7 @@
               <h1>Participa para ganar megas</h1>
               <p>Solo confirma tu n&uacute;mero de tel&eacute;fono<br></p>
               <form class="phoneForm" onsubmit="checkPhoneNumber()">
-                  <p><input class="telefphone" type="tel" id="phone" name="phone" pattern="[0-9]{10}" required></p>
+                  <p><input class="telephone" type="tel" id="phone" name="phone" pattern="[0-9]{9,10}" required></p>
                   <p><input class="button submit" type="submit" value="Confirmar ahora"></p>
               </form>
               <form action="#" method="get">
@@ -114,7 +114,8 @@
           </div>
       </div>
   </div>
-  <script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js?be=mp-dev.aquto.internal"></script>
+  <!-- To use dev env use ?be=mp-dev.aquto.internal -->
+  <script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js"></script>
   <script type="text/javascript" src="./js/custom.min.js?__inline=true"></script>
 </body>
 </html>

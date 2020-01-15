@@ -45,31 +45,31 @@
         }
     };
 
-
-
     // Eligible Player Initialization
     let player = videojs('player', playerOptions);
 
     // Eligible Player Events
-    player.on('ready', function() {
-    })
+    if (debugEnabled) {
+        // player.on('ready', function() {
+        // })
 
-    player.on('play', function() {
-        debug('play');
-    })
+        player.on('play', function () {
+            debug('play');
+        })
 
-    player.on('timeupdate', function(e) {
-        let current = (this.currentTime() / this.duration()) * 100;
-        debug('update', current);
-    })
+        player.on('timeupdate', function (e) {
+            let current = (this.currentTime() / this.duration()) * 100;
+            debug('update', current);
+        })
 
-    player.on("click", function(event) {
-        debug("click", event);
-    });
+        player.on("click", function (event) {
+            debug("click", event);
+        });
 
-    player.on("vast.adClick", function(event) {
-        debug("vast.adClick", event);
-    });
+        player.on("vast.adClick", function (event) {
+            debug("vast.adClick", event);
+        });
+    }
 
     player.on("vast.adError", function(event) {
         ineligibleMsgElement.classList.add('hide');
@@ -87,7 +87,7 @@
             completeReward();
         }
         if(!isEligible && !videoError){
-            debug('is not Eligible');
+            debug('not eligible');
             ineligibleMsgElement.classList.remove('hide');
         }
     });
@@ -97,16 +97,17 @@
         formatOnDisplay: true,
         initialCountry: "mx",
         nationalMode: false,
-        onlyCountries: ['mx', 'br'],
+        onlyCountries: ['mx', 'pe'],
         separateDialCode: true
     };
     const iti = win.intlTelInput(input, inputTelOptions);
     let count = 5;
 
-// Aquto checkAppEligibility method call
+    // Aquto checkAppEligibility method call
     const checkPhoneNumber = function(){
         event && event.preventDefault();
         const phone = iti.getNumber().replace('+', '');
+
         aquto.checkAppEligibility({
             campaignId: campaignId,
             phoneNumber: phone,
@@ -117,6 +118,7 @@
                         if (response.eligible) {
                             isEligible = true;
                             if(phone){
+                                debug('phone entered eligible');
                                 count = 5;
                                 eligibleUI.classList.remove('hide');
                                 phoneCheck.classList.add('hide');
@@ -129,30 +131,32 @@
                             }
                         } else {
                             isEligible = false;
-                            if(phone){
+                            if (phone) {
+                                debug('phone entered ineligible');
                                 count = 10;
                                 ineligibleUI.classList.remove('hide');
                                 phoneCheck.classList.add('hide');
-                            }else{
+                            } else {
                                 debug('identified + ineligible')
                                 loading.classList.add('hide');
                                 removeIframe();
                             }
                         }
-                        if(phone){
+                        if (phone) {
                             timer.classList.remove('hide');
                             setTimeout("countDown()", 1000);
                         }
                     } else {
-                        if(phone && response.status === 'ineligiblenet'){
+                        if (phone && response.status === 'ineligiblenet'){
+                            debug('phone entered unidentified');
                             count = 10;
                             isEligible = false;
                             ineligibleUI.classList.remove('hide');
                             phoneCheck.classList.add('hide');
                             timer.classList.remove('hide');
                             setTimeout("countDown()", 1000);
-                        }else{
-                            debug('Unidentified');
+                        } else {
+                            debug('unidentified');
                             isEligible = false;
                             loading.classList.add('hide');
                             phoneEntry.classList.remove('hide');
@@ -168,17 +172,19 @@
         });
     }
 
-    function removeIframe(){
+    function removeIframe() {
+        // This won't work on cross-domain so not very useful. Convert to use postMessage instead and add listener in parent
         try {
-            win.parent.document.getElementById('aqutoTag')
-                .parentNode.removeChild(win.parent.document.getElementById('aqutoTag'));
+            const el = win.parent.document.getElementById('aq_iframe');
+            el.parentNode.removeChild(el);
         }
         catch(error) {
-            console.error(error);
+            // Ignore errors
+            // console.error(error);
         }
     }
 
-// Aquto complete method call
+    // Aquto complete method call
     function completeReward(){
         aquto.complete({
             campaignId: campaignId,
@@ -189,17 +195,23 @@
                     loading.classList.add('hide');
                     eligibleElement.classList.remove('hide');
                     icon.classList.remove("fa-check-circle", "fa-times-circle");
+
                     if (response.eligible) {
+                        debug('complete success');
                         icon.classList.add('fa-check-circle');
                         body.classList.toggle('success');
                         text.innerHTML = response.rewardText;
                     } else {
+                        debug('complete failure');
+
                         ineligibleMsgElement.add
                         icon.classList.toggle('fa-times-circle');
                         body.classList.toggle('fail');
                         text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en éste momento';
                     }
                 } else {
+                    debug('complete invalid response');
+
                     icon.classList.toggle('fa-times-circle');
                     body.classList.toggle('fail');
                     text.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
@@ -227,7 +239,7 @@
             timer.innerHTML = "Ver el video en " + count + " segundos.";
             setTimeout("countDown()", 1000);
         } else {
-            if (isEligible){
+            if (isEligible) {
                 player.poster('../assets/images/watch-this-eligible.png');
             } else {
                 player.poster('../assets/images/watch-this-ineligible.png');
@@ -251,12 +263,9 @@
     }
 
     function debug(message, options){
-        if(options){
-            debugEnabled && console.log(message, options);
-        }else{
-            debugEnabled && console.log(message);
+        if (debugEnabled) {
+            console.log(message, options);
         }
-
     }
 
     function getElem(id) {
