@@ -77,7 +77,7 @@ module.exports = function(grunt) {
           minifyJS: true
         },
         files: {
-          'flows/vast/tag/index.html': 'flows/vast/inlined.html'
+          'flows/vast/tag/v1.html': 'flows/vast/inlined.html'
         }
       },
       dev: {
@@ -87,7 +87,7 @@ module.exports = function(grunt) {
           minifyJS: true
         },
         files: {
-          'flows/vast/tag/index.html': 'flows/vast/inlined.html'
+          'flows/vast/tag/v1.html': 'flows/vast/inlined.html'
         }
       }
     },
