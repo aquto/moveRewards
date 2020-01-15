@@ -49,20 +49,68 @@ module.exports = function(grunt) {
       build: {
         files: {
           'aquto.min.js': ['aquto.js'],
-          'aquto_celtra.min.js': ['aquto_celtra.js']
+          'aquto_celtra.min.js': ['aquto_celtra.js'],
+          'flows/vast/src/js/custom.min.js': ['flows/vast/src/js/custom.js']
         }
       }
-    }
+    },
+    concat: {
+      css: {
+        src: ['flows/vast/src/css/aquto.skin.css', 'flows/vast/src/css/loading.css', 'flows/vast/src/css/style.css'],
+        dest: 'flows/vast/src/css/styles.css'
+      }
+    },
+    inline: {
+      dist: {
+        options:{
+          cssmin: true
+        },
+        src: 'flows/vast/src/tag.html',
+        dest: 'flows/vast/inlined.html'
+      }
+    },
+    htmlmin: {
+      dist: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true,
+          minifyJS: true
+        },
+        files: {
+          'flows/vast/tag/v1.html': 'flows/vast/inlined.html'
+        }
+      },
+      dev: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true,
+          minifyJS: true
+        },
+        files: {
+          'flows/vast/tag/v1.html': 'flows/vast/inlined.html'
+        }
+      }
+    },
+    clean: ['flows/vast/inlined.html', 'flows/vast/src/css/styles.css', 'flows/vast/src/js/custom.min.js']
   });
+
 
   // Load plugins
   grunt.loadNpmTasks('grunt-webpack');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  // grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-uglify-es'); // supports ES6 syntax
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
+  grunt.loadNpmTasks('grunt-inline');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task(s).
   grunt.registerTask('default', ['webpack:compile', 'uglify']);
   grunt.registerTask('watch', ['webpack:watch']);
   grunt.registerTask('serve', ['connect:server', 'watch']);
 
+  // vast project task(s).
+  grunt.registerTask('minifyHtml', ['htmlmin']);
+  grunt.registerTask('vast', ['default', 'concat', 'inline', 'minifyHtml', 'clean']);
 };

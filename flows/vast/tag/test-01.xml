@@ -1,0 +1,42 @@
+<VAST version="2.0">
+    <Ad id="static">
+        <InLine>
+            <AdSystem>Static VAST Template</AdSystem>
+            <AdTitle>Static VAST Tag</AdTitle>
+            <Impression>https://dummyimage.com/1x1?text=impression</Impression>
+            <Creatives>
+                <Creative>
+                    <Linear>
+                        <Duration>00:00:08</Duration>
+                        <TrackingEvents>
+                            <Tracking event="start">https://dummyimage.com/1x1?text=start</Tracking>
+                            <Tracking event="firstQuartile">https://dummyimage.com/1x1?text=firstQuartile</Tracking>
+                            <Tracking event="midpoint">https://dummyimage.com/1x1?text=midpoint</Tracking>
+                            <Tracking event="thirdQuartile">https://dummyimage.com/1x1?text=thirdQuartile</Tracking>
+                            <Tracking event="complete">https://aquto-vpaid.free.beeceptor.com/pixel/complete</Tracking>
+                            <Tracking event="pause">https://dummyimage.com/1x1?text=pause</Tracking>
+                            <Tracking event="mute">https://dummyimage.com/1x1?text=mute</Tracking>
+                            <Tracking event="fullscreen">https://dummyimage.com/1x1?text=fullscreen</Tracking>
+                        </TrackingEvents>
+                        <VideoClicks>
+                            <ClickThrough>https://aquto-vpaid.free.beeceptor.com/redirect/01</ClickThrough>
+                            <ClickTracking>https://aquto-vpaid.free.beeceptor.com/pixel/ClickTracking</ClickTracking>
+                        </VideoClicks>
+                        <MediaFiles>
+                            <MediaFile type="video/mp4" bitrate="300" width="853" height="480">
+                                <![CDATA[https://firebasestorage.googleapis.com/v0/b/aquto-rich-media.appspot.com/o/videos%2Fads-video.mp4?alt=media&token=071853f1-4d5f-46b0-bb49-f9dc686c90fc]]>
+                            </MediaFile>
+                        </MediaFiles>
+                        <Icons>
+                            <Icon program="AdChoices" height="16" width="16" xPosition="right" yPosition="top">
+                                <StaticResource creativeType="image/png">
+                                    <![CDATA[https://firebasestorage.googleapis.com/v0/b/aquto-rich-media.appspot.com/o/ads-video.png?alt=media&token=47f6490c-9fa6-4985-89e3-bd943db8ff5e]]>
+                                </StaticResource>
+                            </Icon>
+                        </Icons>
+                    </Linear>
+                </Creative>
+            </Creatives>
+        </InLine>
+    </Ad>
+</VAST>
