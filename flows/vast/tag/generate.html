@@ -22,8 +22,13 @@
         }
         #codeArea{
             width: 550px;
-            height: 224px;
+            height: 300px;
+            display: none;
         }
+        iframe{
+            border: none;
+        }
+        #codeLabel{ display: none;}
     </style>
 </head>
 <body>
@@ -31,11 +36,11 @@
     <fieldset>
         <legend>Query</legend>
         <label>Campaign Id <input type="text" name="cid" value=""></label>
-        <label>Vast Tag<input type="text" name="vu" value=""></label>
+        <label>VastTag Url<input type="text" name="vu" value=""></label>
         <button id="submit" onclick="return generate();">Generate</button>
         <br/>
         <br/>
-        <label>Generated Code</label>
+        <label id="codeLabel">Generated Code</label>
         <textarea rows="4" cols="50" id="codeArea"></textarea>
     </fieldset>
 </form>
@@ -45,23 +50,24 @@
 <p>--- below ad ---</p>
 <script>
     function generate() {
-        var src = "index.html?targetId=_target&ts=" + (new Date().getTime()) + "&";
+        var src = "http://app.aquto.com/moveRewards/flows/vast/tag/index.html?ts=" + (new Date().getTime()) + "&";
         var query = [];
         var inputs = document.getElementsByTagName("input");
         for (var i = 0; i < inputs.length; ++i) {
             query.push(encodeURIComponent(inputs[i].name) + "=" + encodeURIComponent(inputs[i].value));
         }
-
         src += query.join("&");
         document.getElementById("_target").innerHTML = "";
         var div = document.getElementById("_script");
         var textArea = document.getElementById("codeArea");
+        var codeLabel = document.getElementById("codeLabel");
         div.innerHTML = "";
         var iframe = document.createElement("iframe");
-        iframe.id = "__aqtest_vastTag02";
         iframe.src = src;
         iframe.width = "300";
         iframe.height = "250";
+        textArea.style.display = "block";
+        codeLabel.style.display = "block";
         div.appendChild(iframe);
         textArea.value = iframe.outerHTML;
         return false;

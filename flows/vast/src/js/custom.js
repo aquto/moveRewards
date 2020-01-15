@@ -72,6 +72,7 @@
     });
 
     player.on("vast.adError", function(event) {
+        ineligibleMsgElement.classList.add('hide');
         debug("vast.adError", event.error);
         eligibleElement.classList.add('hide');
         errorElement.classList.remove('hide');
@@ -85,7 +86,7 @@
             eligibleElement.classList.remove('hide');
             completeReward();
         }
-        if(!isEligible){
+        if(!isEligible && !videoError){
             debug('is not Eligible');
             ineligibleMsgElement.classList.remove('hide');
         }
@@ -142,7 +143,7 @@
                             timer.classList.remove('hide');
                             setTimeout("countDown()", 1000);
                         }
-                    } else { // Undefined
+                    } else {
                         if(phone && response.status === 'ineligiblenet'){
                             count = 10;
                             isEligible = false;
@@ -193,6 +194,7 @@
                         body.classList.toggle('success');
                         text.innerHTML = response.rewardText;
                     } else {
+                        ineligibleMsgElement.add
                         icon.classList.toggle('fa-times-circle');
                         body.classList.toggle('fail');
                         text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en éste momento';
