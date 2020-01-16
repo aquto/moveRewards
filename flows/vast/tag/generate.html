@@ -1,0 +1,82 @@
+<html>
+<head>
+    <title>Ad test (generate)</title>
+    <style type="text/css">
+        * {
+            font: 14px "Courier New";
+        }
+        fieldset {
+            border: 1px solid;
+        }
+        label {
+            display: block;
+            width: 500px;
+            height: 30px;
+        }
+        input {
+            float: right;
+            width: 300px;
+        }
+        form div {
+            clear: both;
+        }
+        #codeArea{
+            display: none;
+        }
+        #codeLabel {
+            display: none;
+        }
+        #preview {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<form>
+    <fieldset>
+        <legend>VAST Ad Tag Generator</legend>
+        <label>Campaign ID: <input type="text" name="cid" value=""></label>
+        <label>VAST tag URL: <input type="text" name="vu" value=""></label>
+        <button id="submit" onclick="return generate();">Generate</button>
+        <br/>
+        <br/>
+        <label id="codeLabel">Generated ad tag:</label>
+        <textarea rows="4" cols="75" id="codeArea" readonly></textarea>
+    </fieldset>
+</form>
+<div id="preview">
+    <p>--- above ad ---</p>
+    <div id="_target"></div>
+    <p>--- below ad ---</p>
+</div>
+<script>
+    function generate() {
+        // ts=" + (new Date().getTime()) + "&"
+        var src = "//assets.aquto.com/moveRewards/flows/vast/tag/v1.html?";
+        var query = [];
+        var inputs = document.getElementsByTagName("input");
+        for (var i = 0; i < inputs.length; ++i) {
+            query.push(encodeURIComponent(inputs[i].name) + "=" + encodeURIComponent(inputs[i].value));
+        }
+        src += query.join("&");
+        var div = document.getElementById("_target");
+        var textArea = document.getElementById("codeArea");
+        var codeLabel = document.getElementById("codeLabel");
+        var preview = document.getElementById("preview");
+        div.innerHTML = "";
+        var iframe = document.createElement("iframe");
+        iframe.id = "aq_iframe";
+        iframe.src = src;
+        iframe.width = "300";
+        iframe.height = "250";
+        iframe.style = "border: none;";
+        textArea.style.display = "block";
+        codeLabel.style.display = "block";
+        preview.style.display = "block";
+        div.appendChild(iframe);
+        textArea.value = iframe.outerHTML;
+        return false;
+    }
+</script>
+</body>
+</html>
