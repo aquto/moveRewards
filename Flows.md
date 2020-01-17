@@ -1,7 +1,7 @@
 Create VAST Ad Tag
 ==================
 
-The VAST flows functionality supports creating an ad tag that displays a video for user to view to receive data rewards. A data rewards mobile web campaign should be created and used. The ad tag is currently limited to the size 300x250.
+The VAST flows functionality supports creating an ad tag that displays a video for user to view to receive data rewards. A data rewards video campaign should be created and used. The ad tag is currently limited to the size 300x250.
 
 Two values are required to generate the code correctly:
 
