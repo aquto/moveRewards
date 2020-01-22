@@ -130,6 +130,7 @@ function checkOfferWallEligibility(options) {
 
           options.callback({
             eligible: true,
+            identified: true,
             offerWallHref: offerWallHref,
             numberOfOffers: response.response.offerCount
           })
