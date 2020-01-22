@@ -14,6 +14,7 @@ function sharedCallback(response, callback) {
     if (response && response.response && response.response.eligible) {
       callbackObject = {
         eligible: true,
+        identified: true,
         rewardAmount: response.response.rewardAmountMB,
         userToken: response.response.userToken
       }
