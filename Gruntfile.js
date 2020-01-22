@@ -16,7 +16,7 @@ module.exports = function(grunt) {
       compile: {
         entry: {
           aquto: "./src/aquto.js",
-          aquto_celtra: "./src/aquto.celtra.js",
+          aquto_celtra: "./src/aquto.celtra.js"
         },
         output: {
           path: __dirname,
