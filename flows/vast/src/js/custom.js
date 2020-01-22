@@ -112,7 +112,7 @@
 
         aquto.checkAppEligibility({
             campaignId: campaignId,
-            phoneNumber: phone || '525546953027',
+            phoneNumber: phone,
             callback: function(response) {
                 debug('checkAppEligibility');
                 if (response) {
