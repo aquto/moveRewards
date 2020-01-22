@@ -16,7 +16,7 @@ module.exports = function(grunt) {
       compile: {
         entry: {
           aquto: "./src/aquto.js",
-          aquto_celtra: "./src/aquto.celtra.js"
+          aquto_celtra: "./src/aquto.celtra.js",
         },
         output: {
           path: __dirname,
@@ -26,15 +26,42 @@ module.exports = function(grunt) {
         },
         mode: 'production'
       },
+      compileFlows: {
+        entry: {
+          aquto_flows: "./src/aquto.flows.js"
+        },
+        output: {
+          path: __dirname,
+          filename: "[name].js",
+          library: ["aqutoFlows"],
+          libraryTarget: "var"
+        },
+        mode: 'production'
+      },
       watch: {
         entry: {
           aquto: "./src/aquto.js",
-          aquto_celtra: "./src/aquto.celtra.js"
+          aquto_celtra: "./src/aquto.celtra.js",
+          aquto_flows: "./src/aquto.flows.js"
         },
         output: {
           path: __dirname,
           filename: "[name].js",
           library: ["aquto"],
+          libraryTarget: "var"
+        },
+        watch: true,
+        keepalive: true,
+        mode: 'development'
+      },
+      watchFlows: {
+        entry: {
+          aquto_flows: "./src/aquto.flows.js"
+        },
+        output: {
+          path: __dirname,
+          filename: "[name].js",
+          library: ["aqutoFlows"],
           libraryTarget: "var"
         },
         watch: true,
@@ -50,6 +77,7 @@ module.exports = function(grunt) {
         files: {
           'aquto.min.js': ['aquto.js'],
           'aquto_celtra.min.js': ['aquto_celtra.js'],
+          'aquto_flows.min.js': ['aquto_flows.js'],
           'flows/vast/src/js/custom.min.js': ['flows/vast/src/js/custom.js']
         }
       }
@@ -106,9 +134,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task(s).
-  grunt.registerTask('default', ['webpack:compile', 'uglify']);
+  grunt.registerTask('default', ['webpack:compile', 'webpack:compileFlows', 'uglify']);
   grunt.registerTask('watch', ['webpack:watch']);
   grunt.registerTask('serve', ['connect:server', 'watch']);
+  // PhoneEntry task(s)
+  grunt.registerTask('watchFlows', ['webpack:watchFlows']);
+  grunt.registerTask('serveFlows', ['connect:server', 'watchFlows']);
 
   // vast project task(s).
   grunt.registerTask('minifyHtml', ['htmlmin']);

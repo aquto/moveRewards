@@ -4,23 +4,28 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <link rel="stylesheet" href="styles/main.css">
   <title>Move Rewards - Ad Banner</title>
 </head>
-
 <body>
-  <div class="banner-container">
-    <img id="banner" src="https://dummyimage.com/400x300/e0e0e0/ffffff.jpg&text=ad+Banner" alt="ad banner" onclick="handleBannerClick()" />
+  <div style="position:relative;" id="aquto_tag">
+    <a href="#" style="position:absolute;" onclick="onClick();" ><img src="https://dummyimage.com/360/e0e0e0/ffffff.jpg&text=ad+Banner" /></a>
   </div>
-
-
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v0.5.0/dist/jBox.all.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v0.5.0/dist/jBox.all.min.css" rel="stylesheet">
-<!--  <script src="aquto.min.js"></script>-->
-<!--  <script src="aquto.flows.min.js"></script>-->
+  <script id="aquto-api" src="../../aquto.min.js"></script>
   <script src="../../aquto_flows.js"></script>
-<!--  <script src="../../aquto.min.js"></script>-->
-  <script src="js/main.js"></script>
+  <script>
+    function onClick() {
+      aqutoFlows.checkAppEligibilityPhoneEntry({
+        targetId: 'aquto_tag', // be good to allow element object as well e.g. target: document.getElementById('aquto_tag');
+        campaignId: 1138, // '1212124-fdsa-fds-321',
+        targetUrl: 'https://aquto.com/',
+        targetUrlIOS: 'https://www.apple.com/',
+        targetUrlAndroid: 'https://www.android.com/',
+        countries: ['mx','ar','br','cl','co'],
+        onComplete: function(response) {
+          window.parent.location.href = response.redirectUrl;
+        }
+      });
+    }
+  </script>
 </body>
 </html>

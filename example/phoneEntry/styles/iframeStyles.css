@@ -1,0 +1,222 @@
+html, body {
+    background: #E0E0E0;
+    color: black;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    display: table;
+    vertical-align: middle;
+}
+
+html, body, .container {
+    margin: auto;
+    padding: 0px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+h1 {
+    font-size: 18px;
+}
+
+html{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    position: relative;
+    display: table-cell;
+    width: 300px;
+    height: 250px;
+    background: #ffffff;
+}
+
+.row {
+    display: block;
+    text-align: center;
+    padding: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.video-js {
+    display: block !important;
+    margin: 0px;
+    padding: 0px;
+}
+
+.hide {
+    display: none;
+}
+
+.success {
+    background-color: green !important;
+    color: white;
+}
+
+.fail {
+    background-color: red !important;
+    color: white;
+}
+
+
+/* Identify Styles */
+.telephone {
+    font-size: 14px;
+    width: 280px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.button {
+    min-width: 280px;
+    border-style: solid;
+    border-width: thin;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit {
+    color: white;
+    background-color: #5CCD96;
+    border-width: thin;
+    border-color: white;
+}
+
+.secondary {
+    color: grey;
+    background-color: transparent;
+    border-color: grey;
+}
+
+.iti__country-list{
+    width: 170px;
+}
+
+.loading {
+    font-size: 20px;
+    color: black;
+}
+
+.loading:after {
+    content: ' .';
+    -webkit-animation: dots 1s steps(5, end) infinite; /* Safari 4+ */
+    -moz-animation: dots 1s steps(5, end) infinite; /* Fx 5+ */
+    -o-animation: dots 1s steps(5, end) infinite; /* Opera 12+ */
+    animation: dots 1s steps(5, end) infinite; /* IE 10+, Fx 29+ */
+}
+
+@-webkit-keyframes dots {
+    0%, 20% {
+        color: rgba(0, 0, 0, 0);
+        text-shadow:
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    40% {
+        color: black;
+        text-shadow:
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    60% {
+        text-shadow:
+                .25em 0 0 black,
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    80%, 100% {
+        text-shadow:
+                .25em 0 0 black,
+                .5em 0 0 black;
+    }
+}
+@-moz-keyframes dots {
+    0%, 20% {
+        color: rgba(0, 0, 0, 0);
+        text-shadow:
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    40% {
+        color: black;
+        text-shadow:
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    60% {
+        text-shadow:
+                .25em 0 0 black,
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    80%, 100% {
+        text-shadow:
+                .25em 0 0 black,
+                .5em 0 0 black;
+    }
+}
+@-o-keyframes dots {
+    0%, 20% {
+        color: rgba(0, 0, 0, 0);
+        text-shadow:
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    40% {
+        color: black;
+        text-shadow:
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    60% {
+        text-shadow:
+                .25em 0 0 black,
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    80%, 100% {
+        text-shadow:
+                .25em 0 0 black,
+                .5em 0 0 black;
+    }
+}
+@keyframes dots {
+    0%, 20% {
+        color: rgba(0, 0, 0, 0);
+        text-shadow:
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    40% {
+        color: black;
+        text-shadow:
+                .25em 0 0 rgba(0, 0, 0, 0),
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    60% {
+        text-shadow:
+                .25em 0 0 black,
+                .5em 0 0 rgba(0, 0, 0, 0);
+    }
+
+    80%, 100% {
+        text-shadow:
+                .25em 0 0 black,
+                .5em 0 0 black;
+    }
+}
