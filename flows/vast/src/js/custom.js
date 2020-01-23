@@ -1,6 +1,6 @@
 (function(win, doc) {
 
-// DOM Elements to use
+    // DOM Elements to use
     const loading = getElem('preload');
     const video = getElem('video');
     const eligibleElement = getElem('eligibleWrapper');
@@ -19,16 +19,17 @@
     let videoOverlay,
         loadingOverlay;
 
-    let campaignId = getUrlParameter('cid');
+    const campaignId = getUrlParameter('cid');
     const vastTagUrl = getUrlParameter('vu');
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
 
+    let timeoutRef;
     let videoError = false;
     let isEligible = false;
 
     // Eligible Player Options
-    let playerOptions = {
+    const playerOptions = {
         controls: true,
         autoplay: false,
         preload: true,
@@ -50,23 +51,23 @@
     };
 
     // Eligible Player Initialization
-    let player = videojs('player', playerOptions);
+    const player = videojs('player', playerOptions);
 
-    // Eligible Player Events
+    // Player Events
+    player.on('play', function () {
+        debug('play');
+        videoError && hideElem(video);
+    })
+
+    player.on('timeupdate', function (e) {
+        videoError && hideElem(video);
+        const current = (this.currentTime() / this.duration()) * 100;
+        debug('update', current);
+    })
+
     if (debugEnabled) {
-        player.on('ready', function() {
-        })
-
-        player.on('play', function () {
-            debug('play');
-            videoError && hideElem(video);
-        })
-
-        player.on('timeupdate', function (e) {
-            videoError && hideElem(video);
-            let current = (this.currentTime() / this.duration()) * 100;
-            debug('update', current);
-        })
+        // player.on('ready', function() {
+        // })
 
         player.on("click", function (event) {
             debug("click", event);
@@ -155,12 +156,12 @@
                                 hideElem(phoneCheck);
                                 showElem(ineligibleUI);
                                 showElem(timer);
-                                setTimeout("countDown()", 1000);
+                                startCountdown();
                             }
                         }
                         if (phone) {
                             timer.classList.remove('hide');
-                            setTimeout("countDown()", 1000);
+                            startCountdown();
                         }
                     } else {
                         if (phone){
@@ -170,7 +171,7 @@
                             showElem(ineligibleUI);
                             hideElem(phoneCheck);
                             showElem(timer);
-                            setTimeout("countDown()", 1000);
+                            startCountdown();
                         } else {
                             debug('unidentified');
                             isEligible = false;
@@ -252,6 +253,7 @@
 
     const showPlayer = function(ap){
         event && event.preventDefault();
+        stopCountdown(); // Cancel timer if set
         hideElem(phoneEntry);
         hideElem(eligibleElement);
         showElem(video);
@@ -263,11 +265,11 @@
     }
 
     const countDown = function() {
-        let timer = getElem("timer");
+        const timer = getElem("timer");
         if (count > 0) {
             count--;
             timer.innerHTML = "Ver el video en " + count + " segundos.";
-            setTimeout("countDown()", 1000);
+            startCountdown();
         } else {
             showPlayer(true);
         }
@@ -303,6 +305,20 @@
 
     function hideElem(elem){
         elem && elem.classList.add('hide');
+    }
+
+    // Start countdown timer
+    function startCountdown() {
+        timeoutRef = setTimeout("countDown()", 1000);
+    }
+
+    // Cancel timer if set
+    function stopCountdown() {
+        if (timeoutRef) {
+            clearTimeout(timeoutRef);
+            timeoutRef = null;
+            debug('countdown stopped');
+        }
     }
 
     win.onload = function(){
