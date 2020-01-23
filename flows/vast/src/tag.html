@@ -23,11 +23,17 @@
 
 <body>
   <div class="container">
+     <div id="loadingOverlay" class="hide">
+         <div class="loaderWrapper">
+             <img class="spinner" src="../assets/images/loader.gif">
+         </div>
+     </div>
     <div class="row" id="preload">
       <p class="loading">Cargando</p>
     </div>
       <!-- Video Element -->
     <div id="video" class="hide">
+        <div id="videoOverlay"></div>
       <video id="player" class="video-js vjs-default-skin" playsinline width="300px" height="250px">
       </video>
     </div>
@@ -42,12 +48,6 @@
                   Estamos procesando tu recompensa...
               </div>
           </div>
-      </div>
-
-      <!-- Ineligible Video -->
-      <div id="ineligibleWrapper" class="hide">
-          <video id="reward-video" class="video-js vjs-default-skin" playsinline preload="auto" width="300px" height="250px">
-          </video>
       </div>
 
       <!-- Ineligible End Video Message -->
