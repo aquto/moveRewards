@@ -113,5 +113,4 @@ module.exports = function(grunt) {
   // vast project task(s).
   grunt.registerTask('minifyHtml', ['htmlmin']);
   grunt.registerTask('vast', ['default', 'concat', 'inline', 'minifyHtml', 'clean']);
-
 };
