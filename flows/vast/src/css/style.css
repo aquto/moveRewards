@@ -93,6 +93,10 @@ h1 {
   width: 170px;
 }
 
+#phoneEntryWrapper{
+  min-height: 190px;
+}
+
 #videoOverlay{
   background-color: rgba(0,0,0,0);
   width: 100%;
@@ -101,4 +105,5 @@ h1 {
   top: 0;
   left: 0;
   z-index: 20;
+  cursor: pointer;
 }
