@@ -8,12 +8,9 @@ function checkAppEligibilityPhoneEntry(options) {
 
     aquto.checkAppEligibility({
         campaignId: options.campaignId,
-        phoneNumber: phone || '5255469530272',
+        phoneNumber: phone,
         callback: function(response) {
             if (response){
-                if (!response.identified){
-                    response.identified = !!(response.eligible && response.operatorCode !== 'unknown');
-                }
                 createCopyResponse(response);
                 if (response.identified) {
                     if (response.eligible) {
@@ -21,56 +18,56 @@ function checkAppEligibilityPhoneEntry(options) {
                         if(phone){
                             debug('phone entered eligible');
                             count = 5;
-                            loading.classList.add('hide');
-                            phoneEntry.classList.remove('hide');
-                            phoneCheck.classList.add('hide');
+                            hideElem(loading);
+                            showElem(phoneEntry);
+                            hideElem(phoneCheck);
                             rewardTextEligible.innerHTML = response.rewardText;
-                            eligibleUI.classList.remove('hide');
+                            showElem(eligibleUI);
                         } else{
                             debug('identified & eligible');
-                            loading.classList.remove('hide');
+                            showElem(loading);
                             redirectToTarget();
                         }
                     } else {
-                        iframe.classList.remove("hide");
+                        showElem(iframe);
                         isEligible = false;
                         if (phone) {
                             debug('phone entered ineligible');
                             // count = 10;
-                            // ineligibleUI.classList.remove('hide');
-                            // phoneCheck.classList.add('hide');
+                            // showElem(ineligibleUI);
+                            // hideElem(phoneCheck);
                         } else {
                             debug('identified + ineligible');
-                            loading.classList.add('hide');
-                            phoneEntry.classList.remove('hide');
-                            phoneCheck.classList.add('hide');
-                            ineligibleUI.classList.remove('hide');
+                            hideElem(loading);
+                            showElem(phoneEntry);
+                            hideElem(phoneCheck);
+                            showElem(ineligibleUI);
                         }
                     }
                     if (phone) {
                         timer.classList.remove('hide');
-                        setTimeout(countDown, 1000);
+                        startCountdown();
                     }
                 } else {
-                    iframe.classList.remove("hide");
+                    showElem(iframe);
                     isEligible = false;
                     if (phone){
                         debug('phone entered unidentified');
-                        loading.classList.add('hide');
-                        phoneEntry.classList.remove('hide');
-                        phoneCheck.classList.add('hide');
-                        ineligibleUI.classList.remove('hide');
+                        hideElem(loading);
+                        showElem(phoneEntry);
+                        hideElem(phoneCheck);
+                        showElem(ineligibleUI);
                     } else {
                         debug('unidentified');
-                        loading.classList.add('hide');
-                        phoneEntry.classList.remove('hide');
+                        hideElem(loading);
+                        showElem(phoneEntry);
                     }
                 }
             } else {
                 debug('error.checkAppEligibility');
-                iframe.classList.remove("hide");
-                loading.classList.add('hide');
-                errorElement.classList.remove('hide');
+                showElem(iframe);
+                hideElem(loading);
+                showElem(errorElement);
             }
         }
     });
@@ -116,6 +113,7 @@ let loading,
     lang;
 
 let count = 5;
+let timeoutRef;
 const debugEnabled = getUrlParameter('d') === '1';
 const defaultLanguages = ['es', 'en', 'pt'];
 const defaultCountries = ['mx'];
@@ -291,7 +289,7 @@ function createIframe(){
         iframeTag.style.border = "none";
         iframeTag.style.position = "absolute";
         iframeTag.style.backgroundColor = "#fff";
-        iframeTag.classList.add("hide");
+        hideElem(iframeTag);
     }
 }
 
@@ -376,7 +374,7 @@ function validatePhoneNumber(){
     checkAppEligibilityPhoneEntry(copyOptions);
 }
 
-function countDown(){
+function countDown() {
     let timer = iframeGetElem("timer");
     let loadingTxtOne, loadingTxtTwo;
     if (lang === 'en'){
@@ -394,11 +392,26 @@ function countDown(){
     if (count > 0) {
         count--;
         timer.innerHTML = loadingTxtOne + count + loadingTxtTwo;
-        setTimeout(countDown, 1000);
+        startCountdown();
     } else {
         redirectToTarget();
     }
 }
+
+// Start countdown timer
+function startCountdown() {
+    timeoutRef = setTimeout(countDown, 1000);
+}
+
+// Cancel timer if set
+function stopCountdown() {
+    if (timeoutRef) {
+        clearTimeout(timeoutRef);
+        timeoutRef = null;
+        debug('countdown stopped');
+    }
+}
+
 
 let deviceDetails;
 
@@ -474,11 +487,19 @@ function getFinalUrl(){
 
 function redirectToTarget(){
     const finalUrl = getFinalUrl();
+    timeoutRef && stopCountdown();
     debug('Redirecting to', finalUrl);
     copyResponse.redirectUrl = finalUrl;
     !debugEnabled && copyOptions.onComplete(copyResponse);
 }
 
+function showElem(elem){
+    elem && elem.classList.remove('hide');
+}
+
+function hideElem(elem){
+    elem && elem.classList.add('hide');
+}
 window.onload = function(){
 
     if (typeof jQuery === 'undefined'){
@@ -501,7 +522,7 @@ window.onload = function(){
         }
     }
 
-    // Listen to message from iframe
+    // Adding Message event to Iframe
     bindEvent(window, 'message', function (e) {
         const eventName = e.data;
 

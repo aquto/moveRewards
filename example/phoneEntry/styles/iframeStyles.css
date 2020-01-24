@@ -112,6 +112,10 @@ html{
     animation: dots 1s steps(5, end) infinite; /* IE 10+, Fx 29+ */
 }
 
+#phoneEntryWrapper{
+    min-height: 190px;
+}
+
 @-webkit-keyframes dots {
     0%, 20% {
         color: rgba(0, 0, 0, 0);
