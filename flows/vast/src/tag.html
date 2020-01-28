@@ -22,98 +22,99 @@
 </head>
 
 <body>
-  <div class="container">
-     <div id="loadingOverlay" class="hide">
-         <div class="loaderWrapper">
-             <img class="spinner" src="../assets/images/loader.gif">
-         </div>
-     </div>
-    <div class="row" id="preload">
-      <p class="loading">Cargando</p>
-    </div>
-      <!-- Video Element -->
-    <div id="video" class="hide">
-        <div id="videoOverlay"></div>
-      <video id="player" class="video-js vjs-default-skin" playsinline>
-      </video>
-    </div>
+    <div class="container-frame">
+        <div id="loadingOverlay" class="hide">
+            <div class="loaderWrapper">
+                <img class="spinner" src="../assets/images/loader.gif">
+            </div>
+        </div>
+        <!-- Video Element -->
+        <div id="video" class="hide">
+            <div id="videoOverlay"></div>
+            <video id="player" class="video-js vjs-default-skin" playsinline>
+            </video>
+        </div>
+      <div class="container">
+        <div id="preload">
+          <p class="loading">Cargando</p>
+        </div>
+          <!-- Eligible End Video Message -->
+          <div id="eligibleWrapper" class="hide">
+              <div id="message">
+                  <div class="row">
+                      <i id="icon" class="fas fa-3x"></i>
+                  </div>
+                  <div id="rewardText" class="row">
+                      Estamos procesando tu recompensa...
+                  </div>
+              </div>
+          </div>
 
-      <!-- Eligible End Video Message -->
-      <div id="eligibleWrapper" class="hide">
-          <div id="message">
+          <!-- Ineligible End Video Message -->
+          <div id="ineligibleMessage" class="hide">
               <div class="row">
-                  <i id="icon" class="fas fa-3x"></i>
+                  <i class="far fa-thumbs-up fa-3x"></i>
               </div>
-              <div id="rewardText" class="row">
-                  Estamos procesando tu recompensa...
+              <div class="row">
+                  Gracias por ver &eacute;ste video
+              </div>
+          </div>
+
+          <!-- Unidentified User Phone Entry Element -->
+          <div id="phoneEntryWrapper" class="hide">
+              <div class="row" id="phoneCheck">
+                  <h1>Participa para ganar megas</h1>
+                  <p>Solo confirma tu n&uacute;mero de tel&eacute;fono<br></p>
+                  <form class="phoneForm" onsubmit="checkPhoneNumber()">
+                      <p><input class="telephone" type="tel" id="phone" name="phone" pattern="[0-9]{9,10}" required></p>
+                      <p><input class="button submit" type="submit" value="Confirmar ahora"></p>
+                  </form>
+                  <form action="#" method="get">
+                      <input type="hidden" name="play" value="true">
+                      <button type="submit" class="button secondary" onclick="showPlayer()">Continuar sin ganar megas</button>
+                  </form>
+              </div>
+
+              <!-- Elegible user UI -->
+              <div class="row hide" id="eligible">
+                  <p><i class="far fa-thumbs-up fa-3x"></i></p>
+                  <p>
+                  <div id="rewardTextEligible">
+                      Tu n&uacute;mero participa para ganar megas.
+                  </div>
+                  </p>
+                  <form action="#" method="get">
+                      <input type="hidden" name="play" value="true">
+                      <button type="submit" class="button submit" onclick="showPlayer()">Ver el video ahora</button>
+                  </form>
+              </div>
+
+              <!-- Ineligible users UI -->
+              <div class="row hide" id="ineligible">
+                  <i class="far fa-frown fa-3x"></i>
+                  <p>Lo sentimos, t&uacute; n&uacute;mero no participa para ganar megas en &eacute;ste momento.</p>
+                  <p>&iquest;Qui&eacute;res ver el video sin ganar megas?</p>
+                  <form action="#" method="get">
+                      <input type="hidden" name="play" value="true">
+                      <button class="button secondary" onclick="showPlayer()">Ver el video sin ganar megas</button>
+                  </form>
+              </div>
+              <div class="row hide" id="timer"></div>
+          </div>
+
+
+
+         <!-- Error message Element -->
+          <div id="errorWrapper" class="hide">
+              <div class="row">
+                  <i class="far fa-frown-open fa-3x"></i>
+              </div>
+              <div class="row">
+                  <div class="row">Lo sentimos, ocurri&oacute; un error durante la reproducci&oacute;n del video.</div>
               </div>
           </div>
       </div>
-
-      <!-- Ineligible End Video Message -->
-      <div id="ineligibleMessage" class="hide">
-          <div class="row">
-              <i class="far fa-thumbs-up fa-3x"></i>
-          </div>
-          <div class="row">
-              Gracias por ver &eacute;ste video
-          </div>
-      </div>
-
-      <!-- Unidentified User Phone Entry Element -->
-      <div id="phoneEntryWrapper" class="hide">
-          <div class="row" id="phoneCheck">
-              <h1>Participa para ganar megas</h1>
-              <p>Solo confirma tu n&uacute;mero de tel&eacute;fono<br></p>
-              <form class="phoneForm" onsubmit="checkPhoneNumber()">
-                  <p><input class="telephone" type="tel" id="phone" name="phone" pattern="[0-9]{9,10}" required></p>
-                  <p><input class="button submit" type="submit" value="Confirmar ahora"></p>
-              </form>
-              <form action="#" method="get">
-                  <input type="hidden" name="play" value="true">
-                  <button type="submit" class="button secondary" onclick="showPlayer()">Continuar sin ganar megas</button>
-              </form>
-          </div>
-
-          <!-- Elegible user UI -->
-          <div class="row hide" id="eligible">
-              <p><i class="far fa-thumbs-up fa-3x"></i></p>
-              <p>
-              <div id="rewardTextEligible">
-                  Tu n&uacute;mero participa para ganar megas.
-              </div>
-              </p>
-              <form action="#" method="get">
-                  <input type="hidden" name="play" value="true">
-                  <button type="submit" class="button submit" onclick="showPlayer()">Ver el video ahora</button>
-              </form>
-          </div>
-
-          <!-- Ineligible users UI -->
-          <div class="row hide" id="ineligible">
-              <i class="far fa-frown fa-3x"></i>
-              <p>Lo sentimos, t&uacute; n&uacute;mero no participa para ganar megas en &eacute;ste momento.</p>
-              <p>&iquest;Qui&eacute;res ver el video sin ganar megas?</p>
-              <form action="#" method="get">
-                  <input type="hidden" name="play" value="true">
-                  <button class="button secondary" onclick="showPlayer()">Ver el video sin ganar megas</button>
-              </form>
-          </div>
-          <div class="row hide" id="timer"></div>
-      </div>
-
-
-
-     <!-- Error message Element -->
-      <div id="errorWrapper" class="hide">
-          <div class="row">
-              <i class="far fa-frown-open fa-3x"></i>
-          </div>
-          <div class="row">
-              <div class="row">Lo sentimos, ocurri&oacute; un error durante la reproducci&oacute;n del video.</div>
-          </div>
-      </div>
-  </div>
+    </div>
   <!-- To use dev env use ?be=mp-dev.aquto.internal -->
   <script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js"></script>
   <script type="text/javascript" src="./js/custom.min.js?__inline=true"></script>

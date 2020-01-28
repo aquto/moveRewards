@@ -9,6 +9,9 @@ Two values are required to generate the code correctly:
 |:----|:--------|
 |cid| Campaign ID (e.g. 123e4567-e89b-12d3-a456-426655440000)|
 |vu| VAST tag URL for the video|
+|Banner Url| URL for the video poster|
+|Width| size for Ad Tag width (e.g. 600)|
+|Height| size for Ad Tag height (e.g. 400)|
 
 VAST tag URL example:
 
@@ -18,10 +21,12 @@ Use the campaign ID and VAST tag URL to generate the following tag, replacing th
 
 `<iframe id="aq_iframe" src="//assets.aquto.com/moveRewards/flows/vast/tag/v1.html?cid=[campaignid]&amp;vu=[vasturl]" width="300" height="250" style="border: none;"></iframe>`
 
-Make sure to properly encode the parameters before adding them using e.g. https://www.urlencoder.org/.
+Make sure to properly encode the parameters before adding them using e.g. https://www.urlencoder.org/
 
 There is also a generator tool available that will generate and preview the tag given the campaign ID and VAST tag URL:
 
 https://assets.aquto.com/moveRewards/flows/vast/tag/generate.html
+
+If the values for Width and Height are lower than the current limit, the ad tag size will be set to 300x250.
 
 Enter the campaign ID and VAST tag URL and click "Generate" button to create the ad tag code and preview panel.

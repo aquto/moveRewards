@@ -3,6 +3,7 @@ html, body {
   color: black;
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 12px;
+  height: 100%;
 }
 
 html, body {
@@ -15,11 +16,22 @@ h1 {
   font-size: 18px;
 }
 
+.container-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
 .container {
+  width: 300px;
+  height: 250px;
   position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .row {
@@ -106,6 +118,7 @@ h1 {
 #loadingOverlay{
   background-color: rgba(255, 255, 255, 0.7);
   cursor: default;
+  position: fixed;
 }
 
 .spinner {

@@ -38,8 +38,8 @@
         <label>Campaign ID: <input type="text" name="cid" value=""></label>
         <label>VAST tag URL: <input type="text" name="vu" value=""></label>
         <label>Banner URL: <input type="text" name="b" value=""></label>
-        <label>Iframe Width: <input id="iw" type="text" name="iw" value=""></label>
-        <label>Iframe Height: <input id="ih" type="text" name="ih" value=""></label>
+        <label>Width: <input id="iWidth" type="text" name="w" value=""></label>
+        <label>Height: <input id="iHeight" type="text" name="h" value=""></label>
         <button id="submit" onclick="return generate();">Generate</button>
         <br/>
         <br/>
@@ -55,12 +55,16 @@
 <script>
     function generate() {
         // ts=" + (new Date().getTime()) + "&"
-        var src = "assets.aquto.com/moveRewards/flows/vast/tag/v1.html?";
+        var src = "//assets.aquto.com/moveRewards/flows/vast/tag/v1.html?";
         var query = [];
         var inputs = document.getElementsByTagName("input");
+        var inputName;
+        var inputValue;
         for (var i = 0; i < inputs.length; ++i) {
-            if(encodeURIComponent(inputs[i].name) !== 'iw' && encodeURIComponent(inputs[i].name) !== 'ih'){
-                query.push(encodeURIComponent(inputs[i].name) + "=" + encodeURIComponent(inputs[i].value));
+            inputName = encodeURIComponent(inputs[i].name);
+            inputValue = encodeURIComponent(inputs[i].value);
+            if(inputName !== 'w' && inputName !== 'h'){
+                query.push(inputName + "=" + inputValue);
             }
         }
         src += query.join("&");
@@ -68,21 +72,17 @@
         var textArea = document.getElementById("codeArea");
         var codeLabel = document.getElementById("codeLabel");
         var preview = document.getElementById("preview");
+        var width = document.getElementById("iWidth").value;
+        var height = document.getElementById("iHeight").value;
         div.innerHTML = "";
         var iframe = document.createElement("iframe");
         iframe.id = "aq_iframe";
         iframe.src = src;
-        if (document.getElementById("iw").value < 300){
-            iframe.width = "300";
-        } else {
-            iframe.width = document.getElementById("iw").value;
-        }
-        if (document.getElementById("ih").value < 250){
-            iframe.width = "250";
-        } else {
-            iframe.height = document.getElementById("ih").value;
-        }
-        iframe.style = "border: none;";
+        const minWidth = 300;
+        const minHeight = 250;
+        const iframeWidth = Math.max(minWidth, width) + "px";
+        const iframeHeight = Math.max(minHeight, height) + "px";
+        iframe.style = "border: none;" + "width:" + iframeWidth + ";" + "height:" + iframeHeight + ";";
         textArea.style.display = "block";
         codeLabel.style.display = "block";
         preview.style.display = "block";

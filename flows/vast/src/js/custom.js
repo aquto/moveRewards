@@ -22,6 +22,8 @@
     const vastTagUrl = getUrlParameter('vu');
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
+    const minWidth = 300;
+    const minHeight = 250;
 
     let timeoutRef;
     let videoError = false;
@@ -29,8 +31,8 @@
 
     // Eligible Player Options
     const playerOptions = {
-        width: win.innerWidth < 300 ? 300 : win.innerWidth,
-        height: win.innerHeight < 250 ? 250 : win.innerHeight,
+        width: getWidth(),
+        height: getHeight(),
         controls: true,
         autoplay: false,
         preload: true,
@@ -200,6 +202,7 @@
             if(event.cancelBubble !== null) {
                 event.cancelBubble = true;
             }
+            hideElem(video);
             checkPhoneNumber();
         });
     }
@@ -231,21 +234,19 @@
                     if (response.eligible) {
                         debug('complete success');
                         icon.classList.add('fa-check-circle');
-                        body.classList.toggle('success');
+                        toggleBodyBgColor('success');
                         text.innerHTML = response.rewardText;
                     } else {
                         debug('complete failure');
-
                         ineligibleMsgElement.add
                         icon.classList.toggle('fa-times-circle');
-                        body.classList.toggle('fail');
+                        toggleBodyBgColor('fail');
                         text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en éste momento';
                     }
                 } else {
                     debug('complete invalid response');
-
                     icon.classList.toggle('fa-times-circle');
-                    body.classList.toggle('fail');
+                    toggleBodyBgColor('fail');
                     text.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
                 }
             }
@@ -322,15 +323,33 @@
         }
     }
 
-    function setContainerSize(){
-        const container = document.getElementsByClassName('container')[0];
-        container.style.width = (win.innerWidth < 300 ? 300 : win.innerWidth ) + "px";
-        container.style.height = (win.innerHeight < 250 ? 250 : win.innerHeight ) + "px";
+    function toggleBodyBgColor(className){
+        if(className === 'success'){
+            body.classList.remove('fail');
+            body.classList.add(className);
+        }
+        if(className === 'fail'){
+            body.classList.remove('success');
+            body.classList.add(className);
+        }
+    }
+
+    function setBodySize(){
+        doc.body.style.width = getWidth() + "px";
+        doc.body.style.height = getHeight() + "px";
+    }
+
+    function getWidth(){
+        return Math.max(minWidth, win.innerWidth)
+    }
+
+    function getHeight(){
+        return Math.max(minHeight, win.innerHeight)
     }
 
     win.onload = function(){
         hideElem(loading);
-        setContainerSize();
+        setBodySize();
         addEventOverlay();
         showPlayer(0);
     }
