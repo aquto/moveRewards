@@ -335,8 +335,8 @@
     }
 
     function setBodySize(){
-        doc.body.style.width = getWidth() + "px";
-        doc.body.style.height = getHeight() + "px";
+        body.style.width = getWidth() + "px";
+        body.style.height = getHeight() + "px";
     }
 
     function getWidth(){
