@@ -3,19 +3,12 @@ html, body {
   color: black;
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 12px;
-  display: table;
-  vertical-align: middle;
 }
 
-html, body, .container {
+html, body {
   margin: auto;
   padding: 0px;
-  width: 300px;
-  height: 250px;
-  max-width: 300px;
-  max-height: 250px;
   text-align: center;
-  vertical-align: middle;
 }
 
 h1 {
@@ -24,7 +17,9 @@ h1 {
 
 .container {
   position: relative;
-  display: table-cell;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .row {

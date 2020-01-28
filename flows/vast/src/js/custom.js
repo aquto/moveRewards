@@ -1,5 +1,4 @@
 (function(win, doc) {
-
     // DOM Elements to use
     const loading = getElem('preload');
     const video = getElem('video');
@@ -30,6 +29,8 @@
 
     // Eligible Player Options
     const playerOptions = {
+        width: win.innerWidth < 300 ? 300 : win.innerWidth,
+        height: win.innerHeight < 250 ? 250 : win.innerHeight,
         controls: true,
         autoplay: false,
         preload: true,
@@ -321,8 +322,15 @@
         }
     }
 
+    function setContainerSize(){
+        const container = document.getElementsByClassName('container')[0];
+        container.style.width = (win.innerWidth < 300 ? 300 : win.innerWidth ) + "px";
+        container.style.height = (win.innerHeight < 250 ? 250 : win.innerHeight ) + "px";
+    }
+
     win.onload = function(){
         hideElem(loading);
+        setContainerSize();
         addEventOverlay();
         showPlayer(0);
     }
@@ -332,3 +340,4 @@
     this.countDown = countDown;
 
 })(window, document);
+
