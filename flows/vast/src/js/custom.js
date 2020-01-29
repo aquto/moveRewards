@@ -22,8 +22,6 @@
     const vastTagUrl = getUrlParameter('vu');
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
-    const minWidth = 300;
-    const minHeight = 250;
 
     let timeoutRef;
     let videoError = false;
@@ -31,8 +29,6 @@
 
     // Eligible Player Options
     const playerOptions = {
-        width: getWidth(),
-        height: getHeight(),
         controls: true,
         autoplay: false,
         preload: true,
@@ -334,22 +330,8 @@
         }
     }
 
-    function setBodySize(){
-        body.style.width = getWidth() + "px";
-        body.style.height = getHeight() + "px";
-    }
-
-    function getWidth(){
-        return Math.max(minWidth, win.innerWidth)
-    }
-
-    function getHeight(){
-        return Math.max(minHeight, win.innerHeight)
-    }
-
     win.onload = function(){
         hideElem(loading);
-        setBodySize();
         addEventOverlay();
         showPlayer(0);
     }

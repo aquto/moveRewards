@@ -270,3 +270,9 @@
 .video-js .vjs-play-progress,.video-js  .vjs-volume-level {
     background-color: #cccccc
 }
+
+.video-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}

@@ -2,121 +2,120 @@
 <html lang="es" dir="ltr">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=300, initial-scale=1, maximum-scale=1, user-scalable=0">
-  <title>Rewarded Video User detection | Contenedor</title>
-  <link href="https://vjs.zencdn.net/7.6.5/video-js.css" rel="stylesheet">
-  <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
-  <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
-  <script src='https://vjs.zencdn.net/7.6.5/video.js'></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs_5.vast.vpaid.min.js" integrity="sha256-dS3vqilIeVqujxFIIgRTAPMqka6OJW5mcZrUoXx90Pc=" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=300, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>Rewarded Video User detection | Contenedor</title>
+    <link href="https://vjs.zencdn.net/7.6.5/video-js.css" rel="stylesheet">
+    <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+    <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+    <script src='https://vjs.zencdn.net/7.6.5/video.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs_5.vast.vpaid.min.js" integrity="sha256-dS3vqilIeVqujxFIIgRTAPMqka6OJW5mcZrUoXx90Pc=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput-jquery.min.js" integrity="sha256-s0v2VDVLbAqGy/FEK0588AtGkSz0aOb6ibQCPCkk4Bk=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput.min.js" integrity="sha256-Gf8PGNhkyd/4AuPWG7theaqc8hAvHzocloCkDN9pXFw=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js" integrity="sha256-271j3cFogB3oRK1PLEHwasgC+sTkKr0f1I37LU9Qkyk=" crossorigin="anonymous"></script>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs.vast.vpaid.min.css" integrity="sha256-Jlz9Tnz24Z33Lph9SYNCOMigjPCxoplDQo8qjAONgfs=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css" integrity="sha256-rTKxJIIHupH7lFo30458ner8uoSSRYciA0gttCkw1JE=" crossorigin="anonymous" />
-  <link rel="stylesheet" href="./css/styles.css?__inline=true">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput.min.js" integrity="sha256-Gf8PGNhkyd/4AuPWG7theaqc8hAvHzocloCkDN9pXFw=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js" integrity="sha256-271j3cFogB3oRK1PLEHwasgC+sTkKr0f1I37LU9Qkyk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs.vast.vpaid.min.css" integrity="sha256-Jlz9Tnz24Z33Lph9SYNCOMigjPCxoplDQo8qjAONgfs=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css" integrity="sha256-rTKxJIIHupH7lFo30458ner8uoSSRYciA0gttCkw1JE=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./css/styles.css?__inline=true">
 </head>
 
 <body>
-    <div class="container-frame">
-        <div id="loadingOverlay" class="hide">
-            <div class="loaderWrapper">
-                <img class="spinner" src="../assets/images/loader.gif">
+<div class="container-frame">
+    <div id="loadingOverlay" class="hide">
+        <div class="loaderWrapper">
+            <img class="spinner" src="../assets/images/loader.gif">
+        </div>
+    </div>
+    <!-- Video Element -->
+    <div id="video" class="hide">
+        <div id="videoOverlay"></div>
+        <video id="player" class="video-js vjs-default-skin" playsinline>
+        </video>
+    </div>
+    <div class="container">
+        <div id="preload">
+            <p class="loading">Cargando</p>
+        </div>
+        <!-- Eligible End Video Message -->
+        <div id="eligibleWrapper" class="hide">
+            <div id="message">
+                <div class="row">
+                    <i id="icon" class="fas fa-3x"></i>
+                </div>
+                <div id="rewardText" class="row">
+                    Estamos procesando tu recompensa...
+                </div>
             </div>
         </div>
-        <!-- Video Element -->
-        <div id="video" class="hide">
-            <div id="videoOverlay"></div>
-            <video id="player" class="video-js vjs-default-skin" playsinline>
-            </video>
+        <!-- Ineligible End Video Message -->
+        <div id="ineligibleMessage" class="hide">
+            <div class="row">
+                <i class="far fa-thumbs-up fa-3x"></i>
+            </div>
+            <div class="row">
+                Gracias por ver &eacute;ste video
+            </div>
         </div>
-      <div class="container">
-        <div id="preload">
-          <p class="loading">Cargando</p>
+        <!-- Unidentified User Phone Entry Element -->
+        <div id="phoneEntryWrapper" class="hide">
+            <div class="row" id="phoneCheck">
+                <h1>Participa para ganar megas</h1>
+                <p>Solo confirma tu n&uacute;mero de tel&eacute;fono
+                    <br>
+                </p>
+                <form class="phoneForm" onsubmit="checkPhoneNumber()">
+                    <p>
+                        <input class="telephone" type="tel" id="phone" name="phone" pattern="[0-9]{9,10}" required>
+                    </p>
+                    <p>
+                        <input class="button submit" type="submit" value="Confirmar ahora">
+                    </p>
+                </form>
+                <form action="#" method="get">
+                    <input type="hidden" name="play" value="true">
+                    <button type="submit" class="button secondary" onclick="showPlayer()">Continuar sin ganar megas</button>
+                </form>
+            </div>
+            <!-- Elegible user UI -->
+            <div class="row hide" id="eligible">
+                <p><i class="far fa-thumbs-up fa-3x"></i></p>
+                <p>
+                <div id="rewardTextEligible">
+                    Tu n&uacute;mero participa para ganar megas.
+                </div>
+                </p>
+                <form action="#" method="get">
+                    <input type="hidden" name="play" value="true">
+                    <button type="submit" class="button submit" onclick="showPlayer()">Ver el video ahora</button>
+                </form>
+            </div>
+            <!-- Ineligible users UI -->
+            <div class="row hide" id="ineligible">
+                <i class="far fa-frown fa-3x"></i>
+                <p>Lo sentimos, t&uacute; n&uacute;mero no participa para ganar megas en &eacute;ste momento.</p>
+                <p>&iquest;Qui&eacute;res ver el video sin ganar megas?</p>
+                <form action="#" method="get">
+                    <input type="hidden" name="play" value="true">
+                    <button class="button secondary" onclick="showPlayer()">Ver el video sin ganar megas</button>
+                </form>
+            </div>
+            <div class="row hide" id="timer"></div>
         </div>
-          <!-- Eligible End Video Message -->
-          <div id="eligibleWrapper" class="hide">
-              <div id="message">
-                  <div class="row">
-                      <i id="icon" class="fas fa-3x"></i>
-                  </div>
-                  <div id="rewardText" class="row">
-                      Estamos procesando tu recompensa...
-                  </div>
-              </div>
-          </div>
-
-          <!-- Ineligible End Video Message -->
-          <div id="ineligibleMessage" class="hide">
-              <div class="row">
-                  <i class="far fa-thumbs-up fa-3x"></i>
-              </div>
-              <div class="row">
-                  Gracias por ver &eacute;ste video
-              </div>
-          </div>
-
-          <!-- Unidentified User Phone Entry Element -->
-          <div id="phoneEntryWrapper" class="hide">
-              <div class="row" id="phoneCheck">
-                  <h1>Participa para ganar megas</h1>
-                  <p>Solo confirma tu n&uacute;mero de tel&eacute;fono<br></p>
-                  <form class="phoneForm" onsubmit="checkPhoneNumber()">
-                      <p><input class="telephone" type="tel" id="phone" name="phone" pattern="[0-9]{9,10}" required></p>
-                      <p><input class="button submit" type="submit" value="Confirmar ahora"></p>
-                  </form>
-                  <form action="#" method="get">
-                      <input type="hidden" name="play" value="true">
-                      <button type="submit" class="button secondary" onclick="showPlayer()">Continuar sin ganar megas</button>
-                  </form>
-              </div>
-
-              <!-- Elegible user UI -->
-              <div class="row hide" id="eligible">
-                  <p><i class="far fa-thumbs-up fa-3x"></i></p>
-                  <p>
-                  <div id="rewardTextEligible">
-                      Tu n&uacute;mero participa para ganar megas.
-                  </div>
-                  </p>
-                  <form action="#" method="get">
-                      <input type="hidden" name="play" value="true">
-                      <button type="submit" class="button submit" onclick="showPlayer()">Ver el video ahora</button>
-                  </form>
-              </div>
-
-              <!-- Ineligible users UI -->
-              <div class="row hide" id="ineligible">
-                  <i class="far fa-frown fa-3x"></i>
-                  <p>Lo sentimos, t&uacute; n&uacute;mero no participa para ganar megas en &eacute;ste momento.</p>
-                  <p>&iquest;Qui&eacute;res ver el video sin ganar megas?</p>
-                  <form action="#" method="get">
-                      <input type="hidden" name="play" value="true">
-                      <button class="button secondary" onclick="showPlayer()">Ver el video sin ganar megas</button>
-                  </form>
-              </div>
-              <div class="row hide" id="timer"></div>
-          </div>
-
-
-
-         <!-- Error message Element -->
-          <div id="errorWrapper" class="hide">
-              <div class="row">
-                  <i class="far fa-frown-open fa-3x"></i>
-              </div>
-              <div class="row">
-                  <div class="row">Lo sentimos, ocurri&oacute; un error durante la reproducci&oacute;n del video.</div>
-              </div>
-          </div>
-      </div>
+        <!-- Error message Element -->
+        <div id="errorWrapper" class="hide">
+            <div class="row">
+                <i class="far fa-frown-open fa-3x"></i>
+            </div>
+            <div class="row">
+                <div class="row">Lo sentimos, ocurri&oacute; un error durante la reproducci&oacute;n del video.</div>
+            </div>
+        </div>
     </div>
-  <!-- To use dev env use ?be=mp-dev.aquto.internal -->
-  <script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js"></script>
-  <script type="text/javascript" src="./js/custom.min.js?__inline=true"></script>
+</div>
+<!-- To use dev env use ?be=mp-dev.aquto.internal -->
+<script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js"></script>
+<script type="text/javascript" src="./js/custom.min.js?__inline=true"></script>
 </body>
+
 </html>
