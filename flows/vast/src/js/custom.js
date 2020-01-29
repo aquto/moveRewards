@@ -1,5 +1,4 @@
 (function(win, doc) {
-
     // DOM Elements to use
     const loading = getElem('preload');
     const video = getElem('video');
@@ -199,6 +198,7 @@
             if(event.cancelBubble !== null) {
                 event.cancelBubble = true;
             }
+            hideElem(video);
             checkPhoneNumber();
         });
     }
@@ -230,21 +230,19 @@
                     if (response.eligible) {
                         debug('complete success');
                         icon.classList.add('fa-check-circle');
-                        body.classList.toggle('success');
+                        toggleBodyBgColor('success');
                         text.innerHTML = response.rewardText;
                     } else {
                         debug('complete failure');
-
                         ineligibleMsgElement.add
                         icon.classList.toggle('fa-times-circle');
-                        body.classList.toggle('fail');
+                        toggleBodyBgColor('fail');
                         text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en éste momento';
                     }
                 } else {
                     debug('complete invalid response');
-
                     icon.classList.toggle('fa-times-circle');
-                    body.classList.toggle('fail');
+                    toggleBodyBgColor('fail');
                     text.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
                 }
             }
@@ -321,6 +319,17 @@
         }
     }
 
+    function toggleBodyBgColor(className){
+        if(className === 'success'){
+            body.classList.remove('fail');
+            body.classList.add(className);
+        }
+        if(className === 'fail'){
+            body.classList.remove('success');
+            body.classList.add(className);
+        }
+    }
+
     win.onload = function(){
         hideElem(loading);
         addEventOverlay();
@@ -332,3 +341,4 @@
     this.countDown = countDown;
 
 })(window, document);
+
