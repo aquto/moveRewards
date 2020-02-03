@@ -15,6 +15,18 @@
     const rewardTextEligible = getElem('rewardTextEligible');
     const phoneCheck = getElem('phoneCheck');
     const input = doc.querySelector("#phone");
+
+    const thanksMsg = getElem('thanksMsg');
+    const phoneEntryTitle = getElem('phoneEntryTitle');
+    const phoneEntrySubTitle = getElem('phoneEntrySubTitle');
+    const phoneEntrySubmitBtn = getElem('phoneEntrySubmitBtn');
+    const continueBtn = getElem('continueBtn');
+    const eligibleBtn = getElem('eligibleBtn');
+    const ineligibleTitle = getElem('ineligibleTitle');
+    const ineligibleSubTitle = getElem('ineligibleSubTitle');
+    const ineligibleBtn = getElem('ineligibleBtn');
+    const errorMsg = getElem('errorMsg');
+
     let videoOverlay,
         loadingOverlay;
 
@@ -23,9 +35,99 @@
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
 
+    const phoneNumberValidation = {
+        us: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '1'
+        },
+        pa: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '507'
+        },
+        sv: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '503'
+        },
+        ni: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '505'
+        },
+        cr: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '506'
+        },
+        mx: {
+            minLen: 12,
+            maxLen: 12,
+            countryCode: '52'
+        },
+        cl: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '56'
+        },
+        pe: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '51'
+        },
+        br: {
+            minLen: 13,
+            maxLen: 13,
+            countryCode: '55'
+        },
+        co: {
+            minLen: 12,
+            maxLen: 12,
+            countryCode: '57'
+        },
+        gt: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '502'
+        },
+        ar: {
+            minLen: 10,
+            maxLen: 14,
+            countryCode: '549'
+        }
+    };
+    const countryDialingCodes = {
+        // Mexico
+        '52': 'mx',
+        // Chile
+        '56': 'cl',
+        // Ecuador
+        '593': 'ec',
+        // Argentina
+        '549': 'ar',
+        // Colombia
+        '57': 'co',
+        // United States
+        '1': 'us',
+        // Peru
+        '51': 'pe',
+        // Brazil
+        '55': 'br'
+    };
+
+    const defaultCountry = ['mx', 'cl', 'ec', 'ar', 'co', 'us', 'pe', 'br'];
+    const defaultLanguage = ['es'];
+    const countries = (getUrlParameter('co') && getUrlParameter('co').split(',')) || defaultCountry;
+    const languages = (getUrlParameter('l') && getUrlParameter('l').split(',')) || defaultLanguage;
+    const hasDefaultCountry = countries.includes('mx');
+    const hasValidCountry = countries.some(c => !!phoneNumberValidation[c]);
+
+
     let timeoutRef;
     let videoError = false;
     let isEligible = false;
+    let language;
 
     // Eligible Player Options
     const playerOptions = {
@@ -103,13 +205,32 @@
     const inputTelOptions = {
         allowDropdown: true,
         formatOnDisplay: true,
-        initialCountry: "mx",
+        initialCountry: (hasDefaultCountry && "mx") || "",
         nationalMode: false,
-        onlyCountries: ['mx', 'pe'],
+        onlyCountries: (hasValidCountry && countries) || ['mx'],
         separateDialCode: true
     };
+
     const iti = win.intlTelInput(input, inputTelOptions);
     let count = 5;
+
+    const numberIsValid = function(){
+        const phoneNumber = iti.getNumber().replace('+', '');
+        const countryCode = findCountry();
+        const isValid = countryCode && phoneNumber.length >= phoneNumberValidation[countryCode].minLen && phoneNumber.length <= phoneNumberValidation[countryCode].maxLen
+        phoneEntrySubmitBtn.disabled = !isValid
+    };
+
+   function findCountry(){
+       const phoneNumber = iti.getNumber().replace('+', '');
+       const entries = Object.entries(countryDialingCodes);
+
+       for (const [dialingCode, cc] of entries) {
+           if (phoneNumber.substring(0, dialingCode.length) === dialingCode) {
+               return cc;
+           }
+       }
+   }
 
     // Aquto checkAppEligibility method call
     const checkPhoneNumber = function(){
@@ -330,10 +451,66 @@
         }
     }
 
+    function setLanguage(){
+        const navigatorLang = (navigator.languages && navigator.languages.length) ? navigator.languages[0]
+            : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en';
+        const lang = navigatorLang.substring(0,2);
+
+        if (languages.find(item => item === lang)){
+            language = lang;
+        } else {
+            language = languages[0];
+        }
+    }
+
+    function setLanguageStrings(){
+        loading.innerHTML = getText('loading');
+        phoneEntryTitle.innerHTML = getText('phoneEntryTitle');
+        thanksMsg.innerHTML = getText('thanksMsg');
+        text.innerHTML = getText('processingTxt');
+        phoneEntrySubTitle.innerHTML = getText('phoneEntrySubTitle');
+        phoneEntrySubmitBtn.innerHTML = getText('phoneEntrySubmitBtn');
+        rewardTextEligible.innerHTML = getText('rewardTextEligible');
+        continueBtn.innerHTML = getText('continueBtn');
+        eligibleBtn.innerHTML = getText('eligibleBtn');
+        ineligibleTitle.innerHTML = getText('ineligibleTitle');
+        ineligibleSubTitle.innerHTML = getText('ineligibleSubTitle');
+        ineligibleBtn.innerHTML = getText('continueBtn');
+        errorMsg.innerHTML = getText('errorMsg');
+    }
+
+    function getText(text){
+        const strings = !!translations[language] || translations[defaultLanguage];
+        return strings[text]
+    }
+
+    function addPhoneInputEventListener(){
+       input.maxLength = 18;
+       input.onkeydown = function(){
+           numberIsValid();
+       };
+       input.onkeyup = function(){
+           numberIsValid();
+       };
+       input.addEventListener("countrychange", function() {
+           numberIsValid();
+           input.value = '';
+       });
+       input.onkeypress = function(e){
+           let ASCIICode = (e.which) ? e.which : e.keyCode
+           if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+               return false;
+           return true;
+       };
+    }
+
     win.onload = function(){
         hideElem(loading);
         addEventOverlay();
         showPlayer(0);
+        setLanguage();
+        setLanguageStrings();
+        addPhoneInputEventListener();
     }
 
     this.checkPhoneNumber = checkPhoneNumber;
