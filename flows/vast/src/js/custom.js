@@ -15,6 +15,9 @@
     const rewardTextEligible = getElem('rewardTextEligible');
     const phoneCheck = getElem('phoneCheck');
     const input = doc.querySelector("#phone");
+    const videoTimer = getElem('videoTimer');
+    const currentTimeTxt = getElem('currentTime');
+    const durationTxt = getElem('duration');
     let videoOverlay,
         loadingOverlay;
 
@@ -23,13 +26,18 @@
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
 
+    const percentageThresholds = [0, 25, 50, 75, 95];
+
     let timeoutRef;
     let videoError = false;
     let isEligible = false;
+    let vastVideoComplete = false;
+    let prevPercentage,
+        responseCopy;
 
     // Eligible Player Options
     const playerOptions = {
-        controls: true,
+        controls: false,
         autoplay: false,
         preload: true,
         nativeControlsForTouch: false,
@@ -56,18 +64,43 @@
     player.on('play', function () {
         debug('play');
         videoError && hideElem(video);
+        if(!vastVideoComplete) {
+            currentTimeTxt.innerHTML = timerFormatter(Math.floor(this.currentTime()));
+        }
     })
+    function setTimerLabels(currentTime, duration){
+        currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
+        durationTxt.innerHTML = timerFormatter(Math.floor(duration));
+    }
+
+    function getPercentage(currentPercentage){
+        return percentageThresholds.reduce(function(prev, curr) {
+            return (Math.abs(curr - currentPercentage) < Math.abs(prev - currentPercentage) ? curr : prev);
+        });
+    }
 
     player.on('timeupdate', function (e) {
         videoError && hideElem(video);
-        const current = (this.currentTime() / this.duration()) * 100;
+        const current = Math.floor(this.currentTime() / this.duration() * 100);
         debug('update', current);
+        const isDuplicated = prevPercentage === getPercentage(current);
+        const percentage = getPercentage(current);
+        prevPercentage = percentage;
+
+        if(!vastVideoComplete){
+            setTimerLabels(this.currentTime(), this.duration());
+            if(percentage && !isDuplicated && isEligible){
+                trackVideoView(responseCopy.clickId, percentage);
+            }
+        }
+        if (current === 100){
+            vastVideoComplete = true;
+        }
     })
 
     if (debugEnabled) {
         // player.on('ready', function() {
         // })
-
         player.on("click", function (event) {
             debug("click", event);
         });
@@ -124,6 +157,8 @@
                 hideElem(loadingOverlay);
                 if (response) {
                     hideElem(videoOverlay);
+                    showElem(videoTimer);
+                    responseCopy = Object.assign({}, response);
                     if (response.identified) {
                         if (response.eligible) {
                             isEligible = true;
@@ -328,6 +363,26 @@
             body.classList.remove('success');
             body.classList.add(className);
         }
+    }
+
+    function timerFormatter(data){
+        return Math.floor(data / 60).toString().padStart(2, '0') + ':' + (data % 60).toString().padStart(2, '0')
+    }
+
+    function trackVideoView(clickId, percentageViewed){
+        const request = new XMLHttpRequest();
+        const params = '?clickId=' + clickId + '&percentageViewed=' + percentageViewed;
+        const url='http://app.aquto.com/api/campaign/event/videoview' + params;
+        request.open("GET", url);
+        request.onload = function(){
+            return {
+                response: {
+                    status: 'success'
+                }
+            }
+        }
+        request.onerror = function(){ console.log(request.responseText); }
+        request.send();
     }
 
     win.onload = function(){
