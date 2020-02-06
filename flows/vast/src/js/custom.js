@@ -32,8 +32,7 @@
     let videoError = false;
     let isEligible = false;
     let vastVideoComplete = false;
-    let prevPercentage,
-        responseCopy;
+    let responseCopy;
 
     // Eligible Player Options
     const playerOptions = {
@@ -73,28 +72,24 @@
         durationTxt.innerHTML = timerFormatter(Math.floor(duration));
     }
 
-    function getPercentage(currentPercentage){
-        return percentageThresholds.reduce(function(prev, curr) {
-            return (Math.abs(curr - currentPercentage) < Math.abs(prev - currentPercentage) ? curr : prev);
-        });
-    }
-
     player.on('timeupdate', function (e) {
         videoError && hideElem(video);
         const current = Math.floor(this.currentTime() / this.duration() * 100);
         debug('update', current);
-        const isDuplicated = prevPercentage === getPercentage(current);
-        const percentage = getPercentage(current);
-        prevPercentage = percentage;
+        setTimerLabels(this.currentTime(), this.duration());
+        if (responseCopy.clickId) {
+            const percentage = (this.currentTime() / this.duration()) * 100;
+            const pctThresholds = percentageThresholds;
 
-        if(!vastVideoComplete){
-            setTimerLabels(this.currentTime(), this.duration());
-            if(percentage && !isDuplicated && isEligible){
-                trackVideoView(responseCopy.clickId, percentage);
-            }
-        }
-        if (current === 100){
-            vastVideoComplete = true;
+            let nextPct = null
+            do {
+                nextPct = pctThresholds.length > 0 ? head(pctThresholds) : 101;
+                if (percentage >= nextPct) {
+                    // Remove threshold and trigger
+                    pctThresholds.shift();
+                    trackVideoView(responseCopy.clickId, nextPct);
+                }
+            } while (percentage >= nextPct)
         }
     })
 
@@ -383,6 +378,10 @@
         }
         request.onerror = function(){ console.log(request.responseText); }
         request.send();
+    }
+
+    function head(array) {
+        return (array && array.length) ? array[0] : undefined;
     }
 
     win.onload = function(){
