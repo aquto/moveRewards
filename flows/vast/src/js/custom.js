@@ -28,6 +28,11 @@
 
     const percentageThresholds = [0, 25, 50, 75, 95];
 
+    /** Check if Aquto backend hostname has been passed in */
+    const scriptParams = parseScriptQuery(document.getElementById('aquto-api'));
+    const be = scriptParams.be || 'app.aquto.com';
+    const ow = scriptParams.ow || 'ow.aquto.com';
+
     let timeoutRef;
     let videoError = false;
     let isEligible = false;
@@ -66,7 +71,7 @@
         if(!vastVideoComplete) {
             currentTimeTxt.innerHTML = timerFormatter(Math.floor(this.currentTime()));
         }
-    })
+    });
     function setTimerLabels(currentTime, duration){
         currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
         durationTxt.innerHTML = timerFormatter(Math.floor(duration));
@@ -74,24 +79,26 @@
 
     player.on('timeupdate', function (e) {
         videoError && hideElem(video);
-        const current = Math.floor(this.currentTime() / this.duration() * 100);
-        debug('update', current);
+        const percentage = Math.floor(this.currentTime() / this.duration() * 100);
+        debug('update', percentage);
         setTimerLabels(this.currentTime(), this.duration());
         if (responseCopy.clickId) {
-            const percentage = (this.currentTime() / this.duration()) * 100;
             const pctThresholds = percentageThresholds;
-
-            let nextPct = null
+            let nextPct = null;
             do {
-                nextPct = pctThresholds.length > 0 ? head(pctThresholds) : 101;
+                if(pctThresholds.length > 0){
+                    nextPct = pctThresholds[0];
+                }else{
+                    nextPct = 101;
+                }
                 if (percentage >= nextPct) {
                     // Remove threshold and trigger
                     pctThresholds.shift();
                     trackVideoView(responseCopy.clickId, nextPct);
                 }
-            } while (percentage >= nextPct)
+            } while (percentage >= nextPct);
         }
-    })
+    });
 
     if (debugEnabled) {
         // player.on('ready', function() {
@@ -367,7 +374,7 @@
     function trackVideoView(clickId, percentageViewed){
         const request = new XMLHttpRequest();
         const params = '?clickId=' + clickId + '&percentageViewed=' + percentageViewed;
-        const url='http://app.aquto.com/api/campaign/event/videoview' + params;
+        const url='https://' + be + '/api/campaign/event/videoview' + params;
         request.open("GET", url);
         request.onload = function(){
             return {
@@ -376,12 +383,8 @@
                 }
             }
         }
-        request.onerror = function(){ console.log(request.responseText); }
+        request.onerror = function(){ debug(request.responseText); }
         request.send();
-    }
-
-    function head(array) {
-        return (array && array.length) ? array[0] : undefined;
     }
 
     win.onload = function(){
