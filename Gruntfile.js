@@ -28,7 +28,7 @@ module.exports = function(grunt) {
       },
       compileFlows: {
         entry: {
-          aquto_flows: "./src/aquto.flows.js"
+          aquto_flows: "./flows/phone/src/aquto.flows.js"
         },
         output: {
           path: __dirname,
@@ -41,8 +41,7 @@ module.exports = function(grunt) {
       watch: {
         entry: {
           aquto: "./src/aquto.js",
-          aquto_celtra: "./src/aquto.celtra.js",
-          aquto_flows: "./src/aquto.flows.js"
+          aquto_celtra: "./src/aquto.celtra.js"
         },
         output: {
           path: __dirname,
@@ -56,7 +55,7 @@ module.exports = function(grunt) {
       },
       watchFlows: {
         entry: {
-          aquto_flows: "./src/aquto.flows.js"
+          aquto_flows: "./flows/phone/src/aquto.flows.js",
         },
         output: {
           path: __dirname,
@@ -77,7 +76,7 @@ module.exports = function(grunt) {
         files: {
           'aquto.min.js': ['aquto.js'],
           'aquto_celtra.min.js': ['aquto_celtra.js'],
-          'aquto_flows.min.js': ['aquto_flows.js'],
+          'flows/phone/tag/aquto_flows.min.js': ['aquto_flows.js'],
           'flows/vast/src/js/custom.min.js': ['flows/vast/src/js/custom.js']
         }
       }

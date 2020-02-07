@@ -2,78 +2,92 @@
 let moveRewards = {}
 
 function checkAppEligibilityPhoneEntry(options) {
-    const phone = iti && iti.getNumber().replace('+', '');
+    const phoneNumber = options.phoneNumber
+    let iframeEl = injectIframe(options.targetId);
+    let iframeElements;
     createCopyOptions(options);
-    appendIframe(options.targetId);
-
     aquto.checkAppEligibility({
         campaignId: options.campaignId,
-        phoneNumber: phone || '5255469530272',
+        phoneNumber: phoneNumber,
         callback: function(response) {
             if (response){
                 if (!response.identified){
                     response.identified = !!(response.eligible && response.operatorCode !== 'unknown');
                 }
+                iframeElements = getIframeElements(iframeEl);
                 createCopyResponse(response);
                 if (response.identified) {
                     if (response.eligible) {
                         isEligible = true;
-                        if(phone){
+                        if(phoneNumber){
                             debug('phone entered eligible');
                             count = 5;
-                            loading.classList.add('hide');
-                            phoneEntry.classList.remove('hide');
-                            phoneCheck.classList.add('hide');
-                            rewardTextEligible.innerHTML = response.rewardText;
-                            eligibleUI.classList.remove('hide');
+                            hideElement(iframeElements.loading);
+                            hideElement(iframeElements.phoneCheck);
+                            showElement(iframeElements.phoneEntry);
+                            showElement(iframeElements.eligibleUI);
+                            iframeElements.rewardTextEligible.innerHTML = response.rewardText;
                         } else{
                             debug('identified & eligible');
-                            loading.classList.remove('hide');
+                            showElement(iframeElements.loading);
                             redirectToTarget();
                         }
                     } else {
-                        iframe.classList.remove("hide");
+                        showElement(iframeEl);
                         isEligible = false;
-                        if (phone) {
+                        if (phoneNumber) {
+                            count = 5;
                             debug('phone entered ineligible');
-                            // count = 10;
-                            // ineligibleUI.classList.remove('hide');
-                            // phoneCheck.classList.add('hide');
+                            hideElement(iframeElements.loading);
+                            hideElement(iframeElements.phoneCheck);
+                            showElement(iframeElements.ineligibleUI);
+                            showElement(iframeElements.phoneEntry);
+                            showElement(iframeElements.timer);
                         } else {
                             debug('identified + ineligible');
-                            loading.classList.add('hide');
-                            phoneEntry.classList.remove('hide');
-                            phoneCheck.classList.add('hide');
-                            ineligibleUI.classList.remove('hide');
+                            hideElement(iframeElements.loading);
+                            showElement(iframeElements.phoneEntry);
+                            hideElement(iframeElements.phoneCheck);
+                            showElement(iframeElements.ineligibleUI);
                         }
                     }
-                    if (phone) {
-                        timer.classList.remove('hide');
-                        setTimeout(countDown, 1000);
+                    if (phoneNumber) {
+                        showElement(iframeElements.timer);
+                        setTimeout(countDown, 1000, iframeEl);
                     }
                 } else {
-                    iframe.classList.remove("hide");
+                    showElement(iframeEl);
                     isEligible = false;
-                    if (phone){
+                    if (phoneNumber){
                         debug('phone entered unidentified');
-                        loading.classList.add('hide');
-                        phoneEntry.classList.remove('hide');
-                        phoneCheck.classList.add('hide');
-                        ineligibleUI.classList.remove('hide');
+                        hideElement(iframeElements.loading);
+                        showElement(iframeElements.phoneEntry);
+                        hideElement(iframeElements.phoneCheck);
+                        showElement(iframeElements.ineligibleUI);
                     } else {
                         debug('unidentified');
-                        loading.classList.add('hide');
-                        phoneEntry.classList.remove('hide');
+                        hideElement(iframeElements.loading);
+                        showElement(iframeElements.phoneEntry);
                     }
                 }
             } else {
                 debug('error.checkAppEligibility');
-                iframe.classList.remove("hide");
-                loading.classList.add('hide');
-                errorElement.classList.remove('hide');
+                showElement(iframeEl);
+                hideElement(iframeElements.loading);
+                showElement(iframeElements.errorElement);
             }
         }
     });
+}
+
+
+function injectIframe(targetId){
+    let iframeEl = document.getElementById('iframe-01');
+    if (!iframeEl){
+        return addIframeListener(appendIframe(setIframeSize(createIframe(), targetId)));
+    }else{
+        return iframeEl
+    }
 }
 
 /*--------------------------------------------------------------------------*/
@@ -84,36 +98,10 @@ module.exports = moveRewards;
 
 /*------------------------ GLOBAL VARIABLES ------------------------------------*/
 
-let loading,
-    eligibleElement,
-    errorElement,
-    ineligibleMsgElement,
-    icon,
-    text,
-    phoneEntry,
-    eligibleUI,
-    ineligibleUI,
-    timer,
-    rewardTextEligible,
-    phoneCheck,
-    input,
-    iti,
+let iti,
     copyOptions,
     copyResponse,
-    isEligible,
-    iframe,
-    targetEl,
-    iframeTag,
-    peTitle,
-    peSubTitle,
-    peSubmitBtn,
-    redirectBtn,
-    ineligibleTitle,
-    ineligibleSubTitle,
-    continueBtn1,
-    continueBtn2,
-    errorMsg,
-    lang;
+    isEligible;
 
 let count = 5;
 const debugEnabled = getUrlParameter('d') === '1';
@@ -127,11 +115,13 @@ const translations = {
         peSubTitle: 'Please verify your mobile number to continue.',
         peSubmitBtn: 'Confirm',
         rewardTextEligible: 'Your phone number is eligible for data rewards.',
-        redirectBtn: 'Redirect',
+        redirectBtn: 'Continue',
         ineligibleTitle: 'Sorry, your phone number is not eligible for data rewards at this time.',
         ineligibleSubTitle: 'Do you want to continue without reward?',
         continueBtn: 'Continue without reward',
-        errorMsg: 'Sorry, we were unable to process your request at this time.'
+        errorMsg: 'Sorry, we were unable to process your request at this time.',
+        loadingTxtOne: 'Redirecting in ',
+        loadingTxtTwo: ' seconds.'
     },
     es: {
         loading: 'Cargando',
@@ -139,11 +129,13 @@ const translations = {
         peSubTitle: 'Solo confirma tu número de teléfono',
         peSubmitBtn: 'Confirmar ahora',
         rewardTextEligible: 'Tu número participa para ganar megas.',
-        redirectBtn: 'Redireccionar ahora',
+        redirectBtn: 'Continuar',
         ineligibleTitle: 'Lo sentimos, tú número no participa para ganar megas en este momento.',
         ineligibleSubTitle: '¿Deseas continuar sin ganar megas?',
         continueBtn: 'Continuar sin ganar megas',
-        errorMsg: 'Lo sentimos. No hemos podido procesar tu solicitud en este momento.'
+        errorMsg: 'Lo sentimos. No hemos podido procesar tu solicitud en este momento.',
+        loadingTxtOne: 'Redireccionar en ',
+        loadingTxtTwo: ' segundos.'
     },
     pt: {
         loading: 'Carregando',
@@ -151,67 +143,101 @@ const translations = {
         peSubTitle: 'Por favor, confirme o número de seu telefone para continuar.',
         peSubmitBtn: 'Confirmar',
         rewardTextEligible: 'Seu número de telefone é elegível a recompensa em pacotes de dados.',
-        redirectBtn: 'Redirecionar',
+        redirectBtn: 'Continuar',
         ineligibleTitle: 'Desculpe, seu número de telefone nao é elegível a recompensa em pacotes de dados desta vez.',
         ineligibleSubTitle: 'Gostaria de continuar sem a recompensa?',
         continueBtn: 'Continuar sem a recompensa',
-        errorMsg: 'Desculpe. Não podemos processar sua solicitação neste momento.'
+        errorMsg: 'Desculpe. Não podemos processar sua solicitação neste momento.',
+        loadingTxtOne: 'Redirecionando em ',
+        loadingTxtTwo: ' segundos.'
     }
 }
 
 /*------------------------ CUSTOM METHODS ------------------------------------*/
 
-function appendIframe(targetId){
-    targetEl = document.querySelector("#" + targetId);
-
-    // Calculating actual rendered values for Target Tag's Width and Height in case they are NOT set by CSS.
-    // If these values are lower than iframes's minWidth or minHeight, they will be set by default.
-    const iframeWidth = targetEl.scrollWidth < parseInt(iframeTag.minWidth.substring(0,3)) ? parseInt(iframeTag.minWidth.substring(0,3)) : targetEl.scrollWidth;
-    const iframeHeight = targetEl.scrollHeight < parseInt(iframeTag.minHeight.substring(0,3)) ? parseInt(iframeTag.minHeight.substring(0,3)) : targetEl.scrollHeight;
-
-    iframeTag.style.width = iframeWidth + "px";
-    iframeTag.style.height = iframeHeight + "px";
-    targetEl && targetEl.appendChild(iframeTag);
-    document.querySelector('#iframe-01').addEventListener("load", ev => {
-        iframe = document.querySelector('#iframe-01');
-        initializeElementsVar();
-        initializePhoneInput();
-        setLangText();
-    });
+function showElement(el){
+    el.classList.remove('hide');
 }
 
-function setLangText(){
-    const navigatorLang = (navigator.languages && navigator.languages.length) ? navigator.languages[0]
-        : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en';
-    lang = navigatorLang.substring(0, 2);
-    const languages = copyOptions.languages || defaultLanguages;
+function hideElement(el){
+    el.classList.add('hide');
+}
 
-    if(languages){
-        if (languages.find(item => item === lang)){
-            setInnerHtml(lang);
-        } else {
-            setInnerHtml(languages[0]);
-            lang = languages[0];
-        }
-    } else {
-        setInnerHtml('es');
-        lang = 'es';
+function createIframe(){
+    let iframeTag = document.createElement('iframe');
+    if (!document.getElementById("iframe-01")){
+        iframeTag.minWidth = '250px';
+        iframeTag.minHeight = '300px';
+        iframeTag.src = "../../iframeContent.html";
+        iframeTag.id = "iframe-01";
+        iframeTag.style.border = "none";
+        iframeTag.style.position = "absolute";
+        iframeTag.style.backgroundColor = "#fff";
+        iframeTag.classList.add("hide");
+    }
+    return iframeTag
+}
+
+function setIframeSize(iframeEl, targetId){
+    let targetElementId;
+    if (Object.prototype.toString.call(targetId) === "[object String]"){
+        targetElementId = targetId;
+    }
+    if (Object.prototype.toString.call(targetId) === "[object HTMLDivElement]"){
+        targetElementId = targetId.id;
     }
 
+    const targetEl = document.querySelector("#" + targetElementId);
+    // Calculating actual rendered values for Target Tag's Width and Height in case they are NOT set by CSS.
+    // If these values are lower than iframes's minWidth or minHeight, they will be set by default.
+    const iframeWidth = targetEl.scrollWidth < parseInt(iframeEl.minWidth.substring(0,3)) ? parseInt(iframeEl.minWidth.substring(0,3)) : targetEl.scrollWidth;
+    const iframeHeight = targetEl.scrollHeight < parseInt(iframeEl.minHeight.substring(0,3)) ? parseInt(iframeEl.minHeight.substring(0,3)) : targetEl.scrollHeight;
+    iframeEl.style.width = iframeWidth + "px";
+    iframeEl.style.height = iframeHeight + "px";
+
+    return {targetEl, iframeEl}
 }
 
-function setInnerHtml(lang){
-    loading.innerHTML = translations[lang].loading;
-    peTitle.innerHTML = translations[lang].peTitle;
-    peSubTitle.innerHTML = translations[lang].peSubTitle;
-    peSubmitBtn.value = translations[lang].peSubmitBtn;
-    rewardTextEligible.innerHTML = translations[lang].rewardTextEligible;
-    redirectBtn.innerHTML = translations[lang].redirectBtn;
-    ineligibleTitle.innerHTML = translations[lang].ineligibleTitle;
-    ineligibleSubTitle.innerHTML = translations[lang].ineligibleSubTitle;
-    continueBtn1.innerHTML = translations[lang].continueBtn;
-    continueBtn2.innerHTML = translations[lang].continueBtn;
-    errorMsg.innerHTML = translations[lang].errorMsg;
+function appendIframe(DOMElements){
+    DOMElements.targetEl && DOMElements.targetEl.appendChild(DOMElements.iframeEl);
+    return DOMElements.iframeEl
+}
+
+function addIframeListener(iframeEl){
+    iframeEl.addEventListener("load", ev => {
+        initializePhoneInput();
+        updateElementTexts(getTranslations(filterLanguage(getBrowserLang(), copyOptions.languages || defaultLanguages), translations), iframeEl);
+    });
+    return iframeEl;
+}
+
+function getBrowserLang(){
+    const navigatorLang = (navigator.languages && navigator.languages.length) ? navigator.languages[0]
+        : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en';
+    return navigatorLang.substring(0, 2)
+}
+
+function filterLanguage(browserLang, allowLang){
+    return allowLang.find(lang => lang === browserLang) || 'es'
+}
+
+function getTranslations(lang, translations){
+    return translations[lang]
+}
+
+function updateElementTexts(messages, iframeEl){
+    const iframeElements = getIframeElements(iframeEl);
+    iframeElements.loading.innerHTML = messages.loading;
+    iframeElements.peTitle.innerHTML = messages.peTitle;
+    iframeElements.peSubTitle.innerHTML = messages.peSubTitle;
+    iframeElements.peSubmitBtn.value = messages.peSubmitBtn;
+    iframeElements.rewardTextEligible.innerHTML = messages.rewardTextEligible;
+    iframeElements.redirectBtn.innerHTML = messages.redirectBtn;
+    iframeElements.ineligibleTitle.innerHTML = messages.ineligibleTitle;
+    iframeElements.ineligibleSubTitle.innerHTML = messages.ineligibleSubTitle;
+    iframeElements.continueBtn1.innerHTML = messages.continueBtn;
+    iframeElements.continueBtn2.innerHTML = messages.continueBtn;
+    iframeElements.errorMsg.innerHTML = messages.errorMsg;
 }
 
 function createScriptTags(){
@@ -228,10 +254,6 @@ function createScriptTags(){
             href: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css',
             integrity: 'sha256-rTKxJIIHupH7lFo30458ner8uoSSRYciA0gttCkw1JE=',
             crossorigin: 'anonymous'
-        },
-        {
-            name: 'link',
-            href: 'styles/main.css'
         },
         {
             name: 'script',
@@ -281,20 +303,6 @@ function createScriptTags(){
     }
 }
 
-function createIframe(){
-    iframeTag = document.createElement('iframe');
-    if (!document.getElementById("iframe-01")){
-        iframeTag.minWidth = '250px';
-        iframeTag.minHeight = '300px';
-        iframeTag.src = "iframeContent.html";
-        iframeTag.id = "iframe-01";
-        iframeTag.style.border = "none";
-        iframeTag.style.position = "absolute";
-        iframeTag.style.backgroundColor = "#fff";
-        iframeTag.classList.add("hide");
-    }
-}
-
 function getUrlParameter(sParam) {
     let sPageURL = window.location.search.substring(1),
         sURLVariables = sPageURL.split('&'),
@@ -320,33 +328,37 @@ function debug(message, options){
     }
 }
 
-function initializeElementsVar(){
-    loading = iframeGetElem('preload');
-    eligibleElement = iframeGetElem('eligibleWrapper');
-    errorElement = iframeGetElem('errorWrapper');
-    ineligibleMsgElement = iframeGetElem('ineligibleMessage');
-    icon = iframeGetElem('icon');
-    text = iframeGetElem('rewardText');
-    phoneEntry = iframeGetElem('phoneEntryWrapper');
-    eligibleUI = iframeGetElem('eligible');
-    ineligibleUI = iframeGetElem('ineligible');
-    timer = iframeGetElem('timer');
-    rewardTextEligible = iframeGetElem('rewardTextEligible');
-    phoneCheck = iframeGetElem('phoneCheck');
-    input = iframeGetElem('phone');
-    peTitle = iframeGetElem('peTitle');
-    peSubTitle = iframeGetElem('peSubTitle');
-    peSubmitBtn = iframeGetElem('peSubmitBtn');
-    redirectBtn = iframeGetElem('redirectBtn');
-    ineligibleTitle = iframeGetElem('ineligibleTitle');
-    ineligibleSubTitle = iframeGetElem('ineligibleSubTitle');
-    continueBtn1 = iframeGetElem('continueBtn1');
-    continueBtn2 = iframeGetElem('continueBtn2');
-    errorMsg = iframeGetElem('errorMsg');
+function getIframeElements(iframeEl){
+    const iframeElements = {
+        loading: iframeGetElem('preload', iframeEl),
+        eligibleElement: iframeGetElem('eligibleWrapper', iframeEl),
+        errorElement: iframeGetElem('errorWrapper', iframeEl),
+        ineligibleMsgElement: iframeGetElem('ineligibleMessage', iframeEl),
+        icon: iframeGetElem('icon', iframeEl),
+        text: iframeGetElem('rewardText', iframeEl),
+        phoneEntry: iframeGetElem('phoneEntryWrapper', iframeEl),
+        eligibleUI: iframeGetElem('eligible', iframeEl),
+        ineligibleUI: iframeGetElem('ineligible', iframeEl),
+        timer: iframeGetElem('timer', iframeEl),
+        rewardTextEligible: iframeGetElem('rewardTextEligible', iframeEl),
+        phoneCheck: iframeGetElem('phoneCheck', iframeEl),
+        input: iframeGetElem('phone', iframeEl),
+        peTitle: iframeGetElem('peTitle', iframeEl),
+        peSubTitle: iframeGetElem('peSubTitle', iframeEl),
+        peSubmitBtn: iframeGetElem('peSubmitBtn', iframeEl),
+        redirectBtn: iframeGetElem('redirectBtn', iframeEl),
+        ineligibleTitle: iframeGetElem('ineligibleTitle', iframeEl),
+        ineligibleSubTitle: iframeGetElem('ineligibleSubTitle', iframeEl),
+        continueBtn1:iframeGetElem('continueBtn1', iframeEl),
+        continueBtn2: iframeGetElem('continueBtn2', iframeEl),
+        errorMsg: iframeGetElem('errorMsg', iframeEl)
+    }
+    return iframeElements
 }
 
 function initializePhoneInput(){
-
+    const iframeEl = document.getElementById('iframe-01');
+    const inputEl = getIframeElements(iframeEl).input;
     const inputTelOptions = {
         allowDropdown: true,
         formatOnDisplay: true,
@@ -355,7 +367,7 @@ function initializePhoneInput(){
         onlyCountries: copyOptions.countries || defaultCountries,
         separateDialCode: true
     };
-    iti = input && window.intlTelInput(input, inputTelOptions);
+    iti = inputEl && window.intlTelInput(inputEl, inputTelOptions);
 }
 
 function createCopyOptions(options){
@@ -366,35 +378,25 @@ function createCopyResponse(response){
     copyResponse = Object.assign({}, response);
 }
 
-function iframeGetElem(id) {
-    const iframeWindow = iframe.contentWindow || iframe.contentDocument;
+function iframeGetElem(id, iframeEl) {
+    const iframeWindow = iframeEl.contentWindow || iframeEl.contentDocument;
     return iframeWindow.document.querySelector("#" + id);
 }
 
-function validatePhoneNumber(){
+const validatePhoneNumber = function(){
     copyOptions.phoneNumber = iti.getNumber().replace('+', '');
     checkAppEligibilityPhoneEntry(copyOptions);
 }
 
-function countDown(){
-    let timer = iframeGetElem("timer");
-    let loadingTxtOne, loadingTxtTwo;
-    if (lang === 'en'){
-        loadingTxtOne = "Redirecting in ";
-        loadingTxtTwo = " seconds."
-    }
-    if (lang === 'es'){
-        loadingTxtOne = "Redireccionar en ";
-        loadingTxtTwo = " segundos."
-    }
-    if (lang === 'pt'){
-        loadingTxtOne = "Redirecionando em ";
-        loadingTxtTwo = " segundos."
-    }
+function countDown(iframeEl){
+    let timer = iframeGetElem("timer", iframeEl);
+    const messages = getTranslations(filterLanguage(getBrowserLang(), copyOptions.languages || defaultLanguages), translations)
+    const loadingTxtOne = messages.loadingTxtOne;
+    const loadingTxtTwo = messages.loadingTxtTwo;
     if (count > 0) {
         count--;
         timer.innerHTML = loadingTxtOne + count + loadingTxtTwo;
-        setTimeout(countDown, 1000);
+        setTimeout(countDown, 1000, iframeEl);
     } else {
         redirectToTarget();
     }
@@ -479,44 +481,26 @@ function redirectToTarget(){
     !debugEnabled && copyOptions.onComplete(copyResponse);
 }
 
-window.onload = function(){
-
-    if (typeof jQuery === 'undefined'){
+(function () {
+    if (typeof jQuery === 'undefined') {
         let jqTag = document.createElement('script');
         jqTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js';
         jqTag.integrity = 'sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=';
         jqTag.setAttribute('crossorigin', 'anonymous');
         document.head.appendChild(jqTag);
     }
-
     createScriptTags();
-    createIframe();
-
-    // addEventListener support for IE8
-    function bindEvent(element, eventName, eventHandler) {
-        if (element.addEventListener){
-            element.addEventListener(eventName, eventHandler, false);
-        } else if (element.attachEvent) {
-            element.attachEvent('on' + eventName, eventHandler);
-        }
-    }
 
     // Listen to message from iframe
     bindEvent(window, 'message', function (e) {
         const eventName = e.data;
-
         if(eventName === 'submitPhoneEntry'){
             validatePhoneNumber();
         }
-
         if(eventName === 'redirectUrl'){
             redirectToTarget();
         }
     });
-
-}
-
-
-
+}());
 
 

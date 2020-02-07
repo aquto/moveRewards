@@ -10,8 +10,9 @@
   <div style="position:relative;" id="aquto_tag">
     <a href="#" style="position:absolute;" onclick="onClick();" ><img src="https://dummyimage.com/360/e0e0e0/ffffff.jpg&text=ad+Banner" /></a>
   </div>
-  <script id="aquto-api" src="../../aquto.min.js"></script>
-  <script src="../../aquto_flows.js"></script>
+  <script id="aquto-api" src="../../../aquto.min.js"></script>
+  <script src="../src/common.js"></script>
+  <script src="aquto_flows.min.js"></script>
   <script>
     function onClick() {
       aqutoFlows.checkAppEligibilityPhoneEntry({
@@ -22,7 +23,7 @@
         targetUrlAndroid: 'https://www.android.com/',
         countries: ['mx','ar','br','cl','co'],
         onComplete: function(response) {
-          window.parent.location.href = response.redirectUrl;
+          window.location.href = response.redirectUrl;
         }
       });
     }

@@ -8,26 +8,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs.vast.vpaid.min.css" integrity="sha256-Jlz9Tnz24Z33Lph9SYNCOMigjPCxoplDQo8qjAONgfs=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css" integrity="sha256-rTKxJIIHupH7lFo30458ner8uoSSRYciA0gttCkw1JE=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="./styles/iframeStyles.css?__inline=true">
+    <link rel="stylesheet" href="iframeStyles.css?__inline=true">
 </head>
 
 <body>
 <div class="container">
     <div class="row" id="preload">
-        <p class="loading">Cargando</p>
+        <p class="loading"></p>
     </div>
     <!-- Unidentified User Phone Entry Element -->
     <div id="phoneEntryWrapper" class="hide">
         <div class="row" id="phoneCheck">
-            <h1 id="peTitle">Participa para ganar megas</h1>
-            <p id="peSubTitle">Solo confirma tu n&uacute;mero de tel&eacute;fono<br></p>
+            <h1 id="peTitle"></h1>
+            <p id="peSubTitle"><br></p>
             <form id="phoneEntryForm" class="phoneForm">
                 <p><input class="telephone" type="tel" id="phone" name="phone" pattern="[0-9]{9,10}" required></p>
                 <p><input id="peSubmitBtn" class="button submit" type="submit" value="Confirmar ahora"></p>
             </form>
             <form action="#" method="get">
                 <input type="hidden" name="play" value="true">
-                <button id="continueBtn1" type="submit" class="button secondary">Continuar sin ganar megas</button>
+                <button id="continueBtn1" type="submit" class="button secondary"></button>
             </form>
         </div>
 
@@ -36,23 +36,22 @@
             <p><i class="far fa-thumbs-up fa-3x"></i></p>
             <p>
             <div id="rewardTextEligible">
-                Tu n&uacute;mero participa para ganar megas.
             </div>
             </p>
             <form action="#" method="get">
                 <input type="hidden" name="play" value="true">
-                <button id="redirectBtn" type="submit" class="button submit">Redireccionar ahora</button>
+                <button id="redirectBtn" type="submit" class="button submit"></button>
             </form>
         </div>
 
         <!-- Ineligible users UI -->
         <div class="row hide" id="ineligible">
             <i class="far fa-frown fa-3x"></i>
-            <p id="ineligibleTitle">Lo sentimos, t&uacute; n&uacute;mero no participa para ganar megas en &eacute;ste momento.</p>
-            <p id="ineligibleSubTitle">&iquest;Deseas continuar sin ganar megas?</p>
+            <p id="ineligibleTitle"></p>
+            <p id="ineligibleSubTitle"></p>
             <form action="#" method="get">
                 <input type="hidden" name="play" value="true">
-                <button id="continueBtn2" class="button secondary">Continuar sin ganar megas</button>
+                <button id="continueBtn2" class="button secondary"></button>
             </form>
         </div>
         <div class="row hide" id="timer"></div>
@@ -64,29 +63,22 @@
             <i class="far fa-frown-open fa-3x"></i>
         </div>
         <div class="row">
-            <div id="errorMsg" class="row">Lo sentimos, ocurri&oacute; un error durante la validación.</div>
+            <div id="errorMsg" class="row"></div>
         </div>
     </div>
 
 </div>
+<script src="./phone/src/common.js"></script>
 <script type="text/javascript">
-    // addEventListener support for IE8
-    function bindEvent(element, eventName, eventHandler) {
-        if (element.addEventListener) {
-            element.addEventListener(eventName, eventHandler, false);
-        } else if (element.attachEvent) {
-            element.attachEvent('on' + eventName, eventHandler);
-        }
-    }
-    // Send a message to the parent
-    var sendMessage = function (msg) {
-        window.parent.postMessage(msg, '*');
-    };
-
     var phoneEntryForm = document.getElementById('phoneEntryForm');
     var continueBtn1 = document.getElementById('continueBtn1');
     var continueBtn2 = document.getElementById('continueBtn2');
     var redirectBtn = document.getElementById('redirectBtn');
+
+    // Send a message to the parent
+    let sendMessage = function (msg) {
+        window.parent.postMessage(msg, '*');
+    };
 
     bindEvent(phoneEntryForm, 'submit', function (e) {
         sendMessage('submitPhoneEntry');
@@ -100,6 +92,7 @@
     bindEvent(redirectBtn, 'click', function (e) {
         sendMessage('redirectUrl');
     });
+
 </script>
 </body>
 </html>
