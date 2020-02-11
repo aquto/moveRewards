@@ -1,23 +1,41 @@
 (function(win, doc) {
     // DOM Elements to use
-    const loading = getElem('preload');
-    const video = getElem('video');
-    const eligibleElement = getElem('eligibleWrapper');
-    const errorElement = getElem('errorWrapper');
-    const ineligibleMsgElement = getElem('ineligibleMessage');
-    const body = doc.body;
-    const icon = getElem('icon');
-    const text = getElem('rewardText');
-    const phoneEntry = getElem('phoneEntryWrapper');
-    const eligibleUI = getElem('eligible');
-    const ineligibleUI = getElem('ineligible');
-    const timer = getElem('timer');
-    const rewardTextEligible = getElem('rewardTextEligible');
-    const phoneCheck = getElem('phoneCheck');
-    const input = doc.querySelector("#phone");
-    const videoTimer = getElem('videoTimer');
-    const currentTimeTxt = getElem('currentTime');
-    const durationTxt = getElem('duration');
+    var global = function(){
+        var DOMelements = {
+            loading: getDOMElement('preload'),
+            video: getDOMElement('video'),
+            eligibleElement: getDOMElement('eligibleWrapper'),
+            errorElement: getDOMElement('errorWrapper'),
+            ineligibleMsgElement: getDOMElement('ineligibleMessage'),
+            body: doc.body,
+            icon: getDOMElement('icon'),
+            text: getDOMElement('rewardText'),
+            phoneEntry: getDOMElement('phoneEntryWrapper'),
+            eligibleUI: getDOMElement('eligible'),
+            ineligibleUI: getDOMElement('ineligible'),
+            timer: getDOMElement('timer'),
+            rewardTextEligible: getDOMElement('rewardTextEligible'),
+            phoneCheck: getDOMElement('phoneCheck'),
+            input: doc.querySelector("#phone"),
+            videoTimer: getDOMElement('videoTimer'),
+            currentTimeTxt: getDOMElement('currentTime'),
+            durationTxt: getDOMElement('duration')
+        }
+
+        function getElement(el){
+            return DOMelements[el]
+        }
+
+        function getDOMElement(id){
+            return doc.getElementById(id);
+        }
+
+        return{
+            getElement: getElement,
+            getDOMElement: getDOMElement
+        }
+    }();
+
     let videoOverlay,
         loadingOverlay;
 
@@ -67,18 +85,19 @@
     // Player Events
     player.on('play', function () {
         debug('play');
-        videoError && hideElem(video);
+        videoError && hideElem(global.getElement('video'));
         if(!vastVideoComplete) {
-            currentTimeTxt.innerHTML = timerFormatter(Math.floor(this.currentTime()));
+            global.getElement('currentTimeTxt').innerHTML = timerFormatter(Math.floor(this.currentTime()));
         }
     });
+
     function setTimerLabels(currentTime, duration){
-        currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
-        durationTxt.innerHTML = timerFormatter(Math.floor(duration));
+        global.getElement('currentTimeTxt').innerHTML = timerFormatter(Math.floor(currentTime));
+        global.getElement('durationTxt').innerHTML = timerFormatter(Math.floor(duration));
     }
 
     player.on('timeupdate', function (e) {
-        videoError && hideElem(video);
+        videoError && hideElem(global.getElement('video'));
         const percentage = Math.floor(this.currentTime() / this.duration() * 100);
         debug('update', percentage);
         setTimerLabels(this.currentTime(), this.duration());
@@ -86,11 +105,7 @@
             const pctThresholds = percentageThresholds;
             let nextPct = null;
             do {
-                if(pctThresholds.length > 0){
-                    nextPct = pctThresholds[0];
-                }else{
-                    nextPct = 101;
-                }
+                nextPct = pctThresholds.length > 0 ? pctThresholds[0] : 101;
                 if (percentage >= nextPct) {
                     // Remove threshold and trigger
                     pctThresholds.shift();
@@ -113,25 +128,25 @@
    }
 
     player.on("vast.adError", function(event) {
-        hideElem(ineligibleMsgElement);
+        hideElem(global.getElement('ineligibleMsgElement'));
         debug("vast.adError", event.error);
-        hideElem(eligibleElement);
-        videoError && hideElem(video);
-        showElem(errorElement);
+        hideElem(global.getElement('eligibleElement'));
+        videoError && hideElem(global.getElement('video'));
+        showElem(global.getElement('errorElement'));
         videoError = true;
     });
 
     player.on("vast.contentEnd", function() {
         debug("vast.contentEnd");
-        hideElem(video);
+        hideElem(global.getElement('video'));
         if (!videoError && isEligible){ // If vast.adError Event then stop the process.
-            showElem(eligibleElement);
+            showElem(global.getElement('eligibleElement'));
             completeReward();
         }
         if(!isEligible && !videoError){
             debug('not eligible');
-            hideElem(video);
-            showElem(ineligibleMsgElement);
+            hideElem(global.getElement('video'));
+            showElem(global.getElement('ineligibleMsgElement'));
         }
     });
 
@@ -143,7 +158,7 @@
         onlyCountries: ['mx', 'pe'],
         separateDialCode: true
     };
-    const iti = win.intlTelInput(input, inputTelOptions);
+    const iti = win.intlTelInput(global.getElement('input'), inputTelOptions);
     let count = 5;
 
     // Aquto checkAppEligibility method call
@@ -159,7 +174,7 @@
                 hideElem(loadingOverlay);
                 if (response) {
                     hideElem(videoOverlay);
-                    showElem(videoTimer);
+                    showElem(global.getElement('videoTimer'))
                     responseCopy = Object.assign({}, response);
                     if (response.identified) {
                         if (response.eligible) {
@@ -167,13 +182,13 @@
                             if(phone){
                                 debug('phone entered eligible');
                                 count = 5;
-                                showElem(eligibleUI);
-                                hideElem(phoneCheck);
-                                rewardTextEligible.innerHTML = response.rewardText;
+                                showElem(global.getElement('eligibleUI'));
+                                hideElem(global.getElement('phoneCheck'));
+                                global.getElement('rewardTextEligible').innerHTML = response.rewardText;
                             } else{
                                 debug('identified & eligible');
-                                hideElem(loading);
-                                showElem(video);
+                                hideElem(global.getElement('loading'));
+                                showElem(global.getElement('video'));
                                 player.play();
                             }
                         } else {
@@ -181,22 +196,22 @@
                             if (phone) {
                                 debug('phone entered ineligible');
                                 count = 5;
-                                showElem(ineligibleUI);
-                                hideElem(phoneCheck);
+                                showElem(global.getElement('ineligibleUI'));
+                                hideElem(global.getElement('phoneCheck'));
                             } else {
                                 debug('identified + ineligible')
                                 count = 10;
-                                hideElem(loading);
-                                hideElem(video);
-                                showElem(phoneEntry);
-                                hideElem(phoneCheck);
-                                showElem(ineligibleUI);
-                                showElem(timer);
+                                hideElem(global.getElement('loading'));
+                                hideElem(global.getElement('video'));
+                                showElem(global.getElement('phoneEntry'));
+                                hideElem(global.getElement('phoneCheck'));
+                                showElem(global.getElement('ineligibleUI'));
+                                showElem(global.getElement('timer'));
                                 startCountdown();
                             }
                         }
                         if (phone) {
-                            timer.classList.remove('hide');
+                            global.getElement('timer').classList.remove('hide');
                             startCountdown();
                         }
                     } else {
@@ -204,23 +219,23 @@
                             debug('phone entered unidentified');
                             count = 10;
                             isEligible = false;
-                            showElem(ineligibleUI);
-                            hideElem(phoneCheck);
-                            showElem(timer);
+                            showElem(global.getElement('ineligibleUI'));
+                            hideElem(global.getElement('phoneCheck'));
+                            showElem(global.getElement('timer'));
                             startCountdown();
                         } else {
                             debug('unidentified');
                             isEligible = false;
-                            hideElem(loading);
-                            hideElem(video);
-                            showElem(phoneEntry);
+                            hideElem(global.getElement('loading'));
+                            hideElem(global.getElement('video'));
+                            showElem(global.getElement('phoneEntry'));
                         }
                     }
                 } else {
                     debug('error.checkAppEligibility');
-                    hideElem(loading);
-                    hideElem(video);
-                    showElem(errorElement);
+                    hideElem(global.getElement('loading'));
+                    hideElem(global.getElement('video'));
+                    showElem(global.getElement('errorElement'));
                 }
             }
         });
@@ -235,7 +250,7 @@
             if(event.cancelBubble !== null) {
                 event.cancelBubble = true;
             }
-            hideElem(video);
+            hideElem(global.getElement('video'));
             checkPhoneNumber();
         });
     }
@@ -260,27 +275,29 @@
             callback: function(response) {
                 debug('complete');
                 if (response) {
-                    hideElem(loading);
-                    showElem(eligibleElement);
-                    icon.classList.remove("fa-check-circle", "fa-times-circle");
+                    hideElem(global.getElement('loading'));
+                    showElem(global.getElement('eligibleElement'));
+                    global.getElement('icon').classList.remove("fa-check-circle", "fa-times-circle");
 
                     if (response.eligible) {
                         debug('complete success');
-                        icon.classList.add('fa-check-circle');
+                        global.getElement('icon').classList.add('fa-check-circle');
                         toggleBodyBgColor('success');
-                        text.innerHTML = response.rewardText;
+                        global.getElement('text').innerHTML = response.rewardText;
                     } else {
                         debug('complete failure');
-                        ineligibleMsgElement.add
-                        icon.classList.toggle('fa-times-circle');
+                        // ineligibleMsgElement.add
+                        global.getElement('ineligibleMsgElement').add; // review after test
+                        global.getElement('icon').classList.toggle('fa-times-circle');
                         toggleBodyBgColor('fail');
-                        text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en éste momento';
+                        global.getElement('text').innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en' +
+                            ' éste momento';
                     }
                 } else {
                     debug('complete invalid response');
-                    icon.classList.toggle('fa-times-circle');
+                    global.getElement('icon').classList.toggle('fa-times-circle');
                     toggleBodyBgColor('fail');
-                    text.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
+                    global.getElement('text').innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
                 }
             }
         });
@@ -289,9 +306,9 @@
     const showPlayer = function(ap){
         event && event.preventDefault();
         stopCountdown(); // Cancel timer if set
-        hideElem(phoneEntry);
-        hideElem(eligibleElement);
-        showElem(video);
+        hideElem(global.getElement('phoneEntry'));
+        hideElem(global.getElement('eligibleElement'));
+        showElem(global.getElement('video'));
         ap !== 0 && autoPlay();
     }
 
@@ -358,12 +375,12 @@
 
     function toggleBodyBgColor(className){
         if(className === 'success'){
-            body.classList.remove('fail');
-            body.classList.add(className);
+            global.getElement('body').classList.remove('fail');
+            global.getElement('body').classList.add(className);
         }
         if(className === 'fail'){
-            body.classList.remove('success');
-            body.classList.add(className);
+            global.getElement('body').classList.remove('success');
+            global.getElement('body').classList.add(className);
         }
     }
 
@@ -372,25 +389,43 @@
     }
 
     function trackVideoView(clickId, percentageViewed){
-        const request = new XMLHttpRequest();
         const params = '?clickId=' + clickId + '&percentageViewed=' + percentageViewed;
-        const url='https://' + be + '/api/campaign/event/videoview' + params;
-        request.open("GET", url);
-        request.onload = function(){
-            return {
-                response: {
-                    status: 'success'
-                }
-            }
-        }
-        request.onerror = function(){ debug(request.responseText); }
-        request.send();
+        const url='//' + be + '/api/campaign/event/videoview' + params;
+        debug('tracking', url);
+        new Image().src = url;
     }
 
-    win.onload = function(){
-        hideElem(loading);
+    function repeatString(string, times) {
+        let repeatedString = "";
+        while (times > 0) {
+            repeatedString += string;
+            times--;
+        }
+        return repeatedString;
+    }
+
+    window.onload = function(){
+        hideElem(global.getElement('loading'));
         addEventOverlay();
         showPlayer(0);
+
+        // Adding String.prototype.padStart compatibility for IE 11
+        if (!String.prototype.padStart) {
+            String.prototype.padStart = function padStart(targetLength,padString) {
+                targetLength = targetLength>>0; //truncate if number or convert non-number to 0;
+                padString = String((typeof padString !== 'undefined' ? padString : ' '));
+                if (this.length > targetLength) {
+                    return String(this);
+                }
+                else {
+                    targetLength = targetLength-this.length;
+                    if (targetLength > padString.length) {
+                        repeatString(padString, targetLength/padString.length);
+                    }
+                    return padString.slice(0,targetLength) + String(this);
+                }
+            };
+        }
     }
 
     this.checkPhoneNumber = checkPhoneNumber;
