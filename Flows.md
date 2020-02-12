@@ -12,8 +12,8 @@ Two values are required to generate the code correctly:
 |Banner Url| URL for the video poster|
 |Width| Ad Tag Width (Minimum 300)|
 |Height| Ad Tag Height (Minimum 250)|
-|Countries| Available Countries (e.g mx,br,ar,col)|
-|Languages| Available Languages (e.g es,en,pt)|
+|Countries| Available Countries (e.g mx, pe, br, ar, co, cl, ec)|
+|Languages| Available Languages (e.g es, en, pt)|
 
 VAST tag URL example:
 
