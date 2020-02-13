@@ -118,7 +118,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    clean: ['flows/vast/inlined.html', 'flows/vast/src/css/styles.css', 'flows/vast/src/js/custom.min.js']
+    clean: ['flows/vast/inlined.html', 'flows/vast/src/css/styles.css', 'flows/vast/src/js/utils.min.js', 'flows/vast/src/js/polyfills.min.js','flows/vast/src/js/custom.min.js']
   });
 
 
