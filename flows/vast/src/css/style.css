@@ -135,6 +135,21 @@ h1 {
     height: 100%;
 }
 
+#videoTimer{
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+#videoTimer p {
+  margin: auto;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+}
+
 #phoneEntrySubmitBtn:disabled{
   background: rgba(92, 205, 150, 0.75);
   cursor: not-allowed;

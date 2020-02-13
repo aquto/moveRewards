@@ -16,7 +16,8 @@ function sharedCallback(response, callback) {
         eligible: true,
         identified: true,
         rewardAmount: response.response.rewardAmountMB,
-        userToken: response.response.userToken
+        userToken: response.response.userToken,
+        clickId: response.response.clickId
       }
 
       var operatorInfo = getOperatorInfo(response.response.operatorCode)

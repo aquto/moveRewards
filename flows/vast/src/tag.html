@@ -32,6 +32,7 @@
         <div id="videoOverlay"></div>
         <video id="player" class="video-js vjs-default-skin" playsinline>
         </video>
+        <div id="videoTimer" class="hide"><span id="currentTime"></span>/<span id="duration"></span></div>
     </div>
     <div class="container">
         <div id="preload">
@@ -109,6 +110,8 @@
 </div>
 <!-- To use dev env use ?be=mp-dev.aquto.internal -->
 <script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js"></script>
+<script type="text/javascript" src="./js/utils.min.js?__inline=true"></script>
+<script type="text/javascript" src="./js/polyfills.min.js?__inline=true"></script>
 <script type="text/javascript" src="./js/translations.min.js?__inline=true"></script>
 <script type="text/javascript" src="./js/custom.min.js?__inline=true"></script>
 </body>
