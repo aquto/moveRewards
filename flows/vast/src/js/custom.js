@@ -57,7 +57,7 @@
         }],
         plugins: {
             vastClient: {
-                adTagUrl: 'test-01.xml', // vastTagUrl,
+                adTagUrl: vastTagUrl,
                 preferredTech: 'html5',
                 adsEnabled: true
             }
@@ -269,8 +269,6 @@
                         DOMelements.text.innerHTML = response.rewardText;
                     } else {
                         debug('complete failure');
-                        // ineligibleMsgElement.add
-                        // DOMelements.ineligibleMsgElement.add; // review after test
                         DOMelements.icon.classList.toggle('fa-times-circle');
                         toggleBodyBgColor('fail');
                         DOMelements.text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en' +
@@ -300,7 +298,6 @@
     }
 
     const countDown = function() {
-        // const timer = getDOMElement("timer"); // @todo review what timer is this...
         if (count > 0) {
             count--;
             DOMelements.timer.innerHTML = "Ver el video en " + count + " segundos.";
