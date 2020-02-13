@@ -1,35 +1,51 @@
 (function(win, doc) {
     // DOM Elements to use
-    const loading = getElem('preload');
-    const video = getElem('video');
-    const eligibleElement = getElem('eligibleWrapper');
-    const errorElement = getElem('errorWrapper');
-    const ineligibleMsgElement = getElem('ineligibleMessage');
-    const body = doc.body;
-    const icon = getElem('icon');
-    const text = getElem('rewardText');
-    const phoneEntry = getElem('phoneEntryWrapper');
-    const eligibleUI = getElem('eligible');
-    const ineligibleUI = getElem('ineligible');
-    const timer = getElem('timer');
-    const rewardTextEligible = getElem('rewardTextEligible');
-    const phoneCheck = getElem('phoneCheck');
-    const input = doc.querySelector("#phone");
-    let videoOverlay,
-        loadingOverlay;
+    var DOMelements = {
+        loading: getDOMElement('preload'),
+        video: getDOMElement('video'),
+        eligibleElement: getDOMElement('eligibleWrapper'),
+        errorElement: getDOMElement('errorWrapper'),
+        ineligibleMsgElement: getDOMElement('ineligibleMessage'),
+        body: doc.body,
+        icon: getDOMElement('icon'),
+        text: getDOMElement('rewardText'),
+        phoneEntry: getDOMElement('phoneEntryWrapper'),
+        eligibleUI: getDOMElement('eligible'),
+        ineligibleUI: getDOMElement('ineligible'),
+        timer: getDOMElement('timer'),
+        rewardTextEligible: getDOMElement('rewardTextEligible'),
+        phoneCheck: getDOMElement('phoneCheck'),
+        input: doc.querySelector("#phone"),
+        videoTimer: getDOMElement('videoTimer'),
+        currentTimeTxt: getDOMElement('currentTime'),
+        durationTxt: getDOMElement('duration')
+    };
+
+    let videoOverlay = getDOMElement('videoOverlay');
+    let loadingOverlay = getDOMElement('loadingOverlay');
 
     const campaignId = getUrlParameter('cid');
     const vastTagUrl = getUrlParameter('vu');
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
+    const disableControls = getUrlParameter('dc') === '1';
+
+    const percentageThresholds = [0, 25, 50, 75, 95];
+
+    /** Check if Aquto backend hostname has been passed in */
+    const scriptParams = parseScriptQuery(document.getElementById('aquto-api'));
+    const be = scriptParams.be || 'app.aquto.com';
+    const ow = scriptParams.ow || 'ow.aquto.com';
 
     let timeoutRef;
     let videoError = false;
     let isEligible = false;
+    let vastVideoComplete = false;
+    let responseCopy;
 
     // Eligible Player Options
     const playerOptions = {
-        controls: true,
+        controls: !disableControls,
         autoplay: false,
         preload: true,
         nativeControlsForTouch: false,
@@ -55,19 +71,42 @@
     // Player Events
     player.on('play', function () {
         debug('play');
-        videoError && hideElem(video);
-    })
+        videoError && hideElem(DOMelements.video);
+        if(!vastVideoComplete && disableControls) {
+            DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(this.currentTime()));
+        }
+    });
+
+    function setTimerLabels(currentTime, duration){
+        if (disableControls) {
+            DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
+            DOMelements.durationTxt.innerHTML = timerFormatter(Math.floor(duration));
+        }
+    }
 
     player.on('timeupdate', function (e) {
-        videoError && hideElem(video);
-        const current = (this.currentTime() / this.duration()) * 100;
-        debug('update', current);
-    })
+        if (!videoError) {
+            const percentage = Math.floor(this.currentTime() / this.duration() * 100);
+            debug('update', percentage);
+            setTimerLabels(this.currentTime(), this.duration());
+            if (responseCopy.clickId) {
+                const pctThresholds = percentageThresholds;
+                let nextPct = null;
+                do {
+                    nextPct = pctThresholds.length > 0 ? pctThresholds[0] : 101;
+                    if (percentage >= nextPct) {
+                        // Remove threshold and trigger
+                        pctThresholds.shift();
+                        trackVideoView(responseCopy.clickId, nextPct);
+                    }
+                } while (percentage >= nextPct);
+            }
+        }
+    });
 
     if (debugEnabled) {
         // player.on('ready', function() {
         // })
-
         player.on("click", function (event) {
             debug("click", event);
         });
@@ -78,25 +117,25 @@
    }
 
     player.on("vast.adError", function(event) {
-        hideElem(ineligibleMsgElement);
+        hideElem(DOMelements.ineligibleMsgElement);
         debug("vast.adError", event.error);
-        hideElem(eligibleElement);
-        videoError && hideElem(video);
-        showElem(errorElement);
+        hideElem(DOMelements.eligibleElement);
+        hideElem(DOMelements.video);
+        showElem(DOMelements.errorElement);
         videoError = true;
     });
 
     player.on("vast.contentEnd", function() {
         debug("vast.contentEnd");
-        hideElem(video);
+        hideElem(DOMelements.video);
         if (!videoError && isEligible){ // If vast.adError Event then stop the process.
-            showElem(eligibleElement);
+            showElem(DOMelements.eligibleElement);
             completeReward();
         }
         if(!isEligible && !videoError){
             debug('not eligible');
-            hideElem(video);
-            showElem(ineligibleMsgElement);
+            hideElem(DOMelements.video);
+            showElem(DOMelements.ineligibleMsgElement);
         }
     });
 
@@ -108,7 +147,7 @@
         onlyCountries: ['mx', 'pe'],
         separateDialCode: true
     };
-    const iti = win.intlTelInput(input, inputTelOptions);
+    const iti = win.intlTelInput(DOMelements.input, inputTelOptions);
     let count = 5;
 
     // Aquto checkAppEligibility method call
@@ -124,19 +163,21 @@
                 hideElem(loadingOverlay);
                 if (response) {
                     hideElem(videoOverlay);
+                    if (disableControls) showElem(DOMelements.videoTimer)
+                    responseCopy = Object.assign({}, response);
                     if (response.identified) {
                         if (response.eligible) {
                             isEligible = true;
                             if(phone){
                                 debug('phone entered eligible');
                                 count = 5;
-                                showElem(eligibleUI);
-                                hideElem(phoneCheck);
-                                rewardTextEligible.innerHTML = response.rewardText;
+                                showElem(DOMelements.eligibleUI);
+                                hideElem(DOMelements.phoneCheck);
+                                DOMelements.rewardTextEligible.innerHTML = response.rewardText;
                             } else{
                                 debug('identified & eligible');
-                                hideElem(loading);
-                                showElem(video);
+                                hideElem(DOMelements.loading);
+                                showElem(DOMelements.video);
                                 player.play();
                             }
                         } else {
@@ -144,22 +185,22 @@
                             if (phone) {
                                 debug('phone entered ineligible');
                                 count = 5;
-                                showElem(ineligibleUI);
-                                hideElem(phoneCheck);
+                                showElem(DOMelements.ineligibleUI);
+                                hideElem(DOMelements.phoneCheck);
                             } else {
                                 debug('identified + ineligible')
                                 count = 10;
-                                hideElem(loading);
-                                hideElem(video);
-                                showElem(phoneEntry);
-                                hideElem(phoneCheck);
-                                showElem(ineligibleUI);
-                                showElem(timer);
+                                hideElem(DOMelements.loading);
+                                hideElem(DOMelements.video);
+                                showElem(DOMelements.phoneEntry);
+                                hideElem(DOMelements.phoneCheck);
+                                showElem(DOMelements.ineligibleUI);
+                                showElem(DOMelements.timer);
                                 startCountdown();
                             }
                         }
                         if (phone) {
-                            timer.classList.remove('hide');
+                            DOMelements.timer.classList.remove('hide');
                             startCountdown();
                         }
                     } else {
@@ -167,30 +208,29 @@
                             debug('phone entered unidentified');
                             count = 10;
                             isEligible = false;
-                            showElem(ineligibleUI);
-                            hideElem(phoneCheck);
-                            showElem(timer);
+                            showElem(DOMelements.ineligibleUI);
+                            hideElem(DOMelements.phoneCheck);
+                            showElem(DOMelements.timer);
                             startCountdown();
                         } else {
                             debug('unidentified');
                             isEligible = false;
-                            hideElem(loading);
-                            hideElem(video);
-                            showElem(phoneEntry);
+                            hideElem(DOMelements.loading);
+                            hideElem(DOMelements.video);
+                            showElem(DOMelements.phoneEntry);
                         }
                     }
                 } else {
                     debug('error.checkAppEligibility');
-                    hideElem(loading);
-                    hideElem(video);
-                    showElem(errorElement);
+                    hideElem(DOMelements.loading);
+                    hideElem(DOMelements.video);
+                    showElem(DOMelements.errorElement);
                 }
             }
         });
     }
 
     function addEventOverlay(){
-        videoOverlay = getElem('videoOverlay');
         videoOverlay.addEventListener('click', function(event) {
             if(event.stopPropagation){
                 event.stopPropagation();
@@ -198,13 +238,12 @@
             if(event.cancelBubble !== null) {
                 event.cancelBubble = true;
             }
-            hideElem(video);
+            hideElem(DOMelements.video);
             checkPhoneNumber();
         });
     }
 
     function addLoadingOverlay(){
-        loadingOverlay = getElem('loadingOverlay');
         showElem(loadingOverlay);
         loadingOverlay.addEventListener('click', function(event) {
             if(event.stopPropagation){
@@ -223,27 +262,27 @@
             callback: function(response) {
                 debug('complete');
                 if (response) {
-                    hideElem(loading);
-                    showElem(eligibleElement);
-                    icon.classList.remove("fa-check-circle", "fa-times-circle");
+                    hideElem(DOMelements.loading);
+                    showElem(DOMelements.eligibleElement);
+                    DOMelements.icon.classList.remove("fa-check-circle", "fa-times-circle");
 
                     if (response.eligible) {
                         debug('complete success');
-                        icon.classList.add('fa-check-circle');
+                        DOMelements.icon.classList.add('fa-check-circle');
                         toggleBodyBgColor('success');
-                        text.innerHTML = response.rewardText;
+                        DOMelements.text.innerHTML = response.rewardText;
                     } else {
                         debug('complete failure');
-                        ineligibleMsgElement.add
-                        icon.classList.toggle('fa-times-circle');
+                        DOMelements.icon.classList.toggle('fa-times-circle');
                         toggleBodyBgColor('fail');
-                        text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en éste momento';
+                        DOMelements.text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en' +
+                            ' éste momento';
                     }
                 } else {
                     debug('complete invalid response');
-                    icon.classList.toggle('fa-times-circle');
+                    DOMelements.icon.classList.toggle('fa-times-circle');
                     toggleBodyBgColor('fail');
-                    text.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
+                    DOMelements.text.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
                 }
             }
         });
@@ -252,9 +291,9 @@
     const showPlayer = function(ap){
         event && event.preventDefault();
         stopCountdown(); // Cancel timer if set
-        hideElem(phoneEntry);
-        hideElem(eligibleElement);
-        showElem(video);
+        hideElem(DOMelements.phoneEntry);
+        hideElem(DOMelements.eligibleElement);
+        showElem(DOMelements.video);
         ap !== 0 && autoPlay();
     }
 
@@ -263,10 +302,9 @@
     }
 
     const countDown = function() {
-        const timer = getElem("timer");
         if (count > 0) {
             count--;
-            timer.innerHTML = "Ver el video en " + count + " segundos.";
+            DOMelements.timer.innerHTML = "Ver el video en " + count + " segundos.";
             startCountdown();
         } else {
             showPlayer(true);
@@ -293,7 +331,7 @@
         }
     }
 
-    function getElem(id) {
+    function getDOMElement(id) {
         return doc.getElementById(id);
     }
 
@@ -321,17 +359,28 @@
 
     function toggleBodyBgColor(className){
         if(className === 'success'){
-            body.classList.remove('fail');
-            body.classList.add(className);
+            DOMelements.body.classList.remove('fail');
+            DOMelements.body.classList.add(className);
         }
         if(className === 'fail'){
-            body.classList.remove('success');
-            body.classList.add(className);
+            DOMelements.body.classList.remove('success');
+            DOMelements.body.classList.add(className);
         }
     }
 
-    win.onload = function(){
-        hideElem(loading);
+    function timerFormatter(data){
+        return Math.floor(data / 60).toString().padStart(2, '0') + ':' + (data % 60).toString().padStart(2, '0')
+    }
+
+    function trackVideoView(clickId, percentageViewed){
+        const params = '?clickId=' + clickId + '&percentageViewed=' + percentageViewed;
+        const url='//' + be + '/api/campaign/event/videoview' + params;
+        debug('tracking', url);
+        new Image().src = url;
+    }
+
+    window.onload = function(){
+        hideElem(DOMelements.loading);
         addEventOverlay();
         showPlayer(0);
     }

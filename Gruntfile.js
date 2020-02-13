@@ -50,7 +50,9 @@ module.exports = function(grunt) {
         files: {
           'aquto.min.js': ['aquto.js'],
           'aquto_celtra.min.js': ['aquto_celtra.js'],
-          'flows/vast/src/js/custom.min.js': ['flows/vast/src/js/custom.js']
+          'flows/vast/src/js/custom.min.js': ['flows/vast/src/js/custom.js'],
+          'flows/vast/src/js/polyfills.min.js': ['flows/vast/src/js/polyfills.js'],
+          'flows/vast/src/js/utils.min.js': ['flows/vast/src/js/utils.js']
         }
       }
     },
@@ -91,7 +93,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    clean: ['flows/vast/inlined.html', 'flows/vast/src/css/styles.css', 'flows/vast/src/js/custom.min.js']
+    clean: ['flows/vast/inlined.html', 'flows/vast/src/css/styles.css', 'flows/vast/src/js/utils.min.js', 'flows/vast/src/js/polyfills.min.js','flows/vast/src/js/custom.min.js']
   });
 
 

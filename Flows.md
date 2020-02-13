@@ -9,9 +9,10 @@ Two values are required to generate the code correctly:
 |:----|:--------|
 |cid| Campaign ID (e.g. 123e4567-e89b-12d3-a456-426655440000)|
 |vu| VAST tag URL for the video|
-|Banner Url| URL for the video poster|
-|Width| Ad Tag Width (Minimum 300)|
-|Height| Ad Tag Height (Minimum 250)|
+|b| URL for the video poster|
+|w| Ad Tag Width (Minimum 300)|
+|h| Ad Tag Height (Minimum 250)|
+|dc| Disable player controls|
 
 VAST tag URL example:
 
