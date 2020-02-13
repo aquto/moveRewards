@@ -28,6 +28,7 @@
     const vastTagUrl = getUrlParameter('vu');
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
+    const disableControls = getUrlParameter('dc') === '1';
 
     const percentageThresholds = [0, 25, 50, 75, 95];
 
@@ -44,7 +45,7 @@
 
     // Eligible Player Options
     const playerOptions = {
-        controls: false,
+        controls: !disableControls,
         autoplay: false,
         preload: true,
         nativeControlsForTouch: false,
@@ -71,32 +72,35 @@
     player.on('play', function () {
         debug('play');
         videoError && hideElem(DOMelements.video);
-        if(!vastVideoComplete) {
+        if(!vastVideoComplete && disableControls) {
             DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(this.currentTime()));
         }
     });
 
     function setTimerLabels(currentTime, duration){
-        DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
-        DOMelements.durationTxt.innerHTML = timerFormatter(Math.floor(duration));
+        if (disableControls) {
+            DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
+            DOMelements.durationTxt.innerHTML = timerFormatter(Math.floor(duration));
+        }
     }
 
     player.on('timeupdate', function (e) {
-        videoError && hideElem(DOMelements.video);
-        const percentage = Math.floor(this.currentTime() / this.duration() * 100);
-        debug('update', percentage);
-        setTimerLabels(this.currentTime(), this.duration());
-        if (responseCopy.clickId) {
-            const pctThresholds = percentageThresholds;
-            let nextPct = null;
-            do {
-                nextPct = pctThresholds.length > 0 ? pctThresholds[0] : 101;
-                if (percentage >= nextPct) {
-                    // Remove threshold and trigger
-                    pctThresholds.shift();
-                    trackVideoView(responseCopy.clickId, nextPct);
-                }
-            } while (percentage >= nextPct);
+        if (!videoError) {
+            const percentage = Math.floor(this.currentTime() / this.duration() * 100);
+            debug('update', percentage);
+            setTimerLabels(this.currentTime(), this.duration());
+            if (responseCopy.clickId) {
+                const pctThresholds = percentageThresholds;
+                let nextPct = null;
+                do {
+                    nextPct = pctThresholds.length > 0 ? pctThresholds[0] : 101;
+                    if (percentage >= nextPct) {
+                        // Remove threshold and trigger
+                        pctThresholds.shift();
+                        trackVideoView(responseCopy.clickId, nextPct);
+                    }
+                } while (percentage >= nextPct);
+            }
         }
     });
 
@@ -116,7 +120,7 @@
         hideElem(DOMelements.ineligibleMsgElement);
         debug("vast.adError", event.error);
         hideElem(DOMelements.eligibleElement);
-        videoError && hideElem(DOMelements.video);
+        hideElem(DOMelements.video);
         showElem(DOMelements.errorElement);
         videoError = true;
     });
@@ -159,7 +163,7 @@
                 hideElem(loadingOverlay);
                 if (response) {
                     hideElem(videoOverlay);
-                    showElem(DOMelements.videoTimer)
+                    if (disableControls) showElem(DOMelements.videoTimer)
                     responseCopy = Object.assign({}, response);
                     if (response.identified) {
                         if (response.eligible) {
