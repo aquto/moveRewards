@@ -1,24 +1,35 @@
 (function(win, doc) {
     // DOM Elements to use
     var DOMelements = {
-        loading: getDOMElement('preload'),
+        body: doc.body,
         video: getDOMElement('video'),
         eligibleElement: getDOMElement('eligibleWrapper'),
         errorElement: getDOMElement('errorWrapper'),
         ineligibleMsgElement: getDOMElement('ineligibleMessage'),
-        body: doc.body,
         icon: getDOMElement('icon'),
-        text: getDOMElement('rewardText'),
         phoneEntry: getDOMElement('phoneEntryWrapper'),
         eligibleUI: getDOMElement('eligible'),
         ineligibleUI: getDOMElement('ineligible'),
         timer: getDOMElement('timer'),
-        rewardTextEligible: getDOMElement('rewardTextEligible'),
         phoneCheck: getDOMElement('phoneCheck'),
         input: doc.querySelector("#phone"),
         videoTimer: getDOMElement('videoTimer'),
         currentTimeTxt: getDOMElement('currentTime'),
-        durationTxt: getDOMElement('duration')
+        durationTxt: getDOMElement('duration'),
+        loadingWrapper: getDOMElement('loadingWrapper'),
+        loading: getDOMElement('loading'),
+        phoneEntryTitle: getDOMElement('phoneEntryTitle'),
+        thanksMsg: getDOMElement('thanksMsg'),
+        processingText: getDOMElement('processingText'),
+        phoneEntrySubTitle: getDOMElement('phoneEntrySubTitle'),
+        phoneEntrySubmitBtn: getDOMElement('phoneEntrySubmitBtn'),
+        rewardTextEligible: getDOMElement('rewardTextEligible'),
+        continueBtn: getDOMElement('continueBtn'),
+        eligibleBtn: getDOMElement('eligibleBtn'),
+        ineligibleTitle: getDOMElement('ineligibleTitle'),
+        ineligibleSubTitle: getDOMElement('ineligibleSubTitle'),
+        ineligibleBtn: getDOMElement('ineligibleBtn'),
+        errorMsg: getDOMElement('errorMsg')
     };
 
     let videoOverlay = getDOMElement('videoOverlay');
@@ -29,7 +40,6 @@
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
     const disableControls = getUrlParameter('dc') === '1';
-
     const percentageThresholds = [0, 25, 50, 75, 95];
 
     /** Check if Aquto backend hostname has been passed in */
@@ -69,7 +79,6 @@
             countryCode: '55'
         }
     };
-
     const countryDialingCodes = {
         // Mexico
         '52': 'mx',
@@ -84,24 +93,27 @@
         // Brazil
         '55': 'br'
     };
+    const userCountries = getUrlParameter('co') && getUrlParameter('co').split(',');
+    const availableCountries = ['mx', 'cl', 'ar', 'co', 'pe', 'br'];
+    const defaultCountries = availableCountries;
+    const countries = intersect(userCountries, availableCountries) || defaultCountries;
+    const country = countries[0];
+    const userLanguages = getUrlParameter('l') && getUrlParameter('l').split(',');
+    const availableLanguages = ['es', 'pt', 'en'];
+    const defaultLanguages = availableLanguages;
+    const languages = intersect(userLanguages, availableLanguages) || defaultLanguages;
+    const lang = languages[0];
 
-    const defaultCountries = ['mx', 'cl', 'ar', 'co', 'pe', 'br'];
-    const defaultLanguages = ['es', 'pt'];
-    const countries = (getUrlParameter('co') && getUrlParameter('co').split(',')) || defaultCountries;
-    const languages = (getUrlParameter('l') && getUrlParameter('l').split(',')) || defaultLanguages;
-
-    const hasDefaultCountry = countries.indexOf('mx') >= 0;
-    const hasValidCountry = countries.some(function(c){return !!phoneNumberValidation[c]});
-    const defaultCountry = defaultCountries.filter(function(cc){ return cc === 'mx'});
+    // Strings Translation
+    const messages =  translations[setTranslationLanguage(getNavigatorLanguage())];
 
     let timeoutRef;
     let videoError = false;
     let isEligible = false;
     let vastVideoComplete = false;
     let responseCopy;
-    let language;
 
-    // Eligible Player Options
+    // Player Options
     const playerOptions = {
         controls: !disableControls,
         autoplay: false,
@@ -127,22 +139,15 @@
     const player = videojs('player', playerOptions);
 
     // Player Events
-    player.on('play', function () {
+    player.on('play', function() {
         debug('play');
         videoError && hideElem(DOMelements.video);
-        if(!vastVideoComplete && disableControls) {
+        if (!vastVideoComplete && disableControls) {
             DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(this.currentTime()));
         }
     });
 
-    function setTimerLabels(currentTime, duration){
-        if (disableControls) {
-            DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
-            DOMelements.durationTxt.innerHTML = timerFormatter(Math.floor(duration));
-        }
-    }
-
-    player.on('timeupdate', function (e) {
+    player.on('timeupdate', function(e) {
         if (!videoError) {
             const percentage = Math.floor(this.currentTime() / this.duration() * 100);
             debug('update', percentage);
@@ -162,18 +167,6 @@
         }
     });
 
-    if (debugEnabled) {
-        // player.on('ready', function() {
-        // })
-        player.on("click", function (event) {
-            debug("click", event);
-        });
-
-        player.on("vast.adClick", function (event) {
-            debug("vast.adClick", event);
-        });
-   }
-
     player.on("vast.adError", function(event) {
         hideElem(DOMelements.ineligibleMsgElement);
         debug("vast.adError", event.error);
@@ -186,48 +179,42 @@
     player.on("vast.contentEnd", function() {
         debug("vast.contentEnd");
         hideElem(DOMelements.video);
-        if (!videoError && isEligible){ // If vast.adError Event then stop the process.
+        if (!videoError && isEligible) { // If vast.adError Event then stop the process.
             showElem(DOMelements.eligibleElement);
             completeReward();
         }
-        if(!isEligible && !videoError){
+        if (!isEligible && !videoError) {
             debug('not eligible');
             hideElem(DOMelements.video);
             showElem(DOMelements.ineligibleMsgElement);
         }
     });
 
+    if (debugEnabled) {
+        // player.on('ready', function() {
+        // })
+        player.on("click", function(event) {
+            debug("click", event);
+        });
+
+        player.on("vast.adClick", function(event) {
+            debug("vast.adClick", event);
+        });
+    }
+
     const inputTelOptions = {
         allowDropdown: true,
         formatOnDisplay: true,
-        initialCountry: "mx",
+        initialCountry: country,
         nationalMode: false,
-        onlyCountries: ['mx', 'pe'],
+        onlyCountries: countries,
         separateDialCode: true
     };
     const iti = win.intlTelInput(DOMelements.input, inputTelOptions);
     let count = 5;
 
-    const numberIsValid = function(){
-        const phoneNumber = iti.getNumber().replace('+', '');
-        const countryCode = findCountry();
-        const isValid = countryCode && phoneNumber.length >= phoneNumberValidation[countryCode].minLen && phoneNumber.length <= phoneNumberValidation[countryCode].maxLen
-        phoneEntrySubmitBtn.disabled = !isValid
-    };
-
-   function findCountry(){
-       const phoneNumber = iti.getNumber().replace('+', '');
-       const entries = Object.entries(countryDialingCodes);
-
-       for (let i = 0; i < entries.length; i++){
-           if (phoneNumber.substring(0, entries[i][0].length) === entries[i][0]) {
-               return entries[i][1];
-           }
-       }
-   }
-
     // Aquto checkAppEligibility method call
-    const checkPhoneNumber = function(){
+    const checkPhoneNumber = function() {
         event && event.preventDefault();
         const phone = iti.getNumber().replace('+', '');
         addLoadingOverlay();
@@ -244,15 +231,15 @@
                     if (response.identified) {
                         if (response.eligible) {
                             isEligible = true;
-                            if(phone){
+                            if (phone) {
                                 debug('phone entered eligible');
                                 count = 5;
                                 showElem(DOMelements.eligibleUI);
                                 hideElem(DOMelements.phoneCheck);
                                 DOMelements.rewardTextEligible.innerHTML = response.rewardText;
-                            } else{
+                            } else {
                                 debug('identified & eligible');
-                                hideElem(DOMelements.loading);
+                                hideElem(DOMelements.loadingWrapper);
                                 showElem(DOMelements.video);
                                 player.play();
                             }
@@ -266,7 +253,7 @@
                             } else {
                                 debug('identified + ineligible')
                                 count = 10;
-                                hideElem(DOMelements.loading);
+                                hideElem(DOMelements.loadingWrapper);
                                 hideElem(DOMelements.video);
                                 showElem(DOMelements.phoneEntry);
                                 hideElem(DOMelements.phoneCheck);
@@ -280,7 +267,7 @@
                             startCountdown();
                         }
                     } else {
-                        if (phone){
+                        if (phone) {
                             debug('phone entered unidentified');
                             count = 10;
                             isEligible = false;
@@ -291,14 +278,14 @@
                         } else {
                             debug('unidentified');
                             isEligible = false;
-                            hideElem(DOMelements.loading);
+                            hideElem(DOMelements.loadingWrapper);
                             hideElem(DOMelements.video);
                             showElem(DOMelements.phoneEntry);
                         }
                     }
                 } else {
                     debug('error.checkAppEligibility');
-                    hideElem(DOMelements.loading);
+                    hideElem(DOMelements.loadingWrapper);
                     hideElem(DOMelements.video);
                     showElem(DOMelements.errorElement);
                 }
@@ -306,65 +293,7 @@
         });
     }
 
-    function addEventOverlay(){
-        videoOverlay.addEventListener('click', function(event) {
-            if(event.stopPropagation){
-                event.stopPropagation();
-            }
-            if(event.cancelBubble !== null) {
-                event.cancelBubble = true;
-            }
-            hideElem(video);
-            checkPhoneNumber();
-        });
-    }
-
-    function addLoadingOverlay(){
-        showElem(loadingOverlay);
-        loadingOverlay.addEventListener('click', function(event) {
-            if(event.stopPropagation){
-                event.stopPropagation();
-            }
-            if(event.cancelBubble !== null) {
-                event.cancelBubble = true;
-            }
-        });
-    }
-
-    // Aquto complete method call
-    function completeReward(){
-        aquto.complete({
-            campaignId: campaignId,
-            callback: function(response) {
-                debug('complete');
-                if (response) {
-                    hideElem(DOMelements.loading);
-                    showElem(DOMelements.eligibleElement);
-                    DOMelements.icon.classList.remove("fa-check-circle", "fa-times-circle");
-
-                    if (response.eligible) {
-                        debug('complete success');
-                        DOMelements.icon.classList.add('fa-check-circle');
-                        toggleBodyBgColor('success');
-                        DOMelements.text.innerHTML = response.rewardText;
-                    } else {
-                        debug('complete failure');
-                        DOMelements.icon.classList.toggle('fa-times-circle');
-                        toggleBodyBgColor('fail');
-                        DOMelements.text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en' +
-                            ' éste momento';
-                    }
-                } else {
-                    debug('complete invalid response');
-                    DOMelements.icon.classList.toggle('fa-times-circle');
-                    toggleBodyBgColor('fail');
-                    DOMelements.text.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
-                }
-            }
-        });
-    }
-
-    const showPlayer = function(ap){
+    const showPlayer = function(ap) {
         event && event.preventDefault();
         stopCountdown(); // Cancel timer if set
         hideElem(DOMelements.phoneEntry);
@@ -373,14 +302,10 @@
         ap !== 0 && autoPlay();
     }
 
-    function autoPlay(){
-        player.play();
-    }
-
     const countDown = function() {
-        const timer = getElem("timer");
-        const timerTextOne = getText('timerTxt1');
-        const timerTextTwo = getText('timerTxt2');
+        const timer = getDOMElement("timer");
+        const timerTextOne = messages.timerTxt1;
+        const timerTextTwo = messages.timerTxt2;
         if (count > 0) {
             count--;
             DOMelements.timer.innerHTML = "Ver el video en " + count + " segundos.";
@@ -391,9 +316,97 @@
         }
     }
 
+    // Aquto complete method call
+    function completeReward() {
+        aquto.complete({
+            campaignId: campaignId,
+            callback: function(response) {
+                debug('complete');
+                if (response) {
+                    hideElem(DOMelements.loadingWrapper);
+                    showElem(DOMelements.eligibleElement);
+                    DOMelements.icon.classList.remove("fa-check-circle", "fa-times-circle");
+
+                    if (response.eligible) {
+                        debug('complete success');
+                        DOMelements.icon.classList.add('fa-check-circle');
+                        toggleBodyBgColor('success');
+                        DOMelements.processingText.innerHTML = response.rewardText;
+                    } else {
+                        debug('complete failure');
+                        DOMelements.icon.classList.toggle('fa-times-circle');
+                        toggleBodyBgColor('fail');
+                        DOMelements.processingText.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en' +
+                            ' éste momento';
+                    }
+                } else {
+                    debug('complete invalid response');
+                    DOMelements.icon.classList.toggle('fa-times-circle');
+                    toggleBodyBgColor('fail');
+                    DOMelements.processingText.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
+                }
+            }
+        });
+    }
+
+    // Phone Number Entry Validation
+    function numberIsValid() {
+        const phoneNumber = iti.getNumber().replace('+', '');
+        const countryCode = findCountry();
+        const isValid = countryCode && phoneNumber.length >= phoneNumberValidation[countryCode].minLen && phoneNumber.length <= phoneNumberValidation[countryCode].maxLen
+        DOMelements.phoneEntrySubmitBtn.disabled = !isValid
+    }
+
+    function setTimerLabels(currentTime, duration) {
+        if (disableControls) {
+            DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
+            DOMelements.durationTxt.innerHTML = timerFormatter(Math.floor(duration));
+        }
+    }
+
+    function findCountry() {
+        const phoneNumber = iti.getNumber().replace('+', '');
+        const entries = Object.entries(countryDialingCodes);
+
+        for (let i = 0; i < entries.length; i++) {
+            if (phoneNumber.substring(0, entries[i][0].length) === entries[i][0]) {
+                return entries[i][1];
+            }
+        }
+    }
+
+    function addEventOverlay() {
+        videoOverlay.addEventListener('click', function(event) {
+            if (event.stopPropagation) {
+                event.stopPropagation();
+            }
+            if (event.cancelBubble !== null) {
+                event.cancelBubble = true;
+            }
+            hideElem(video);
+            checkPhoneNumber();
+        });
+    }
+
+    function addLoadingOverlay() {
+        showElem(loadingOverlay);
+        loadingOverlay.addEventListener('click', function(event) {
+            if (event.stopPropagation) {
+                event.stopPropagation();
+            }
+            if (event.cancelBubble !== null) {
+                event.cancelBubble = true;
+            }
+        });
+    }
+
+    function autoPlay() {
+        player.play();
+    }
+
     function getUrlParameter(sParam) {
         let sPageURL = win.location.search.substring(1),
-            sURLVariables = sPageURL.split('&') ,
+            sURLVariables = sPageURL.split('&'),
             sParameterName,
             i;
 
@@ -405,21 +418,21 @@
         }
     }
 
-    function debug(message, options){
+    function debug(message, options) {
         if (debugEnabled) {
             console.log(message, options);
         }
     }
 
-    function getElem(id) {
+    function getDOMElement(id) {
         return doc.getElementById(id);
     }
 
-    function showElem(elem){
+    function showElem(elem) {
         elem && elem.classList.remove('hide');
     }
 
-    function hideElem(elem){
+    function hideElem(elem) {
         elem && elem.classList.add('hide');
     }
 
@@ -437,238 +450,94 @@
         }
     }
 
-    function toggleBodyBgColor(className){
-        if(className === 'success'){
-            body.classList.remove('fail');
-            body.classList.add(className);
+    function toggleBodyBgColor(className) {
+        if (className === 'success') {
+            DOMelements.body.classList.remove('fail');
+            DOMelements.body.classList.add(className);
         }
-        if(className === 'fail'){
-            body.classList.remove('success');
-            body.classList.add(className);
+        if (className === 'fail') {
+            DOMelements.body.classList.remove('success');
+            DOMelements.body.classList.add(className);
         }
     }
 
-    function timerFormatter(data){
+    function timerFormatter(data) {
         return Math.floor(data / 60).toString().padStart(2, '0') + ':' + (data % 60).toString().padStart(2, '0')
     }
 
-    function trackVideoView(clickId, percentageViewed){
+    function trackVideoView(clickId, percentageViewed) {
         const params = '?clickId=' + clickId + '&percentageViewed=' + percentageViewed;
-        const url='//' + be + '/api/campaign/event/videoview' + params;
+        const url = '//' + be + '/api/campaign/event/videoview' + params;
         debug('tracking', url);
         new Image().src = url;
     }
 
-    window.onload = function(){
-        hideElem(DOMelements.loading);
-    function setLanguage(){
-        const navigatorLang = (navigator.languages && navigator.languages.length) ? navigator.languages[0]
-            : navigator.userLanguage || navigator.language || navigator.browserLanguage || defaultLanguages[0];
-        const lang = navigatorLang.substring(0,2);
+    function getNavigatorLanguage() {
+        const navigatorLang = (navigator.languages && navigator.languages.length) ? navigator.languages[0] :
+            navigator.userLanguage || navigator.language || navigator.browserLanguage || defaultLanguages[0];
+        return navigatorLang.substring(0, 2);
+    }
 
-        if (languages.find(function(item){return item === lang})){
-            language = lang;
-        } else {
-            language = languages[0];
+    // Compare Navigator Language to default Language, used to select and specific translation
+    function setTranslationLanguage(navigatorLang){
+        if(lang === navigatorLang){
+            return navigatorLang
+        } else{
+            return lang
         }
     }
 
-    function setLanguageStrings(){
-        loading.innerHTML = getText('loading');
-        phoneEntryTitle.innerHTML = getText('phoneEntryTitle');
-        thanksMsg.innerHTML = getText('thanksMsg');
-        text.innerHTML = getText('processingTxt');
-        phoneEntrySubTitle.innerHTML = getText('phoneEntrySubTitle');
-        phoneEntrySubmitBtn.innerHTML = getText('phoneEntrySubmitBtn');
-        phoneEntrySubmitBtn.value = getText('phoneEntrySubmitBtn');
-        rewardTextEligible.innerHTML = getText('rewardTextEligible');
-        continueBtn.innerHTML = getText('continueBtn');
-        eligibleBtn.innerHTML = getText('eligibleBtn');
-        ineligibleTitle.innerHTML = getText('ineligibleTitle');
-        ineligibleSubTitle.innerHTML = getText('ineligibleSubTitle');
-        ineligibleBtn.innerHTML = getText('continueBtn');
-        errorMsg.innerHTML = getText('errorMsg');
-    }
+    function setElementsText() {
+        const elements = [
+            DOMelements.loading,
+            DOMelements.phoneEntryTitle,
+            DOMelements.thanksMsg,
+            DOMelements.processingText,
+            DOMelements.phoneEntrySubTitle,
+            DOMelements.phoneEntrySubmitBtn,
+            DOMelements.rewardTextEligible,
+            DOMelements.continueBtn,
+            DOMelements.eligibleBtn,
+            DOMelements.ineligibleTitle,
+            DOMelements.ineligibleSubTitle,
+            DOMelements.ineligibleBtn,
+            DOMelements.errorMsg,
+        ];
 
-    function getText(text){
-        let strings;
-        if(translations[language]){
-            strings = translations[language];
-        } else {
-            strings = translations[defaultLanguages[0]];
+        for (let i = 0; i < elements.length; i ++){
+            elements[i].innerHTML = messages[elements[i].id];
         }
-        return strings[text]
+
     }
 
-    function addPhoneInputEventListener(){
-       input.maxLength = 18;
-       input.onkeydown = function(){
-           numberIsValid();
-       };
-       input.onkeyup = function(){
-           numberIsValid();
-       };
-       input.addEventListener("countrychange", function() {
-           numberIsValid();
-           input.value = '';
-       });
-       input.onkeypress = function(e){
-           let ASCIICode = (e.which) ? e.which : e.keyCode
-           if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
-               return false;
-           return true;
-       };
-    }
-
-    function addObjectEntries(){
-        if (!Object.entries) {
-            Object.entries = function( obj ){
-                var ownProps = Object.keys( obj ),
-                    i = ownProps.length,
-                    resArray = new Array(i); // preallocate the Array
-                while (i--)
-                    resArray[i] = [ownProps[i], obj[ownProps[i]]];
-
-                return resArray;
-            };
-        }
-    }
-
-    function addArraySome(){
-        if (!Array.prototype.some) {
-            Array.prototype.some = function(fun, thisArg) {
-                'use strict';
-
-                if (this == null) {
-                    throw new TypeError('Array.prototype.some called on null or undefined');
-                }
-
-                if (typeof fun !== 'function') {
-                    throw new TypeError();
-                }
-
-                var t = Object(this);
-                var len = t.length >>> 0;
-
-                for (var i = 0; i < len; i++) {
-                    if (i in t && fun.call(thisArg, t[i], i, t)) {
-                        return true;
-                    }
-                }
-
+    function addPhoneInputEventListener() {
+        DOMelements.input.maxLength = 18;
+        DOMelements.input.onkeydown = function() {
+            numberIsValid();
+        };
+        DOMelements.input.onkeyup = function() {
+            numberIsValid();
+        };
+        DOMelements.input.addEventListener("countrychange", function() {
+            numberIsValid();
+            DOMelements.input.value = '';
+        });
+        DOMelements.input.onkeypress = function(e) {
+            let ASCIICode = (e.which) ? e.which : e.keyCode
+            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
                 return false;
-            };
-        }
+            return true;
+        };
     }
 
-    function addArrayFilter(){
-        if (!Array.prototype.filter){
-            Array.prototype.filter = function(func, thisArg) {
-                'use strict';
-                if ( ! ((typeof func === 'Function' || typeof func === 'function') && this) )
-                    throw new TypeError();
-
-                var len = this.length >>> 0,
-                    res = new Array(len), // preallocate array
-                    t = this, c = 0, i = -1;
-
-                var kValue;
-                if (thisArg === undefined){
-                    while (++i !== len){
-                        // checks to see if the key was set
-                        if (i in this){
-                            kValue = t[i]; // in case t is changed in callback
-                            if (func(t[i], i, t)){
-                                res[c++] = kValue;
-                            }
-                        }
-                    }
-                }
-                else{
-                    while (++i !== len){
-                        // checks to see if the key was set
-                        if (i in this){
-                            kValue = t[i];
-                            if (func.call(thisArg, t[i], i, t)){
-                                res[c++] = kValue;
-                            }
-                        }
-                    }
-                }
-
-                res.length = c; // shrink down array to proper size
-                return res;
-            };
-        }
-    }
-
-    function addArrayFind(){
-        // https://tc39.github.io/ecma262/#sec-array.prototype.find
-        if (!Array.prototype.find) {
-            Object.defineProperty(Array.prototype, 'find', {
-                value: function(predicate) {
-                    // 1. Let O be ? ToObject(this value).
-                    if (this == null) {
-                        throw TypeError('"this" is null or not defined');
-                    }
-
-                    var o = Object(this);
-
-                    // 2. Let len be ? ToLength(? Get(O, "length")).
-                    var len = o.length >>> 0;
-
-                    // 3. If IsCallable(predicate) is false, throw a TypeError exception.
-                    if (typeof predicate !== 'function') {
-                        throw TypeError('predicate must be a function');
-                    }
-
-                    // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
-                    var thisArg = arguments[1];
-
-                    // 5. Let k be 0.
-                    var k = 0;
-
-                    // 6. Repeat, while k < len
-                    while (k < len) {
-                        // a. Let Pk be ! ToString(k).
-                        // b. Let kValue be ? Get(O, Pk).
-                        // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
-                        // d. If testResult is true, return kValue.
-                        var kValue = o[k];
-                        if (predicate.call(thisArg, kValue, k, o)) {
-                            return kValue;
-                        }
-                        // e. Increase k by 1.
-                        k++;
-                    }
-
-                    // 7. Return undefined.
-                    return undefined;
-                },
-                configurable: true,
-                writable: true
-            });
-        }
-    }
-
-    win.onload = function(){
-        addEventOverlay();
-        showPlayer(0);
-        setLanguage();
-        setLanguageStrings();
-        addPhoneInputEventListener();
-        hideElem(loading);
-
-        // Polyfills
-        addObjectEntries();
-        addArraySome();
-        addArrayFilter();
-        addArrayFind();
-    }
+    addEventOverlay();
+    showPlayer(0);
+    setElementsText();
+    addPhoneInputEventListener();
+    hideElem(DOMelements.loadingWrapper);
 
     this.checkPhoneNumber = checkPhoneNumber;
     this.showPlayer = showPlayer;
     this.countDown = countDown;
 
 })(window, document);
-

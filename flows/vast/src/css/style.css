@@ -103,6 +103,10 @@ h1 {
   width: 170px;
 }
 
+#loading, .ellipsis{
+  display: inline;
+}
+
 #phoneEntryWrapper{
   min-height: 250px;
 }

@@ -1,3 +1,4 @@
+
 function parseScriptQuery(scriptTag) {
     var args = {}
     if (scriptTag) {
@@ -11,4 +12,32 @@ function parseScriptQuery(scriptTag) {
         }
     }
     return args
+}
+
+// Return an array as result of intersection between two arrays
+function intersect(arr1, arr2) {
+    if(arr1 && arr2){
+        const result = arr1.filter(function(item) {
+            return arr2.indexOf(item) > -1;
+        });
+
+        if (result.length > 0){
+            return result;
+        } else{
+            return null;
+        }
+    }else{
+        return null;
+    }
+
+}
+
+// Return an string repeated number times provided
+function repeatString(string, times) {
+    let repeatedString = "";
+    while (times > 0) {
+        repeatedString += string;
+        times--;
+    }
+    return repeatedString;
 }

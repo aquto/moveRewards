@@ -35,8 +35,8 @@
         <div id="videoTimer" class="hide"><span id="currentTime"></span>/<span id="duration"></span></div>
     </div>
     <div class="container">
-        <div id="preload">
-            <p class="loading"></p>
+        <div id="loadingWrapper">
+            <p id="loading"></p><p class="ellipsis"></p>
         </div>
         <!-- Eligible End Video Message -->
         <div id="eligibleWrapper" class="hide">
@@ -44,7 +44,7 @@
                 <div class="row">
                     <i id="icon" class="fas fa-3x"></i>
                 </div>
-                <div id="rewardText" class="row"></div>
+                <div id="processingText" class="row"></div>
             </div>
         </div>
         <!-- Ineligible End Video Message -->
@@ -60,13 +60,13 @@
                 <h1 id="phoneEntryTitle"></h1>
                 <p id="phoneEntrySubTitle"><br />
                 </p>
-                <form class="phoneForm" onsubmit="checkPhoneNumber()">
+                <form class="phoneForm" action="#" method="get">
                     <p>
                         <input class="telephone" type="tel" id="phone" name="phone" required>
                     </p>
                     <p>
-                        <input id="phoneEntrySubmitBtn" class="button submit" type="submit" value="Confirmar ahora"
-                               disabled>
+                        <button id="phoneEntrySubmitBtn" class="button submit" onclick="checkPhoneNumber()" disabled>
+                        </button>
                     </p>
                 </form>
                 <form action="#" method="get">

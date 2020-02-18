@@ -3,7 +3,7 @@ const translations = {
         loading: 'Cargando',
         phoneEntryTitle: 'Participa para ganar Megas',
         thanksMsg: 'Gracias por ver este video',
-        processingTxt: 'Estamos procesando tu recompensa...',
+        processingText: 'Estamos procesando tu recompensa...',
         phoneEntrySubTitle: 'Solo confirma tu número de teléfono.',
         phoneEntrySubmitBtn: 'Confirmar ahora',
         rewardTextEligible: 'Tu número participa para ganar megas.',
@@ -11,15 +11,16 @@ const translations = {
         eligibleBtn: 'Ver el video ahora',
         ineligibleTitle: 'Lo sentimos, tú número no participa para ganar megas en este momento.',
         ineligibleSubTitle: '¿Quieres ver el video sin ganar megas?',
+        ineligibleBtn: 'Continuar sin ganar megas',
         errorMsg: 'Lo sentimos, ocurrió un error durante la reproducción del video.',
         timerTxt1: 'Ver el video en ',
-        timerTxt2: ' segundos.',
+        timerTxt2: ' segundos.'
     },
     en: {
         loading: 'Loading',
         phoneEntryTitle: 'Watch video to receive data rewards',
         thanksMsg: 'Thank you for watching this video',
-        processingTxt: 'We are processing your data reward...',
+        processingText: 'We are processing your data reward...',
         phoneEntrySubTitle: 'Please verify your mobile number to continue.',
         phoneEntrySubmitBtn: 'Confirm',
         rewardTextEligible: 'Your phone number is eligible for data rewards.',
@@ -27,15 +28,16 @@ const translations = {
         eligibleBtn: 'Watch video',
         ineligibleTitle: 'Sorry, your phone number is not eligible for data rewards at this time.',
         ineligibleSubTitle: 'Do you want to continue without reward?',
+        ineligibleBtn: 'Continue without reward',
         errorMsg: 'Sorry, we are unable to play this video at the moment.',
         timerTxt1: 'Watch video in ',
-        timerTxt2: ' seconds.',
+        timerTxt2: ' seconds.'
     },
     pt:{
         loading: 'Carregando',
         phoneEntryTitle: 'Participe e ganhe Megas',
         thanksMsg: 'Obrigado por assistir ao vídeo',
-        processingTxt: 'Estamos processando sua recompensa...',
+        processingText: 'Estamos processando sua recompensa...',
         phoneEntrySubTitle: 'Por favor, confirme o número de seu telefone para continuar.',
         phoneEntrySubmitBtn: 'Confirmar',
         rewardTextEligible: 'Seu número de telefone é elegível a recompensa em pacotes de dados.',
@@ -43,9 +45,9 @@ const translations = {
         eligibleBtn: 'Assista ao vídeo',
         ineligibleTitle: 'Desculpe, seu número de telefone nao é elegível a recompensa em pacotes de dados desta vez.',
         ineligibleSubTitle: 'Gostaria de continuar sem a recompensa?',
+        ineligibleBtn: 'Continuar sem a recompensa',
         errorMsg: 'Desculpe, o vídeo não está habilitado neste momento.',
         timerTxt1: 'Assista ao vídeo em ',
-        timerTxt2: ' segundos.',
-
+        timerTxt2: ' segundos.'
     }
 };
