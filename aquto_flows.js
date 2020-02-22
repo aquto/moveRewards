@@ -1,1 +1,101 @@
-var aqutoFlows=function(e){var n={};function t(i){if(n[i])return n[i].exports;var r=n[i]={i:i,l:!1,exports:{}};return e[i].call(r.exports,r,r.exports,t),r.l=!0,r.exports}return t.m=e,t.c=n,t.d=function(e,n,i){t.o(e,n)||Object.defineProperty(e,n,{enumerable:!0,get:i})},t.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},t.t=function(e,n){if(1&n&&(e=t(e)),8&n)return e;if(4&n&&"object"==typeof e&&e&&e.__esModule)return e;var i=Object.create(null);if(t.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:e}),2&n&&"string"!=typeof e)for(var r in e)t.d(i,r,function(n){return e[n]}.bind(null,r));return i},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,n){return Object.prototype.hasOwnProperty.call(e,n)},t.p="",t(t.s=0)}([function(e,n){let t,i,r,o,l={};function a(e){const n=e.phoneNumber;let l,a=function(e){let n=document.getElementById("iframe-01");return n||function(e){return e.addEventListener("load",n=>{!function(){const e=y(document.getElementById("iframe-01")).input,n={allowDropdown:!0,formatOnDisplay:!0,initialCountry:"mx",nationalMode:!1,onlyCountries:i.countries||d,separateDialCode:!0};t=e&&window.intlTelInput(e,n)}(),function(e,n){const t=y(n);t.loading.innerHTML=e.loading,t.peTitle.innerHTML=e.peTitle,t.peSubTitle.innerHTML=e.peSubTitle,t.peSubmitBtn.value=e.peSubmitBtn,t.rewardTextEligible.innerHTML=e.rewardTextEligible,t.redirectBtn.innerHTML=e.redirectBtn,t.ineligibleTitle.innerHTML=e.ineligibleTitle,t.ineligibleSubTitle.innerHTML=e.ineligibleSubTitle,t.continueBtn1.innerHTML=e.continueBtn,t.continueBtn2.innerHTML=e.continueBtn,t.errorMsg.innerHTML=e.errorMsg}(h(f(b(),i.languages||c),g),e)}),e}(((r=function(e,n){let t;"[object String]"===Object.prototype.toString.call(n)&&(t=n),"[object HTMLDivElement]"===Object.prototype.toString.call(n)&&(t=n.id);const i=document.querySelector("#"+t),r=i.scrollWidth<parseInt(e.minWidth.substring(0,3))?parseInt(e.minWidth.substring(0,3)):i.scrollWidth,o=i.scrollHeight<parseInt(e.minHeight.substring(0,3))?parseInt(e.minHeight.substring(0,3)):i.scrollHeight;return e.style.width=r+"px",e.style.height=o+"px",{targetEl:i,iframeEl:e}}(function(){let e=document.createElement("iframe");return document.getElementById("iframe-01")||(e.minWidth="250px",e.minHeight="300px",e.src="../../iframeContent.html",e.id="iframe-01",e.style.border="none",e.style.position="absolute",e.style.backgroundColor="#fff",e.classList.add("hide")),e}(),e)).targetEl&&r.targetEl.appendChild(r.iframeEl),r.iframeEl));var r}(e.targetId);!function(e){i=Object.assign({},e)}(e),aquto.checkAppEligibility({campaignId:e.campaignId,phoneNumber:n,callback:function(e){e?(e.identified||(e.identified=!(!e.eligible||"unknown"===e.operatorCode)),l=y(a),function(e){r=Object.assign({},e)}(e),e.identified?(e.eligible?(o=!0,n?(T("phone entered eligible"),s=5,m(l.loading),m(l.phoneCheck),p(l.phoneEntry),p(l.eligibleUI),l.rewardTextEligible.innerHTML=e.rewardText):(T("identified & eligible"),p(l.loading),C())):(p(a),o=!1,n?(s=5,T("phone entered ineligible"),m(l.loading),m(l.phoneCheck),p(l.ineligibleUI),p(l.phoneEntry),p(l.timer)):(T("identified + ineligible"),m(l.loading),p(l.phoneEntry),m(l.phoneCheck),p(l.ineligibleUI))),n&&(p(l.timer),setTimeout(w,1e3,a))):(p(a),o=!1,n?(T("phone entered unidentified"),m(l.loading),p(l.phoneEntry),m(l.phoneCheck),p(l.ineligibleUI)):(T("unidentified"),m(l.loading),p(l.phoneEntry)))):(T("error.checkAppEligibility"),p(a),m(l.loading),p(l.errorElement))}})}l.VERSION="0.1.0",l.checkAppEligibilityPhoneEntry=a,e.exports=l;let s=5;const u="1"===function(e){let n,t,i=window.location.search.substring(1).split("&");for(t=0;t<i.length;t++)if((n=i[t].split("="))[0]===e)return void 0===n[1]||decodeURIComponent(n[1])}("d"),c=["es","en","pt"],d=["mx"],g={en:{loading:"Loading",peTitle:"Participate to win megas",peSubTitle:"Please verify your mobile number to continue.",peSubmitBtn:"Confirm",rewardTextEligible:"Your phone number is eligible for data rewards.",redirectBtn:"Continue",ineligibleTitle:"Sorry, your phone number is not eligible for data rewards at this time.",ineligibleSubTitle:"Do you want to continue without reward?",continueBtn:"Continue without reward",errorMsg:"Sorry, we were unable to process your request at this time.",loadingTxtOne:"Redirecting in ",loadingTxtTwo:" seconds."},es:{loading:"Cargando",peTitle:"Participa para ganar Megas",peSubTitle:"Solo confirma tu número de teléfono",peSubmitBtn:"Confirmar ahora",rewardTextEligible:"Tu número participa para ganar megas.",redirectBtn:"Continuar",ineligibleTitle:"Lo sentimos, tú número no participa para ganar megas en este momento.",ineligibleSubTitle:"¿Deseas continuar sin ganar megas?",continueBtn:"Continuar sin ganar megas",errorMsg:"Lo sentimos. No hemos podido procesar tu solicitud en este momento.",loadingTxtOne:"Redireccionar en ",loadingTxtTwo:" segundos."},pt:{loading:"Carregando",peTitle:"Participe e ganhe Megas",peSubTitle:"Por favor, confirme o número de seu telefone para continuar.",peSubmitBtn:"Confirmar",rewardTextEligible:"Seu número de telefone é elegível a recompensa em pacotes de dados.",redirectBtn:"Continuar",ineligibleTitle:"Desculpe, seu número de telefone nao é elegível a recompensa em pacotes de dados desta vez.",ineligibleSubTitle:"Gostaria de continuar sem a recompensa?",continueBtn:"Continuar sem a recompensa",errorMsg:"Desculpe. Não podemos processar sua solicitação neste momento.",loadingTxtOne:"Redirecionando em ",loadingTxtTwo:" segundos."}};function p(e){e.classList.remove("hide")}function m(e){e.classList.add("hide")}function b(){return(navigator.languages&&navigator.languages.length?navigator.languages[0]:navigator.userLanguage||navigator.language||navigator.browserLanguage||"en").substring(0,2)}function f(e,n){return n.find(n=>n===e)||"es"}function h(e,n){return n[e]}function T(e,n){u&&(n?console.log(e,n):console.log(e))}function y(e){return{loading:S("preload",e),eligibleElement:S("eligibleWrapper",e),errorElement:S("errorWrapper",e),ineligibleMsgElement:S("ineligibleMessage",e),icon:S("icon",e),text:S("rewardText",e),phoneEntry:S("phoneEntryWrapper",e),eligibleUI:S("eligible",e),ineligibleUI:S("ineligible",e),timer:S("timer",e),rewardTextEligible:S("rewardTextEligible",e),phoneCheck:S("phoneCheck",e),input:S("phone",e),peTitle:S("peTitle",e),peSubTitle:S("peSubTitle",e),peSubmitBtn:S("peSubmitBtn",e),redirectBtn:S("redirectBtn",e),ineligibleTitle:S("ineligibleTitle",e),ineligibleSubTitle:S("ineligibleSubTitle",e),continueBtn1:S("continueBtn1",e),continueBtn2:S("continueBtn2",e),errorMsg:S("errorMsg",e)}}function S(e,n){return(n.contentWindow||n.contentDocument).document.querySelector("#"+e)}function w(e){let n=S("timer",e);const t=h(f(b(),i.languages||c),g),r=t.loadingTxtOne,o=t.loadingTxtTwo;s>0?(s--,n.innerHTML=r+s+o,setTimeout(w,1e3,e)):C()}let x;function E(){let e=["iPad Simulator","iPhone Simulator","iPod Simulator","iPad","iPhone","iPod"];if(navigator.platform)for(;e.length;)if(navigator.platform===e.pop())return!0;return!1}function j(){if(x)return x;const e=navigator.userAgent,n=e.indexOf("Android")>-1&&e.indexOf("Mozilla/5.0")>-1&&e.indexOf("AppleWebKit")>-1;return x={isAndroid:n,isIOS:E()}}function v(){const e=j(),n=e.isAndroid,t=e.isIOS;return n&&i.targetUrlAndroid?i.targetUrlAndroid:t&&i.targetUrlIOS?i.targetUrlIOS:i.targetUrl?i.targetUrl:(alert("NO Url provided"),null)}function C(){const e=function(){const e=r.clickId||null;let n=r.clickUrl||null;if(o){return(n||v()).replace("$$clickId$$",e||"")}return v()}();T("Redirecting to",e),r.redirectUrl=e,!u&&i.onComplete(r)}!function(){if("undefined"==typeof jQuery){let e=document.createElement("script");e.src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js",e.integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=",e.setAttribute("crossorigin","anonymous"),document.head.appendChild(e)}!function(){const e=[{name:"link",href:"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css",integrity:"sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=",crossorigin:"anonymous"},{name:"link",href:"https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css",integrity:"sha256-rTKxJIIHupH7lFo30458ner8uoSSRYciA0gttCkw1JE=",crossorigin:"anonymous"},{name:"script",src:"https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput-jquery.min.js",integrity:"sha256-s0v2VDVLbAqGy/FEK0588AtGkSz0aOb6ibQCPCkk4Bk=",crossorigin:"anonymous"},{name:"script",src:"https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput.min.js",integrity:"sha256-Gf8PGNhkyd/4AuPWG7theaqc8hAvHzocloCkDN9pXFw=",crossorigin:"anonymous"},{name:"script",src:"https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js",integrity:"sha256-271j3cFogB3oRK1PLEHwasgC+sTkKr0f1I37LU9Qkyk=",crossorigin:"anonymous"}];let n;for(let t=0;t<e.length;t++)n=document.createElement(e[t].name),e[t].integrity&&(n.integrity=e[t].integrity),e[t].crossorigin&&n.setAttribute("crossorigin",e[t].crossorigin),"link"===e[t].name&&(n.rel="stylesheet",n.href=e[t].href,document.head.appendChild(n)),"script"===e[t].name&&(n.type="text/javascript",n.src=e[t].src,document.body.appendChild(n))}(),bindEvent(window,"message",(function(e){const n=e.data;"submitPhoneEntry"===n&&(i.phoneNumber=t.getNumber().replace("+",""),a(i)),"redirectUrl"===n&&C()}))}()}]);
+var aqutoFlows =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./flows/phone/src/js/aquto.flows.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./flows/phone/src/js/aquto.flows.js":
+/*!*******************************************!*\
+  !*** ./flows/phone/src/js/aquto.flows.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/** instantiate moveRewards object */\nlet moveRewards = {};\nlet data = {};\nlet targetOrigin;\nconst iframeId = 'iframe-01';\n\n/**\n * Check eligibility for the current device\n * Campaign id is used to determine configured reward, and operator\n *\n * @param {String} campaignId Aquto campaign id\n * @param {function} callback Callback function on success or error\n * @param {String} [phoneNumber] The phone number of the subscriber\n *\n */\n\nfunction checkAppEligibilityPhoneEntry(options) {\n    const phoneNumber = options.phoneNumber;\n    aquto.checkAppEligibility({\n        campaignId: options.campaignId,\n        phoneNumber: phoneNumber,\n        callback: function(response) {\n            if (response){\n                if (!response.identified){\n                    response.identified = !!(response.eligible && response.operatorCode !== 'unknown');\n                }\n                // Create Message Content containing Response and Options Objects, and the response status.\n                createPostMessageData('aq.handleIframeDOM', response, options, 'success');\n                if (!document.getElementById(iframeId)) {\n                    injectIframe(options);\n                } else {\n                    sendMessageToIframe(JSON.stringify(data), targetOrigin);\n                }\n            } else {\n                createPostMessageData('aq.handleIframeDOM', response, options, 'error');\n                if (!document.getElementById(iframeId)) {\n                    injectIframe(options);\n                } else {\n                    sendMessageToIframe(JSON.stringify(data));\n                }\n            }\n        }\n    });\n}\n\n/*--------------------------------------------------------------------------*/\n\nmoveRewards.VERSION = '0.1.0';\nmoveRewards.checkAppEligibilityPhoneEntry = checkAppEligibilityPhoneEntry;\nmodule.exports = moveRewards;\n\n/*--------------------------- IFRAME CONSTRUCTOR -----------------------------------------------*/\nfunction injectIframe(options){\n    appendIframeToTarget(setIframeSize(createIframeTag(), options.targetId));\n}\n\nfunction createIframeTag(){\n\n    let iframeTag = document.createElement('iframe');\n        iframeTag.minWidth = '250px';\n        iframeTag.minHeight = '300px';\n        iframeTag.src = \"../../iframeContent.html\";\n        iframeTag.id = \"iframe-01\";\n        iframeTag.name = \"aqutoIframe\";\n        iframeTag.style.border = \"none\";\n        iframeTag.style.position = \"absolute\";\n        iframeTag.style.backgroundColor = \"#fff\";\n    return iframeTag\n}\n\nfunction setIframeSize(iframeEl, targetId){\n\n    const targetElementId = typeof targetId === 'string' ? targetId : targetId.id;\n    const targetEl = document.querySelector(\"#\" + targetElementId);\n\n    // Calculating actual rendered values for Target Tag's Width and Height in case they are NOT set by CSS.\n    // If these values are lower than iframes's minWidth or minHeight, they will be set by default.\n    const iframeWidth = targetEl.scrollWidth < parseInt(iframeEl.minWidth.substring(0,3)) ? parseInt(iframeEl.minWidth.substring(0,3)) : targetEl.scrollWidth;\n    const iframeHeight = targetEl.scrollHeight < parseInt(iframeEl.minHeight.substring(0,3)) ? parseInt(iframeEl.minHeight.substring(0,3)) : targetEl.scrollHeight;\n    iframeEl.style.width = iframeWidth + \"px\";\n    iframeEl.style.height = iframeHeight + \"px\";\n\n    return {targetEl, iframeEl}\n}\n\nfunction appendIframeToTarget(DOMElements){\n    DOMElements.targetEl && DOMElements.targetEl.appendChild(DOMElements.iframeEl);\n}\n\n/*--------------------------- END IFRAME CONSTRUCTOR -----------------------------------------------*/\n\n\n// Create PostMessage Object\nfunction createPostMessageData(id, response, options, status){\n    data.id = id;\n    data.response = response;\n    data.options = options;\n    data.status = status;\n    data.sPageURL = window.location.search.substring(1);\n    data.parentSrc = window.location.origin;\n}\n\n// PostMessage to Iframe\nfunction sendMessageToIframe(message, targetOrigin){\n    window.frames.aqutoIframe.postMessage(message, targetOrigin);\n}\n\n// addEventListener support for IE8\nfunction bindEvent(element, eventName, eventHandler) {\n    if (element.addEventListener){\n        element.addEventListener(eventName, eventHandler, false);\n    } else if (element.attachEvent) {\n        element.attachEvent('on' + eventName, eventHandler);\n    }\n}\n\n// Adding PostMessages Event Listener\nbindEvent(window, 'message', function (e) {\n    const eventName = e.data.eventName;\n\n    if (document.getElementById(iframeId)){\n        const iFrameSrc = document.getElementById(iframeId).src;\n        if(iFrameSrc.includes(e.origin)){\n            targetOrigin = e.origin;\n            // Once iFrame is loaded send data (checkAppEligibility Response and user Options) to iFrame\n            if(eventName === 'aq.iframeLoaded'){\n                sendMessageToIframe(JSON.stringify(data), targetOrigin);\n            }\n\n            // Call checkAppEligibilityPhoneEntry method when iFrame postMessage \"submitPhoneEntryForm\"\n            if(eventName === 'aq.validatePhoneNumber'){\n                const prevOptions = data.options;\n                const options = Object.assign(e.data.options, prevOptions);\n                checkAppEligibilityPhoneEntry(options);\n            }\n\n            // Call userCallback method when iFrame postMessage \"triggerOnComplete\"\n            if(eventName === 'aq.triggerOnComplete'){\n                const redirectUrl = e.data.finalUrl;\n                data.options.onComplete({redirectUrl});\n            }\n        }\n    }\n});\n\n// String.prototype.polyfill\nif (!String.prototype.includes) {\n    String.prototype.includes = function(search, start) {\n        'use strict';\n\n        if (search instanceof RegExp) {\n            throw TypeError('first argument must not be a RegExp');\n        }\n        if (start === undefined) { start = 0; }\n        return this.indexOf(search, start) !== -1;\n    };\n}\n\n\n\n\n\n\n\n\n\n//# sourceURL=webpack://aqutoFlows/./flows/phone/src/js/aquto.flows.js?");
+
+/***/ })
+
+/******/ });

@@ -28,7 +28,7 @@ module.exports = function(grunt) {
       },
       compileFlows: {
         entry: {
-          aquto_flows: "./flows/phone/src/aquto.flows.js"
+          aquto_flows: "./flows/phone/src/js/aquto.flows.js"
         },
         output: {
           path: __dirname,
@@ -55,7 +55,7 @@ module.exports = function(grunt) {
       },
       watchFlows: {
         entry: {
-          aquto_flows: "./flows/phone/src/aquto.flows.js",
+          aquto_flows: "./flows/phone/src/js/aquto.flows.js",
         },
         output: {
           path: __dirname,
