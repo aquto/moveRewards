@@ -13,9 +13,7 @@ const translations = {
         ineligibleSubTitle: '¿Quieres ver el video sin ganar megas?',
         ineligibleBtn: 'Continuar sin ganar megas',
         errorMsg: 'Lo sentimos, ocurrió un error durante la reproducción del video.',
-        timerTxt1: 'Ver el video en ',
-        timerTxt2: ' segundos.',
-        get timer() { return this.timerTxt1 + '{count}' + this.timerTxt2 }
+        timer: 'Ver el video en {count} segundos.'
     },
     en: {
         loading: 'Loading',
@@ -31,9 +29,7 @@ const translations = {
         ineligibleSubTitle: 'Do you want to continue without reward?',
         ineligibleBtn: 'Continue without reward',
         errorMsg: 'Sorry, we are unable to play this video at the moment.',
-        timerTxt1: 'Watch video in ',
-        timerTxt2: ' seconds.',
-        get timer() { return this.timerTxt1 + '{count}' + this.timerTxt2 }
+        timer: 'Watch video in {count} seconds.',
     },
     pt:{
         loading: 'Carregando',
@@ -49,8 +45,6 @@ const translations = {
         ineligibleSubTitle: 'Gostaria de continuar sem a recompensa?',
         ineligibleBtn: 'Continuar sem a recompensa',
         errorMsg: 'Desculpe, o vídeo não está habilitado neste momento.',
-        timerTxt1: 'Assista ao vídeo em ',
-        timerTxt2: ' segundos.',
-        get timer() { return this.timerTxt1 + '{count}' + this.timerTxt2 }
+        timer: 'Assista ao vídeo em {count} segundos.'
     }
 };

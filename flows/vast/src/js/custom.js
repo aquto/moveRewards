@@ -102,7 +102,8 @@
     const availableLanguages = ['es', 'pt', 'en'];
     const defaultLanguages = availableLanguages;
     const languages = intersect(userLanguages, availableLanguages) || defaultLanguages;
-    const lang = languages.find( function (l) {return getNavigatorLanguage() === l}) || languages[0];
+    const navLanguage = getNavigatorLanguage();
+    const lang = languages.find( function (l) {return navLanguage === l}) || languages[0];
 
     // Strings Translation
     const messages = translations[lang];
@@ -259,13 +260,13 @@
                                 hideElem(DOMelements.phoneCheck);
                                 showElem(DOMelements.ineligibleUI);
                                 showElem(DOMelements.timer);
-                                DOMelements.timer.innerHTML = messages.timer.replace(/\{count\}/, count);
+                                DOMelements.timer.innerHTML = timerMessage(count);
                                 startCountdown();
                             }
                         }
                         if (phone) {
                             showElem(DOMelements.timer);
-                            DOMelements.timer.innerHTML = messages.timer.replace(/\{count\}/, count);
+                            DOMelements.timer.innerHTML = timerMessage(count);
                             startCountdown();
                         }
                     } else {
@@ -276,7 +277,7 @@
                             showElem(DOMelements.ineligibleUI);
                             hideElem(DOMelements.phoneCheck);
                             showElem(DOMelements.timer);
-                            DOMelements.timer.innerHTML = messages.timer.replace(/\{count\}/, count);
+                            DOMelements.timer.innerHTML = timerMessage(count);
                             startCountdown();
                         } else {
                             debug('unidentified');
@@ -309,7 +310,7 @@
         const timer = DOMelements.timer;
         if (count > 0) {
             count--;
-            timer.innerHTML = messages.timer.replace(/\{count\}/, count);
+            timer.innerHTML = timerMessage(count);
             startCountdown();
         } else {
             showPlayer(true);
@@ -500,9 +501,6 @@
             if(typeof elements[i].id === 'string'){
                 elements[i].innerHTML = messages[elements[i].id];
             }
-            if(typeof elements[i].id === "function"){
-                elements[i].innerHTML = messages[elements[i].id]();
-            }
         }
 
     }
@@ -525,6 +523,10 @@
                 return false;
             return true;
         };
+    }
+
+    function timerMessage(count){
+        return messages.timer.replace(/\{count\}/, count);
     }
 
     addEventOverlay();
