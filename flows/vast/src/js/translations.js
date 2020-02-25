@@ -14,7 +14,8 @@ const translations = {
         ineligibleBtn: 'Continuar sin ganar megas',
         errorMsg: 'Lo sentimos, ocurrió un error durante la reproducción del video.',
         timerTxt1: 'Ver el video en ',
-        timerTxt2: ' segundos.'
+        timerTxt2: ' segundos.',
+        get timer() { return this.timerTxt1 + '{count}' + this.timerTxt2 }
     },
     en: {
         loading: 'Loading',
@@ -31,7 +32,8 @@ const translations = {
         ineligibleBtn: 'Continue without reward',
         errorMsg: 'Sorry, we are unable to play this video at the moment.',
         timerTxt1: 'Watch video in ',
-        timerTxt2: ' seconds.'
+        timerTxt2: ' seconds.',
+        get timer() { return this.timerTxt1 + '{count}' + this.timerTxt2 }
     },
     pt:{
         loading: 'Carregando',
@@ -48,6 +50,7 @@ const translations = {
         ineligibleBtn: 'Continuar sem a recompensa',
         errorMsg: 'Desculpe, o vídeo não está habilitado neste momento.',
         timerTxt1: 'Assista ao vídeo em ',
-        timerTxt2: ' segundos.'
+        timerTxt2: ' segundos.',
+        get timer() { return this.timerTxt1 + '{count}' + this.timerTxt2 }
     }
 };

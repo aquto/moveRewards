@@ -102,10 +102,10 @@
     const availableLanguages = ['es', 'pt', 'en'];
     const defaultLanguages = availableLanguages;
     const languages = intersect(userLanguages, availableLanguages) || defaultLanguages;
-    const lang = languages[0];
+    const lang = languages.find( function (l) {return getNavigatorLanguage() === l}) || languages[0];
 
     // Strings Translation
-    const messages =  translations[setTranslationLanguage(getNavigatorLanguage())];
+    const messages = translations[lang];
 
     let timeoutRef;
     let videoError = false;
@@ -259,11 +259,13 @@
                                 hideElem(DOMelements.phoneCheck);
                                 showElem(DOMelements.ineligibleUI);
                                 showElem(DOMelements.timer);
+                                DOMelements.timer.innerHTML = messages.timer.replace(/\{count\}/, count);
                                 startCountdown();
                             }
                         }
                         if (phone) {
-                            DOMelements.timer.classList.remove('hide');
+                            showElem(DOMelements.timer);
+                            DOMelements.timer.innerHTML = messages.timer.replace(/\{count\}/, count);
                             startCountdown();
                         }
                     } else {
@@ -274,6 +276,7 @@
                             showElem(DOMelements.ineligibleUI);
                             hideElem(DOMelements.phoneCheck);
                             showElem(DOMelements.timer);
+                            DOMelements.timer.innerHTML = messages.timer.replace(/\{count\}/, count);
                             startCountdown();
                         } else {
                             debug('unidentified');
@@ -303,13 +306,10 @@
     }
 
     const countDown = function() {
-        const timer = getDOMElement("timer");
-        const timerTextOne = messages.timerTxt1;
-        const timerTextTwo = messages.timerTxt2;
+        const timer = DOMelements.timer;
         if (count > 0) {
             count--;
-            DOMelements.timer.innerHTML = "Ver el video en " + count + " segundos.";
-            timer.innerHTML = timerTextOne + count + timerTextTwo;
+            timer.innerHTML = messages.timer.replace(/\{count\}/, count);
             startCountdown();
         } else {
             showPlayer(true);
@@ -478,15 +478,6 @@
         return navigatorLang.substring(0, 2);
     }
 
-    // Compare Navigator Language to default Language, used to select and specific translation
-    function setTranslationLanguage(navigatorLang){
-        if(lang === navigatorLang){
-            return navigatorLang
-        } else{
-            return lang
-        }
-    }
-
     function setElementsText() {
         const elements = [
             DOMelements.loading,
@@ -502,10 +493,16 @@
             DOMelements.ineligibleSubTitle,
             DOMelements.ineligibleBtn,
             DOMelements.errorMsg,
+            DOMelements.timer,
         ];
 
         for (let i = 0; i < elements.length; i ++){
-            elements[i].innerHTML = messages[elements[i].id];
+            if(typeof elements[i].id === 'string'){
+                elements[i].innerHTML = messages[elements[i].id];
+            }
+            if(typeof elements[i].id === "function"){
+                elements[i].innerHTML = messages[elements[i].id]();
+            }
         }
 
     }
