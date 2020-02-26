@@ -15,6 +15,8 @@ Two values are required to generate the code correctly:
 |dc| Disable player controls|
 |c| Available Countries (e.g mx, pe, br, ar, co, cl, ec)|
 |l| Available Languages (e.g es, en, pt)|
+|ch| Incent channel is used for reporting purposes (e.g channel1)|
+|psid| Unique tracking code assigned by Aquto|
 
 VAST tag URL example:
 

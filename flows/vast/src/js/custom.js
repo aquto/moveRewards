@@ -105,8 +105,8 @@
     const navLanguage = getNavigatorLanguage();
     const lang = languages.find( function (l) {return navLanguage === l}) || languages[0];
 
-    const publisherSiteUuid = getUrlParameter('psid') && getUrlParameter('psid').split(',')[0];
-    const channel = getUrlParameter('ch') && getUrlParameter('ch').split(',')[0];
+    const publisherSiteUuid = getUrlParameter('psid');
+    const channel = getUrlParameter('ch');
 
     // Strings Translation
     const messages = translations[lang];
