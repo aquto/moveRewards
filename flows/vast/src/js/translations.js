@@ -13,7 +13,9 @@ const translations = {
         ineligibleSubTitle: '¿Quieres ver el video sin ganar megas?',
         ineligibleBtn: 'Continuar sin ganar megas',
         errorMsg: 'Lo sentimos, ocurrió un error durante la reproducción del video.',
-        timer: 'Ver el video en {count} segundos.'
+        timer: 'Ver el video en {count} segundos.',
+        ineligibleMsg: 'Lo sentimos, tu número no aplica para ganar megas en éste momento',
+        completeFailMsg: 'Lo sentimos, hubo un problema para activar los megas.'
     },
     en: {
         loading: 'Loading',
@@ -30,6 +32,8 @@ const translations = {
         ineligibleBtn: 'Continue without reward',
         errorMsg: 'Sorry, we are unable to play this video at the moment.',
         timer: 'Watch video in {count} seconds.',
+        ineligibleMsg: 'Sorry, your phone number is not eligible for data rewards',
+        completeFailMsg: 'Sorry, there was a problem to activate your data.'
     },
     pt:{
         loading: 'Carregando',
@@ -45,6 +49,8 @@ const translations = {
         ineligibleSubTitle: 'Gostaria de continuar sem a recompensa?',
         ineligibleBtn: 'Continuar sem a recompensa',
         errorMsg: 'Desculpe, o vídeo não está habilitado neste momento.',
-        timer: 'Assista ao vídeo em {count} segundos.'
+        timer: 'Assista ao vídeo em {count} segundos.',
+        ineligibleMsg: 'Desculpe, seu número de telefone  não é elegível a recompensa em pacotes de dados',
+        completeFailMsg: 'Desculpe, houve um problema ao ativar seu pacote de dados.'
     }
 };

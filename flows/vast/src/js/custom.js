@@ -337,14 +337,13 @@
                         debug('complete failure');
                         DOMelements.icon.classList.toggle('fa-times-circle');
                         toggleBodyBgColor('fail');
-                        DOMelements.processingText.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en' +
-                            ' éste momento';
+                        DOMelements.processingText.innerHTML = messages.ineligibleMsg;
                     }
                 } else {
                     debug('complete invalid response');
                     DOMelements.icon.classList.toggle('fa-times-circle');
                     toggleBodyBgColor('fail');
-                    DOMelements.processingText.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
+                    DOMelements.processingText.innerHTML = messages.completeFailMsg;
                 }
             }
         });
