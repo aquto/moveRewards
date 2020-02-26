@@ -1,9 +1,9 @@
-.loading {
+.ellipsis {
   font-size: 20px;
   color: black;
 }
 
-.loading:after {
+.ellipsis:after {
   content: ' .';
   animation: dots 1s steps(5, end) infinite;
 }
