@@ -105,6 +105,9 @@
     const navLanguage = getNavigatorLanguage();
     const lang = languages.find( function (l) {return navLanguage === l}) || languages[0];
 
+    const publisherSiteUuid = getUrlParameter('psid') && getUrlParameter('psid').split(',')[0];
+    const channel = getUrlParameter('ch') && getUrlParameter('ch').split(',')[0];
+
     // Strings Translation
     const messages = translations[lang];
 
@@ -222,6 +225,8 @@
         aquto.checkAppEligibility({
             campaignId: campaignId,
             phoneNumber: phone,
+            publisherSiteUuid: publisherSiteUuid,
+            channel: channel,
             callback: function(response) {
                 debug('checkAppEligibility');
                 hideElem(loadingOverlay);
