@@ -6,17 +6,17 @@ The VAST flows functionality supports creating an ad tag that displays a video f
 Two values are required to generate the code correctly:
 
 |Name|Description|
-|:----|:--------|
+|:---|:----------|
 |cid| Campaign ID (e.g. 123e4567-e89b-12d3-a456-426655440000)|
 |vu| VAST tag URL for the video|
 |b| URL for the video poster|
 |w| Ad Tag Width (Minimum 300)|
 |h| Ad Tag Height (Minimum 250)|
 |dc| Disable player controls|
-|c| Available Countries (e.g mx, pe, br, ar, co, cl, ec)|
-|l| Available Languages (e.g es, en, pt)|
-|ch| Incent channel is used for reporting purposes (e.g channel1)|
-|psid| Unique tracking code assigned by Aquto|
+|c| Comma separated list of available countries (Supported and default: mx,cl,ar,co,pe,br)|
+|l| Comma separated list of available languages (Supported and default: es,en,pt)|
+|ch| Incent channel string to be used for reporting purposes|
+|psid| Unique publisher site tracking code assigned by Aquto|
 
 VAST tag URL example:
 

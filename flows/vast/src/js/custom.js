@@ -40,6 +40,11 @@
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
     const disableControls = getUrlParameter('dc') === '1';
+    const publisherSiteUuid = getUrlParameter('psid');
+    const channel = getUrlParameter('ch');
+    const userCountries = getUrlParameter('co') && getUrlParameter('co').split(',');
+    const userLanguages = getUrlParameter('l') && getUrlParameter('l').split(',');
+
     const percentageThresholds = [0, 25, 50, 75, 95];
 
     /** Check if Aquto backend hostname has been passed in */
@@ -93,20 +98,15 @@
         // Brazil
         '55': 'br'
     };
-    const userCountries = getUrlParameter('co') && getUrlParameter('co').split(',');
     const availableCountries = ['mx', 'cl', 'ar', 'co', 'pe', 'br'];
     const defaultCountries = availableCountries;
     const countries = intersect(userCountries, availableCountries) || defaultCountries;
     const country = countries[0];
-    const userLanguages = getUrlParameter('l') && getUrlParameter('l').split(',');
     const availableLanguages = ['es', 'pt', 'en'];
     const defaultLanguages = availableLanguages;
     const languages = intersect(userLanguages, availableLanguages) || defaultLanguages;
     const navLanguage = getNavigatorLanguage();
     const lang = languages.find( function (l) {return navLanguage === l}) || languages[0];
-
-    const publisherSiteUuid = getUrlParameter('psid');
-    const channel = getUrlParameter('ch');
 
     // Strings Translation
     const messages = translations[lang];
