@@ -8,10 +8,14 @@
 </head>
 <body>
   <div style="position:relative;" id="aquto_tag">
-    <a href="#" style="position:absolute;" onclick="onClick();" ><img src="https://dummyimage.com/360/e0e0e0/ffffff.jpg&text=ad+Banner" /></a>
+      <a href="#" style="position:absolute;" onclick="onClick();" >
+        <div style="position: relative; display: table;">
+          <img src="https://dummyimage.com/360/e0e0e0/ffffff.jpg&text=ad+Banner" />
+        </div>
+      </a>
   </div>
   <!-- To use dev env use ?be=mp-dev.aquto.internal -->
-  <script id="aquto-api" src="../../../aquto.min.js"></script>
+  <script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js?be=mp-dev.aquto.internal"></script>
   <script src="aquto_flows.min.js"></script>
   <script>
     function onClick() {

@@ -77,7 +77,10 @@ module.exports = function(grunt) {
           'aquto.min.js': ['aquto.js'],
           'aquto_celtra.min.js': ['aquto_celtra.js'],
           'flows/phone/tag/aquto_flows.min.js': ['aquto_flows.js'],
-          'flows/vast/src/js/custom.min.js': ['flows/vast/src/js/custom.js']
+          'flows/vast/src/js/custom.min.js': ['flows/vast/src/js/custom.js'],
+          'flows/vast/src/js/polyfills.min.js': ['flows/vast/src/js/polyfills.js'],
+          'flows/vast/src/js/utils.min.js': ['flows/vast/src/js/utils.js'],
+          'flows/vast/src/js/translations.min.js': ['flows/vast/src/js/translations.js']
         }
       }
     },
@@ -89,11 +92,13 @@ module.exports = function(grunt) {
     },
     inline: {
       dist: {
-        options:{
+        options: {
           cssmin: true
         },
-        src: 'flows/vast/src/tag.html',
-        dest: 'flows/vast/inlined.html'
+        files: {
+          'flows/vast/inlined.html': 'flows/vast/src/tag.html',
+          'flows/phone/src/inlined.html': 'flows/phone/src/iframeContent.html'
+        }
       }
     },
     htmlmin: {
@@ -104,7 +109,8 @@ module.exports = function(grunt) {
           minifyJS: true
         },
         files: {
-          'flows/vast/tag/v1.html': 'flows/vast/inlined.html'
+          'flows/vast/tag/v1.html': 'flows/vast/inlined.html',
+          'flows/phone/tag/v1.html': 'flows/phone/src/inlined.html'
         }
       },
       dev: {
@@ -114,11 +120,12 @@ module.exports = function(grunt) {
           minifyJS: true
         },
         files: {
-          'flows/vast/tag/v1.html': 'flows/vast/inlined.html'
+          'flows/vast/tag/v1.html': 'flows/vast/inlined.html',
+          'flows/phone/tag/v1.html': 'flows/phone/src/inlined.html'
         }
       }
     },
-    clean: ['flows/vast/inlined.html', 'flows/vast/src/css/styles.css', 'flows/vast/src/js/utils.min.js', 'flows/vast/src/js/polyfills.min.js','flows/vast/src/js/custom.min.js']
+    clean: ['flows/vast/inlined.html', 'flows/phone/src/inlined.html', 'flows/vast/src/css/styles.css', 'flows/vast/src/js/utils.min.js', 'flows/vast/src/js/polyfills.min.js','flows/vast/src/js/custom.min.js', 'flows/vast/src/js/translations.min.js']
   });
 
 
@@ -136,11 +143,13 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['webpack:compile', 'webpack:compileFlows', 'uglify']);
   grunt.registerTask('watch', ['webpack:watch']);
   grunt.registerTask('serve', ['connect:server', 'watch']);
-  // PhoneEntry task(s)
-  grunt.registerTask('watchFlows', ['webpack:watchFlows']);
-  grunt.registerTask('serveFlows', ['connect:server', 'watchFlows']);
 
-  // vast project task(s).
+  // Vast task(s).
   grunt.registerTask('minifyHtml', ['htmlmin']);
   grunt.registerTask('vast', ['default', 'concat', 'inline', 'minifyHtml', 'clean']);
+
+  // PhoneEntry task(s).
+  grunt.registerTask('watchFlows', ['webpack:watchFlows']);
+  grunt.registerTask('serveFlows', ['vast', 'connect:server', 'watchFlows']);
+
 };

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs.vast.vpaid.min.css" integrity="sha256-Jlz9Tnz24Z33Lph9SYNCOMigjPCxoplDQo8qjAONgfs=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css" integrity="sha256-rTKxJIIHupH7lFo30458ner8uoSSRYciA0gttCkw1JE=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="iframeStyles.css?__inline=true">
+    <link rel="stylesheet" href="./css/iframeStyles.css?__inline=true">
 </head>
 
 <body>
@@ -68,13 +68,15 @@
     </div>
 
 </div>
+<!-- To use dev env use ?be=mp-dev.aquto.internal -->
+<script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js?be=mp-dev.aquto.internal"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput-jquery.min.js" integrity="sha256-s0v2VDVLbAqGy/FEK0588AtGkSz0aOb6ibQCPCkk4Bk=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput.min.js" integrity="sha256-Gf8PGNhkyd/4AuPWG7theaqc8hAvHzocloCkDN9pXFw=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js" integrity="sha256-271j3cFogB3oRK1PLEHwasgC+sTkKr0f1I37LU9Qkyk=" crossorigin="anonymous"></script>
-<script src="./phone/src/js/utils.js"></script>
-<script src="./phone/src/js/polyfills.js"></script>
-<script src="./phone/src/js/translations.js"></script>
-<script src="./phone/src/js/iframeMain.js"></script>
+<script src="../src/js/utils.js?__inline=true"></script>
+<script src="../src/js/polyfills.js?__inline=true"></script>
+<script src="../src/js/translations.js?__inline=true"></script>
+<script src="../src/js/iframeMain.js?__inline=true"></script>
 </body>
 </html>
