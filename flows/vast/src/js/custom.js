@@ -1,24 +1,35 @@
 (function(win, doc) {
     // DOM Elements to use
     var DOMelements = {
-        loading: getDOMElement('preload'),
+        body: doc.body,
         video: getDOMElement('video'),
         eligibleElement: getDOMElement('eligibleWrapper'),
         errorElement: getDOMElement('errorWrapper'),
         ineligibleMsgElement: getDOMElement('ineligibleMessage'),
-        body: doc.body,
         icon: getDOMElement('icon'),
-        text: getDOMElement('rewardText'),
         phoneEntry: getDOMElement('phoneEntryWrapper'),
         eligibleUI: getDOMElement('eligible'),
         ineligibleUI: getDOMElement('ineligible'),
         timer: getDOMElement('timer'),
-        rewardTextEligible: getDOMElement('rewardTextEligible'),
         phoneCheck: getDOMElement('phoneCheck'),
         input: doc.querySelector("#phone"),
         videoTimer: getDOMElement('videoTimer'),
         currentTimeTxt: getDOMElement('currentTime'),
-        durationTxt: getDOMElement('duration')
+        durationTxt: getDOMElement('duration'),
+        loadingWrapper: getDOMElement('loadingWrapper'),
+        loading: getDOMElement('loading'),
+        phoneEntryTitle: getDOMElement('phoneEntryTitle'),
+        thanksMsg: getDOMElement('thanksMsg'),
+        processingText: getDOMElement('processingText'),
+        phoneEntrySubTitle: getDOMElement('phoneEntrySubTitle'),
+        phoneEntrySubmitBtn: getDOMElement('phoneEntrySubmitBtn'),
+        rewardTextEligible: getDOMElement('rewardTextEligible'),
+        continueBtn: getDOMElement('continueBtn'),
+        eligibleBtn: getDOMElement('eligibleBtn'),
+        ineligibleTitle: getDOMElement('ineligibleTitle'),
+        ineligibleSubTitle: getDOMElement('ineligibleSubTitle'),
+        ineligibleBtn: getDOMElement('ineligibleBtn'),
+        errorMsg: getDOMElement('errorMsg')
     };
 
     let videoOverlay = getDOMElement('videoOverlay');
@@ -29,6 +40,10 @@
     const debugEnabled = getUrlParameter('d') === '1';
     const bannerUrl = getUrlParameter('b');
     const disableControls = getUrlParameter('dc') === '1';
+    const publisherSiteUuid = getUrlParameter('psid');
+    const channel = getUrlParameter('ch');
+    const userCountries = getUrlParameter('co') && getUrlParameter('co').split(',');
+    const userLanguages = getUrlParameter('l') && getUrlParameter('l').split(',');
 
     const percentageThresholds = [0, 25, 50, 75, 95];
 
@@ -37,13 +52,72 @@
     const be = scriptParams.be || 'app.aquto.com';
     const ow = scriptParams.ow || 'ow.aquto.com';
 
+    const phoneNumberValidation = {
+        mx: {
+            minLen: 12,
+            maxLen: 12,
+            countryCode: '52'
+        },
+        cl: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '56'
+        },
+        ar: {
+            minLen: 10,
+            maxLen: 14,
+            countryCode: '549'
+        },
+        co: {
+            minLen: 12,
+            maxLen: 12,
+            countryCode: '57'
+        },
+        pe: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '51'
+        },
+        br: {
+            minLen: 13,
+            maxLen: 13,
+            countryCode: '55'
+        }
+    };
+    const countryDialingCodes = {
+        // Mexico
+        '52': 'mx',
+        // Chile
+        '56': 'cl',
+        // Argentina
+        '549': 'ar',
+        // Colombia
+        '57': 'co',
+        // Peru
+        '51': 'pe',
+        // Brazil
+        '55': 'br'
+    };
+    const availableCountries = ['mx', 'cl', 'ar', 'co', 'pe', 'br'];
+    const defaultCountries = availableCountries;
+    const countries = intersect(userCountries, availableCountries) || defaultCountries;
+    const country = countries[0];
+    const availableLanguages = ['es', 'pt', 'en'];
+    const defaultLanguages = availableLanguages;
+    const languages = intersect(userLanguages, availableLanguages) || defaultLanguages;
+    const navLanguage = getNavigatorLanguage();
+    const lang = languages.find( function (l) {return navLanguage === l}) || languages[0];
+
+    // Strings Translation
+    const messages = translations[lang];
+
     let timeoutRef;
     let videoError = false;
     let isEligible = false;
     let vastVideoComplete = false;
     let responseCopy;
 
-    // Eligible Player Options
+    // Player Options
     const playerOptions = {
         controls: !disableControls,
         autoplay: false,
@@ -69,22 +143,15 @@
     const player = videojs('player', playerOptions);
 
     // Player Events
-    player.on('play', function () {
+    player.on('play', function() {
         debug('play');
         videoError && hideElem(DOMelements.video);
-        if(!vastVideoComplete && disableControls) {
+        if (!vastVideoComplete && disableControls) {
             DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(this.currentTime()));
         }
     });
 
-    function setTimerLabels(currentTime, duration){
-        if (disableControls) {
-            DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
-            DOMelements.durationTxt.innerHTML = timerFormatter(Math.floor(duration));
-        }
-    }
-
-    player.on('timeupdate', function (e) {
+    player.on('timeupdate', function(e) {
         if (!videoError) {
             const percentage = Math.floor(this.currentTime() / this.duration() * 100);
             debug('update', percentage);
@@ -104,18 +171,6 @@
         }
     });
 
-    if (debugEnabled) {
-        // player.on('ready', function() {
-        // })
-        player.on("click", function (event) {
-            debug("click", event);
-        });
-
-        player.on("vast.adClick", function (event) {
-            debug("vast.adClick", event);
-        });
-   }
-
     player.on("vast.adError", function(event) {
         hideElem(DOMelements.ineligibleMsgElement);
         debug("vast.adError", event.error);
@@ -128,36 +183,50 @@
     player.on("vast.contentEnd", function() {
         debug("vast.contentEnd");
         hideElem(DOMelements.video);
-        if (!videoError && isEligible){ // If vast.adError Event then stop the process.
+        if (!videoError && isEligible) { // If vast.adError Event then stop the process.
             showElem(DOMelements.eligibleElement);
             completeReward();
         }
-        if(!isEligible && !videoError){
+        if (!isEligible && !videoError) {
             debug('not eligible');
             hideElem(DOMelements.video);
             showElem(DOMelements.ineligibleMsgElement);
         }
     });
 
+    if (debugEnabled) {
+        // player.on('ready', function() {
+        // })
+        player.on("click", function(event) {
+            debug("click", event);
+        });
+
+        player.on("vast.adClick", function(event) {
+            debug("vast.adClick", event);
+        });
+    }
+
     const inputTelOptions = {
         allowDropdown: true,
         formatOnDisplay: true,
-        initialCountry: "mx",
+        initialCountry: country,
         nationalMode: false,
-        onlyCountries: ['mx', 'pe'],
+        onlyCountries: countries,
         separateDialCode: true
     };
     const iti = win.intlTelInput(DOMelements.input, inputTelOptions);
     let count = 5;
 
     // Aquto checkAppEligibility method call
-    const checkPhoneNumber = function(){
+    const checkPhoneNumber = function() {
         event && event.preventDefault();
         const phone = iti.getNumber().replace('+', '');
         addLoadingOverlay();
         aquto.checkAppEligibility({
             campaignId: campaignId,
             phoneNumber: phone,
+            publisherSiteUuid: publisherSiteUuid,
+            channel: channel,
             callback: function(response) {
                 debug('checkAppEligibility');
                 hideElem(loadingOverlay);
@@ -168,15 +237,15 @@
                     if (response.identified) {
                         if (response.eligible) {
                             isEligible = true;
-                            if(phone){
+                            if (phone) {
                                 debug('phone entered eligible');
                                 count = 5;
                                 showElem(DOMelements.eligibleUI);
                                 hideElem(DOMelements.phoneCheck);
                                 DOMelements.rewardTextEligible.innerHTML = response.rewardText;
-                            } else{
+                            } else {
                                 debug('identified & eligible');
-                                hideElem(DOMelements.loading);
+                                hideElem(DOMelements.loadingWrapper);
                                 showElem(DOMelements.video);
                                 player.play();
                             }
@@ -190,39 +259,42 @@
                             } else {
                                 debug('identified + ineligible')
                                 count = 10;
-                                hideElem(DOMelements.loading);
+                                hideElem(DOMelements.loadingWrapper);
                                 hideElem(DOMelements.video);
                                 showElem(DOMelements.phoneEntry);
                                 hideElem(DOMelements.phoneCheck);
                                 showElem(DOMelements.ineligibleUI);
                                 showElem(DOMelements.timer);
+                                DOMelements.timer.innerHTML = timerMessage(count);
                                 startCountdown();
                             }
                         }
                         if (phone) {
-                            DOMelements.timer.classList.remove('hide');
+                            showElem(DOMelements.timer);
+                            DOMelements.timer.innerHTML = timerMessage(count);
                             startCountdown();
                         }
                     } else {
-                        if (phone){
+                        if (phone) {
                             debug('phone entered unidentified');
                             count = 10;
                             isEligible = false;
                             showElem(DOMelements.ineligibleUI);
                             hideElem(DOMelements.phoneCheck);
                             showElem(DOMelements.timer);
+                            DOMelements.timer.innerHTML = timerMessage(count);
                             startCountdown();
                         } else {
                             debug('unidentified');
                             isEligible = false;
-                            hideElem(DOMelements.loading);
+                            hideElem(DOMelements.loadingWrapper);
                             hideElem(DOMelements.video);
                             showElem(DOMelements.phoneEntry);
                         }
                     }
                 } else {
                     debug('error.checkAppEligibility');
-                    hideElem(DOMelements.loading);
+                    hideElem(DOMelements.loadingWrapper);
                     hideElem(DOMelements.video);
                     showElem(DOMelements.errorElement);
                 }
@@ -230,65 +302,7 @@
         });
     }
 
-    function addEventOverlay(){
-        videoOverlay.addEventListener('click', function(event) {
-            if(event.stopPropagation){
-                event.stopPropagation();
-            }
-            if(event.cancelBubble !== null) {
-                event.cancelBubble = true;
-            }
-            hideElem(DOMelements.video);
-            checkPhoneNumber();
-        });
-    }
-
-    function addLoadingOverlay(){
-        showElem(loadingOverlay);
-        loadingOverlay.addEventListener('click', function(event) {
-            if(event.stopPropagation){
-                event.stopPropagation();
-            }
-            if(event.cancelBubble !== null) {
-                event.cancelBubble = true;
-            }
-        });
-    }
-
-    // Aquto complete method call
-    function completeReward(){
-        aquto.complete({
-            campaignId: campaignId,
-            callback: function(response) {
-                debug('complete');
-                if (response) {
-                    hideElem(DOMelements.loading);
-                    showElem(DOMelements.eligibleElement);
-                    DOMelements.icon.classList.remove("fa-check-circle", "fa-times-circle");
-
-                    if (response.eligible) {
-                        debug('complete success');
-                        DOMelements.icon.classList.add('fa-check-circle');
-                        toggleBodyBgColor('success');
-                        DOMelements.text.innerHTML = response.rewardText;
-                    } else {
-                        debug('complete failure');
-                        DOMelements.icon.classList.toggle('fa-times-circle');
-                        toggleBodyBgColor('fail');
-                        DOMelements.text.innerHTML = 'Lo sentimos, tu número no aplica para ganar megas en' +
-                            ' éste momento';
-                    }
-                } else {
-                    debug('complete invalid response');
-                    DOMelements.icon.classList.toggle('fa-times-circle');
-                    toggleBodyBgColor('fail');
-                    DOMelements.text.innerHTML = 'Lo sentimos, hubo un problema para activar los megas.';
-                }
-            }
-        });
-    }
-
-    const showPlayer = function(ap){
+    const showPlayer = function(ap) {
         event && event.preventDefault();
         stopCountdown(); // Cancel timer if set
         hideElem(DOMelements.phoneEntry);
@@ -297,23 +311,107 @@
         ap !== 0 && autoPlay();
     }
 
-    function autoPlay(){
-        player.play();
-    }
-
     const countDown = function() {
+        const timer = DOMelements.timer;
         if (count > 0) {
             count--;
-            DOMelements.timer.innerHTML = "Ver el video en " + count + " segundos.";
+            timer.innerHTML = timerMessage(count);
             startCountdown();
         } else {
             showPlayer(true);
         }
     }
 
+    // Aquto complete method call
+    function completeReward() {
+        aquto.complete({
+            campaignId: campaignId,
+            callback: function(response) {
+                debug('complete');
+                if (response) {
+                    hideElem(DOMelements.loadingWrapper);
+                    showElem(DOMelements.eligibleElement);
+                    DOMelements.icon.classList.remove("fa-check-circle", "fa-times-circle");
+
+                    if (response.eligible) {
+                        debug('complete success');
+                        DOMelements.icon.classList.add('fa-check-circle');
+                        toggleBodyBgColor('success');
+                        DOMelements.processingText.innerHTML = response.rewardText;
+                    } else {
+                        debug('complete failure');
+                        DOMelements.icon.classList.toggle('fa-times-circle');
+                        toggleBodyBgColor('fail');
+                        DOMelements.processingText.innerHTML = messages.ineligibleMsg;
+                    }
+                } else {
+                    debug('complete invalid response');
+                    DOMelements.icon.classList.toggle('fa-times-circle');
+                    toggleBodyBgColor('fail');
+                    DOMelements.processingText.innerHTML = messages.completeFailMsg;
+                }
+            }
+        });
+    }
+
+    // Phone Number Entry Validation
+    function numberIsValid() {
+        const phoneNumber = iti.getNumber().replace('+', '');
+        const countryCode = findCountry();
+        const isValid = countryCode && phoneNumber.length >= phoneNumberValidation[countryCode].minLen && phoneNumber.length <= phoneNumberValidation[countryCode].maxLen
+        DOMelements.phoneEntrySubmitBtn.disabled = !isValid
+    }
+
+    function setTimerLabels(currentTime, duration) {
+        if (disableControls) {
+            DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(currentTime));
+            DOMelements.durationTxt.innerHTML = timerFormatter(Math.floor(duration));
+        }
+    }
+
+    function findCountry() {
+        const phoneNumber = iti.getNumber().replace('+', '');
+        const entries = Object.entries(countryDialingCodes);
+
+        for (let i = 0; i < entries.length; i++) {
+            if (phoneNumber.substring(0, entries[i][0].length) === entries[i][0]) {
+                return entries[i][1];
+            }
+        }
+    }
+
+    function addEventOverlay() {
+        videoOverlay.addEventListener('click', function(event) {
+            if (event.stopPropagation) {
+                event.stopPropagation();
+            }
+            if (event.cancelBubble !== null) {
+                event.cancelBubble = true;
+            }
+            hideElem(video);
+            checkPhoneNumber();
+        });
+    }
+
+    function addLoadingOverlay() {
+        showElem(loadingOverlay);
+        loadingOverlay.addEventListener('click', function(event) {
+            if (event.stopPropagation) {
+                event.stopPropagation();
+            }
+            if (event.cancelBubble !== null) {
+                event.cancelBubble = true;
+            }
+        });
+    }
+
+    function autoPlay() {
+        player.play();
+    }
+
     function getUrlParameter(sParam) {
         let sPageURL = win.location.search.substring(1),
-            sURLVariables = sPageURL.split('&') ,
+            sURLVariables = sPageURL.split('&'),
             sParameterName,
             i;
 
@@ -325,7 +423,7 @@
         }
     }
 
-    function debug(message, options){
+    function debug(message, options) {
         if (debugEnabled) {
             console.log(message, options);
         }
@@ -335,11 +433,11 @@
         return doc.getElementById(id);
     }
 
-    function showElem(elem){
+    function showElem(elem) {
         elem && elem.classList.remove('hide');
     }
 
-    function hideElem(elem){
+    function hideElem(elem) {
         elem && elem.classList.add('hide');
     }
 
@@ -357,37 +455,92 @@
         }
     }
 
-    function toggleBodyBgColor(className){
-        if(className === 'success'){
+    function toggleBodyBgColor(className) {
+        if (className === 'success') {
             DOMelements.body.classList.remove('fail');
             DOMelements.body.classList.add(className);
         }
-        if(className === 'fail'){
+        if (className === 'fail') {
             DOMelements.body.classList.remove('success');
             DOMelements.body.classList.add(className);
         }
     }
 
-    function timerFormatter(data){
+    function timerFormatter(data) {
         return Math.floor(data / 60).toString().padStart(2, '0') + ':' + (data % 60).toString().padStart(2, '0')
     }
 
-    function trackVideoView(clickId, percentageViewed){
+    function trackVideoView(clickId, percentageViewed) {
         const params = '?clickId=' + clickId + '&percentageViewed=' + percentageViewed;
-        const url='//' + be + '/api/campaign/event/videoview' + params;
+        const url = '//' + be + '/api/campaign/event/videoview' + params;
         debug('tracking', url);
         new Image().src = url;
     }
 
-    window.onload = function(){
-        hideElem(DOMelements.loading);
-        addEventOverlay();
-        showPlayer(0);
+    function getNavigatorLanguage() {
+        const navigatorLang = (navigator.languages && navigator.languages.length) ? navigator.languages[0] :
+            navigator.userLanguage || navigator.language || navigator.browserLanguage || defaultLanguages[0];
+        return navigatorLang.substring(0, 2);
     }
+
+    function setElementsText() {
+        const elements = [
+            DOMelements.loading,
+            DOMelements.phoneEntryTitle,
+            DOMelements.thanksMsg,
+            DOMelements.processingText,
+            DOMelements.phoneEntrySubTitle,
+            DOMelements.phoneEntrySubmitBtn,
+            DOMelements.rewardTextEligible,
+            DOMelements.continueBtn,
+            DOMelements.eligibleBtn,
+            DOMelements.ineligibleTitle,
+            DOMelements.ineligibleSubTitle,
+            DOMelements.ineligibleBtn,
+            DOMelements.errorMsg,
+            DOMelements.timer,
+        ];
+
+        for (let i = 0; i < elements.length; i ++){
+            if(typeof elements[i].id === 'string'){
+                elements[i].innerHTML = messages[elements[i].id];
+            }
+        }
+
+    }
+
+    function addPhoneInputEventListener() {
+        DOMelements.input.maxLength = 18;
+        DOMelements.input.onkeydown = function() {
+            numberIsValid();
+        };
+        DOMelements.input.onkeyup = function() {
+            numberIsValid();
+        };
+        DOMelements.input.addEventListener("countrychange", function() {
+            numberIsValid();
+            DOMelements.input.value = '';
+        });
+        DOMelements.input.onkeypress = function(e) {
+            let ASCIICode = (e.which) ? e.which : e.keyCode
+            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+                return false;
+            return true;
+        };
+    }
+
+    function timerMessage(count){
+        return messages.timer.replace(/\{count\}/, count);
+    }
+
+    addEventOverlay();
+    showPlayer(0);
+    setElementsText();
+    addPhoneInputEventListener();
+    hideElem(DOMelements.loadingWrapper);
 
     this.checkPhoneNumber = checkPhoneNumber;
     this.showPlayer = showPlayer;
     this.countDown = countDown;
 
 })(window, document);
-
