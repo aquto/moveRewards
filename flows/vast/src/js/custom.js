@@ -47,6 +47,17 @@
 
     const percentageThresholds = [0, 25, 50, 75, 95];
 
+    // const pixelSubType = 'mrflowsvast';
+    const channelDelimiter = '-';
+    const channelSuffixes = {
+        impression: 'impression',
+        autoIdentify: 'click',
+        phoneEntry: 'phonenumber',
+        videoStart: 'videostart',
+        videoEnd: 'videoend',
+        videoError: 'videoerror'
+    }
+
     /** Check if Aquto backend hostname has been passed in */
     const scriptParams = parseScriptQuery(document.getElementById('aquto-api'));
     const be = scriptParams.be || 'app.aquto.com';
@@ -112,6 +123,7 @@
     const messages = translations[lang];
 
     let timeoutRef;
+    let videoStarted = false;
     let videoError = false;
     let isEligible = false;
     let vastVideoComplete = false;
@@ -149,6 +161,10 @@
         if (!vastVideoComplete && disableControls) {
             DOMelements.currentTimeTxt.innerHTML = timerFormatter(Math.floor(this.currentTime()));
         }
+        if (!videoStarted) {
+            videoStarted = true;
+            videoStartPixel();
+        }
     });
 
     player.on('timeupdate', function(e) {
@@ -183,14 +199,19 @@
     player.on("vast.contentEnd", function() {
         debug("vast.contentEnd");
         hideElem(DOMelements.video);
-        if (!videoError && isEligible) { // If vast.adError Event then stop the process.
-            showElem(DOMelements.eligibleElement);
-            completeReward();
-        }
-        if (!isEligible && !videoError) {
-            debug('not eligible');
-            hideElem(DOMelements.video);
-            showElem(DOMelements.ineligibleMsgElement);
+        if (!videoError) {
+            videoEndPixel();
+            if (isEligible) {
+                showElem(DOMelements.eligibleElement);
+                completeReward();
+            }
+            else {
+                debug('not eligible');
+                hideElem(DOMelements.video);
+                showElem(DOMelements.ineligibleMsgElement);
+            }
+        } else {
+            videoErrorPixel();
         }
     });
 
@@ -222,13 +243,18 @@
         event && event.preventDefault();
         const phone = iti.getNumber().replace('+', '');
         addLoadingOverlay();
+
+        const callChannel = getChannel(channel, phone ? channelSuffixes.phoneEntry : channelSuffixes.autoIdentify);
+        debug('checkPhoneNumber', { phone, publisherSiteUuid, callChannel });
+
         aquto.checkAppEligibility({
             campaignId: campaignId,
             phoneNumber: phone,
             publisherSiteUuid: publisherSiteUuid,
-            channel: channel,
+            channel: callChannel,
             callback: function(response) {
-                debug('checkAppEligibility');
+                debug('checkAppEligibilityResponse', response);
+
                 hideElem(loadingOverlay);
                 if (response) {
                     hideElem(videoOverlay);
@@ -470,10 +496,47 @@
         return Math.floor(data / 60).toString().padStart(2, '0') + ':' + (data % 60).toString().padStart(2, '0')
     }
 
+    function impressionPixel() {
+        trackingPixel(channelSuffixes.impression);
+    }
+
+    function videoStartPixel() {
+        trackingPixel(channelSuffixes.videoStart);
+    }
+
+    function videoEndPixel() {
+        trackingPixel(channelSuffixes.videoEnd);
+    }
+
+    function videoErrorPixel() {
+        trackingPixel(channelSuffixes.videoError);
+    }
+
+    function trackingPixel(channelSuffix) {
+        const params = '?campaignId=' + encodeURIComponent(campaignId)
+          + '&publisherSiteUuid=' + encodeURIComponent(orEmptyStr(publisherSiteUuid))
+          + '&channel=' + encodeURIComponent(getChannel(channel, channelSuffix));
+        const relativePath = 'datarewards/pixel';
+
+        // Generic campaign event
+        // const params = '?subType=' + encodeURIComponent(pixelSubType)
+        //   '&campaignId=' + encodeURIComponent(campaignId)
+        //   + '&source=' + encodeURIComponent(orEmptyStr(publisherSiteUuid))
+        //   + '&details=' + encodeURIComponent(getChannel(channel, channelSuffix));
+        // const relativePath = 'event/generic';
+
+        pixelUrl(relativePath, params, 'tracking url');
+    }
+
     function trackVideoView(clickId, percentageViewed) {
-        const params = '?clickId=' + clickId + '&percentageViewed=' + percentageViewed;
-        const url = '//' + be + '/api/campaign/event/videoview' + params;
-        debug('tracking', url);
+        const params = '?clickId=' + orEmptyStr(clickId) + '&percentageViewed=' + percentageViewed;
+        const relativePath = 'event/videoview';
+        pixelUrl(relativePath, params, 'video tracking url');
+    }
+
+    function pixelUrl(relativePath, params, name) {
+        const url = '//' + be + '/api/campaign/' + relativePath + params;
+        debug(name, url);
         new Image().src = url;
     }
 
@@ -533,14 +596,29 @@
         return messages.timer.replace(/\{count\}/, count);
     }
 
-    addEventOverlay();
-    showPlayer(0);
-    setElementsText();
-    addPhoneInputEventListener();
-    hideElem(DOMelements.loadingWrapper);
+    function getChannel(channel, channelSuffix) {
+        const delimiter = channel ? channelDelimiter : '';
+        return orEmptyStr(channel) + delimiter + orEmptyStr(channelSuffix);
+    }
 
-    this.checkPhoneNumber = checkPhoneNumber;
-    this.showPlayer = showPlayer;
-    this.countDown = countDown;
+    function orEmptyStr(v) {
+        return v === undefined || v === null ? '' : v;
+    }
 
+    function init() {
+        addEventOverlay();
+        showPlayer(0);
+        setElementsText();
+        addPhoneInputEventListener();
+        hideElem(DOMelements.loadingWrapper);
+        // Fire impression pixel
+        impressionPixel();
+
+        // Store in window scope so HTML can access
+        this.checkPhoneNumber = checkPhoneNumber;
+        this.showPlayer = showPlayer;
+        this.countDown = countDown;
+    }
+
+    init();
 })(window, document);

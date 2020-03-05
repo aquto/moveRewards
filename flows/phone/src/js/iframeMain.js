@@ -1,7 +1,54 @@
 (function (win, doc) {
 
-    const availableCountries = ['mx'];
+    const availableCountries = ['mx', 'cl', 'ar', 'co', 'pe', 'br'];
     const defaultCountries = availableCountries;
+    const phoneNumberValidation = {
+        mx: {
+            minLen: 12,
+            maxLen: 12,
+            countryCode: '52'
+        },
+        cl: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '56'
+        },
+        ar: {
+            minLen: 10,
+            maxLen: 14,
+            countryCode: '549'
+        },
+        co: {
+            minLen: 12,
+            maxLen: 12,
+            countryCode: '57'
+        },
+        pe: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '51'
+        },
+        br: {
+            minLen: 13,
+            maxLen: 13,
+            countryCode: '55'
+        }
+    };
+    const countryDialingCodes = {
+        // Mexico
+        '52': 'mx',
+        // Chile
+        '56': 'cl',
+        // Argentina
+        '549': 'ar',
+        // Colombia
+        '57': 'co',
+        // Peru
+        '51': 'pe',
+        // Brazil
+        '55': 'br'
+    };
+
     let isEligible = false;
     let dataFromParent = {};
     let count = 0;
@@ -11,72 +58,64 @@
     let debugEnabled = false;
     let targetOrigin = '*';
 
-    function handleDOM(response, options, status){
+    function handleDOM(response, options){
         const DOMElements = selectDOMElements();
         setTextForElements(DOMElements, options);
-        if (status === 'success'){
-            initIntlTelInput(DOMElements.phone, options);
-            addButtonsEventListeners(DOMElements, options);
-            const phoneNumber = options.phoneNumber;
-            if (response.identified) {
-                if (response.eligible) {
-                    isEligible = true;
-                    if(phoneNumber){
-                        count = 5;
-                        debug('phone entered eligible');
-                        hideEl(DOMElements.preload);
-                        hideEl(DOMElements.phoneCheck);
-                        showEl(DOMElements.phoneEntryWrapper);
-                        showEl(DOMElements.eligibleWrapper);
-                        DOMElements.rewardTextEligible.innerHTML = response.rewardText;
-                    } else{
-                        debug('identified & eligible');
-                        showEl(DOMElements.preload);
-                        triggerOnComplete();
-                    }
+        initIntlTelInput(DOMElements.phone, options);
+        addButtonsEventListeners(DOMElements, options);
+        addPhoneInputEventListener(DOMElements);
+        const phoneNumber = options.phoneNumber;
+        if (response.identified) {
+            if (response.eligible) {
+                isEligible = true;
+                if(phoneNumber){
+                    count = 5;
+                    debug('phone entered eligible');
+                    hideEl(DOMElements.preload);
+                    hideEl(DOMElements.phoneCheck);
+                    showEl(DOMElements.phoneEntryWrapper);
+                    showEl(DOMElements.eligibleWrapper);
+                    DOMElements.rewardTextEligible.innerHTML = response.rewardText;
                 } else {
-                    isEligible = false;
-                    if (phoneNumber) {
-                        count = 5;
-                        debug('phone entered ineligible');
-                        hideEl(DOMElements.preload);
-                        hideEl(DOMElements.phoneCheck);
-                        showEl(DOMElements.ineligibleWrapper);
-                        showEl(DOMElements.phoneEntryWrapper);
-                        showEl(DOMElements.timer);
-                    } else {
-                        debug('identified + ineligible');
-                        hideEl(DOMElements.preload);
-                        showEl(DOMElements.phoneEntryWrapper);
-                        hideEl(DOMElements.phoneCheck);
-                        showEl(DOMElements.ineligibleWrapper);
-                    }
-                }
-                if (phoneNumber) {
-                    showEl(DOMElements.timer);
-                    setTimeout(countDown, 1000, DOMElements.timer);
+                    debug('identified & eligible');
+                    showEl(DOMElements.preload);
+                    triggerOnComplete();
                 }
             } else {
                 isEligible = false;
-                if (phoneNumber){
-                    debug('phone entered unidentified');
+                if (phoneNumber) {
+                    count = 5;
+                    debug('phone entered ineligible');
+                    hideEl(DOMElements.preload);
+                    hideEl(DOMElements.phoneCheck);
+                    showEl(DOMElements.ineligibleWrapper);
+                    showEl(DOMElements.phoneEntryWrapper);
+                    showEl(DOMElements.timer);
+                } else {
+                    debug('identified + ineligible');
                     hideEl(DOMElements.preload);
                     showEl(DOMElements.phoneEntryWrapper);
                     hideEl(DOMElements.phoneCheck);
                     showEl(DOMElements.ineligibleWrapper);
-                } else {
-                    debug('unidentified');
-                    hideEl(DOMElements.preload);
-                    showEl(DOMElements.phoneEntryWrapper);
                 }
             }
-        }
-
-        if (status === 'error'){
-            debug('error.checkAppEligibility');
-            hideEl(DOMElements.preload);
-            hideEl(DOMElements.phoneEntryWrapper);
-            showEl(DOMElements.errorWrapper);
+            if (phoneNumber) {
+                showEl(DOMElements.timer);
+                setTimeout(countDown, 1000, DOMElements.timer);
+            }
+        } else {
+            isEligible = false;
+            if (phoneNumber){
+                debug('phone entered unidentified');
+                hideEl(DOMElements.preload);
+                showEl(DOMElements.phoneEntryWrapper);
+                hideEl(DOMElements.phoneCheck);
+                showEl(DOMElements.ineligibleWrapper);
+            } else {
+                debug('unidentified');
+                hideEl(DOMElements.preload);
+                showEl(DOMElements.phoneEntryWrapper);
+            }
         }
     }
 
@@ -302,7 +341,7 @@
 
         if(dataFromParent.id === 'aq.handleIframeDOM'){
             targetOrigin = parentSrc; // Updating targetOrigin from '*' to parentSrc
-            handleDOM(dataFromParent.response, dataFromParent.options, dataFromParent.status);
+            handleDOM(dataFromParent.response, dataFromParent.options);
             setDebugEnabled(dataFromParent.sPageURL);
         }
     }
@@ -315,7 +354,7 @@
     // postMessage to Parent to confirm iFrame is loaded
     function iFrameLoaded(){
         addIframeEventListener();
-        const message = { eventName: 'aq.iframeLoaded'};
+        const message = { eventName: 'aq.iframeLoaded', iframeRef: this.name};
         sendMessage(message);
     }
 
@@ -328,15 +367,15 @@
                 finalUrl
             };
             debug('Redirecting to', finalUrl);
-            //!debugEnabled && sendMessage(message);
-            sendMessage(message);
+            // !debugEnabled && sendMessage(message);
+            // sendMessage(message);
         }
     }
 
     function submitPhoneEntryForm(event, prevOptions){
         event && event.preventDefault();
         const options = Object.assign({}, prevOptions);
-        options.phoneNumber = iti && iti.getNumber().replace('+', '');
+        options.phoneNumber = iti && iti.getNumber().replace('+', '')
         debug('Submitting Phone Entry Form');
         aquto.checkAppEligibility({
             campaignId: options.campaignId,
@@ -370,6 +409,45 @@
         }
     }
 
+    // Phone Number Entry Validation
+    function numberIsValid(phoneEntrySubmitBtn) {
+        const phoneNumber = iti.getNumber().replace('+', '');
+        const countryCode = findCountry();
+        const isValid = countryCode && phoneNumber.length >= phoneNumberValidation[countryCode].minLen && phoneNumber.length <= phoneNumberValidation[countryCode].maxLen
+        phoneEntrySubmitBtn.disabled = !isValid;
+        phoneEntrySubmitBtn.style.cursor = isValid ? 'pointer' : 'not-allowed';
+    }
+
+    function addPhoneInputEventListener(DOMelements) {
+        DOMelements.phone.maxLength = 18;
+        DOMelements.phone.onkeydown = function() {
+            numberIsValid(DOMelements.peSubmitBtn);
+        };
+        DOMelements.phone.onkeyup = function() {
+            numberIsValid(DOMelements.peSubmitBtn);
+        };
+        DOMelements.phone.addEventListener("countrychange", function() {
+            numberIsValid(DOMelements.peSubmitBtn);
+            DOMelements.phone.value = '';
+        });
+        DOMelements.phone.onkeypress = function(e) {
+            let ASCIICode = (e.which) ? e.which : e.keyCode
+            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+                return false;
+            return true;
+        };
+    }
+
+    function findCountry() {
+        const phoneNumber = iti.getNumber().replace('+', '');
+        const entries = Object.entries(countryDialingCodes);
+
+        for (let i = 0; i < entries.length; i++) {
+            if (phoneNumber.substring(0, entries[i][0].length) === entries[i][0]) {
+                return entries[i][1];
+            }
+        }
+    }
 
     iFrameLoaded();
 

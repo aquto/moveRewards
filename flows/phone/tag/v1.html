@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="es" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=300,initial-scale=1,maximum-scale=1,user-scalable=0"><title>Flows Phone Entry | Iframe Content</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs.vast.vpaid.min.css" integrity="sha256-Jlz9Tnz24Z33Lph9SYNCOMigjPCxoplDQo8qjAONgfs=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css" integrity="sha256-rTKxJIIHupH7lFo30458ner8uoSSRYciA0gttCkw1JE=" crossorigin="anonymous"><style>html,body{background:#eee;color:#000;font-family:Roboto,Helvetica,Arial,sans-serif;font-size:12px;display:table;vertical-align:middle}body{width:100%;height:100%}html,body,.container{margin:auto;padding:0;text-align:center;vertical-align:middle}h1{font-size:18px}html{height:100vh;display:flex;justify-content:center;align-items:center}.container{position:relative;min-width:300px;min-height:250px;background:#fff;height:100%;display:flex;width:100%;justify-content:center;align-items:center}.row{display:block;text-align:center;padding:0;margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px}.video-js{display:block!important;margin:0;padding:0}.hide{display:none}.success{background-color:green!important;color:#fff}.fail{background-color:red!important;color:#fff}.telephone{font-size:14px;width:280px;padding-top:5px;padding-bottom:5px}.button{min-width:280px;border-style:solid;border-width:thin;padding-top:15px;padding-bottom:15px;font-size:16px;cursor:pointer}.submit{color:#fff;background-color:#5CCD96;border-width:thin;border-color:#fff}.secondary{color:grey;background-color:transparent;border-color:grey}.iti__country-list{width:170px}.loading{font-size:20px;color:#000}.loading:after{content:' .';-webkit-animation:dots 1s steps(5,end) infinite;-moz-animation:dots 1s steps(5,end) infinite;-o-animation:dots 1s steps(5,end) infinite;animation:dots 1s steps(5,end) infinite}#phoneEntryWrapper{min-height:190px}@-webkit-keyframes dots{0%,20%{color:rgba(0,0,0,0);text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}40%{color:#000;text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}60%{text-shadow:.25em 0 0 black,.5em 0 0 rgba(0,0,0,0)}80%,100%{text-shadow:.25em 0 0 black,.5em 0 0 #000}}@-moz-keyframes dots{0%,20%{color:rgba(0,0,0,0);text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}40%{color:#000;text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}60%{text-shadow:.25em 0 0 black,.5em 0 0 rgba(0,0,0,0)}80%,100%{text-shadow:.25em 0 0 black,.5em 0 0 #000}}@-o-keyframes dots{0%,20%{color:rgba(0,0,0,0);text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}40%{color:#000;text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}60%{text-shadow:.25em 0 0 black,.5em 0 0 rgba(0,0,0,0)}80%,100%{text-shadow:.25em 0 0 black,.5em 0 0 #000}}@keyframes dots{0%,20%{color:rgba(0,0,0,0);text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}40%{color:#000;text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}60%{text-shadow:.25em 0 0 black,.5em 0 0 rgba(0,0,0,0)}80%,100%{text-shadow:.25em 0 0 black,.5em 0 0 #000}}#phoneEntryWrapper{min-height:250px}</style></head><body><div class="container"><div class="row" id="preload"><p class="loading"></p></div><div id="phoneEntryWrapper" class="hide"><div class="row" id="phoneCheck"><h1 id="peTitle"></h1><p id="peSubTitle"><br></p><form id="phoneEntryForm" class="phoneForm"><p><input class="telephone" type="tel" id="phone" name="phone" pattern="[0-9]{9,10}" required></p><p><input id="peSubmitBtn" class="button submit" type="submit" value="Confirmar ahora"></p></form><form action="#" method="get"><input type="hidden" name="play" value="true"> <button id="continueBtn1" type="submit" class="button secondary"></button></form></div><div class="row hide" id="eligibleWrapper"><p><i class="far fa-thumbs-up fa-3x"></i></p><p></p><div id="rewardTextEligible"></div><p></p><form action="#" method="get"><input type="hidden" name="play" value="true"> <button id="redirectBtn" type="submit" class="button submit"></button></form></div><div class="row hide" id="ineligibleWrapper"><i class="far fa-frown fa-3x"></i><p id="ineligibleTitle"></p><p id="ineligibleSubTitle"></p><form action="#" method="get"><input type="hidden" name="play" value="true"> <button id="continueBtn2" class="button secondary"></button></form></div><div class="row hide" id="timer"></div></div><div id="errorWrapper" class="hide"><div class="row"><i class="far fa-frown-open fa-3x"></i></div><div class="row"><div id="errorMsg" class="row"></div></div></div></div><script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js?be=mp-dev.aquto.internal"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput-jquery.min.js" integrity="sha256-s0v2VDVLbAqGy/FEK0588AtGkSz0aOb6ibQCPCkk4Bk=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput.min.js" integrity="sha256-Gf8PGNhkyd/4AuPWG7theaqc8hAvHzocloCkDN9pXFw=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js" integrity="sha256-271j3cFogB3oRK1PLEHwasgC+sTkKr0f1I37LU9Qkyk=" crossorigin="anonymous"></script><script>function getUrlParameter(sParam, sPageURL) {
+<!DOCTYPE html><html lang="es" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=300,initial-scale=1,maximum-scale=1,user-scalable=0"><title>Flows Phone Entry | Iframe Content</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/videojs-vast-vpaid/2.0.2/videojs.vast.vpaid.min.css" integrity="sha256-Jlz9Tnz24Z33Lph9SYNCOMigjPCxoplDQo8qjAONgfs=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css" integrity="sha256-rTKxJIIHupH7lFo30458ner8uoSSRYciA0gttCkw1JE=" crossorigin="anonymous"><style>html,body{background:#eee;color:#000;font-family:Roboto,Helvetica,Arial,sans-serif;font-size:12px;display:table;vertical-align:middle}body{width:100%;height:100%}html,body,.container{margin:auto;padding:0;text-align:center;vertical-align:middle}h1{font-size:18px}html{height:100vh;display:flex;justify-content:center;align-items:center}.container{position:relative;min-width:300px;min-height:250px;background:#fff;height:100%;display:flex;width:100%;justify-content:center;align-items:center}.row{display:block;text-align:center;padding:0;margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px}.video-js{display:block!important;margin:0;padding:0}.hide{display:none}.success{background-color:green!important;color:#fff}.fail{background-color:red!important;color:#fff}.telephone{font-size:14px;width:280px;padding-top:5px;padding-bottom:5px}.button{min-width:280px;border-style:solid;border-width:thin;padding-top:15px;padding-bottom:15px;font-size:16px;cursor:pointer}.submit{color:#fff;background-color:#5CCD96;border-width:thin;border-color:#fff}.secondary{color:grey;background-color:transparent;border-color:grey}.iti__country-list{width:170px}.loading{font-size:20px;color:#000}.loading:after{content:' .';-webkit-animation:dots 1s steps(5,end) infinite;-moz-animation:dots 1s steps(5,end) infinite;-o-animation:dots 1s steps(5,end) infinite;animation:dots 1s steps(5,end) infinite}#phoneEntryWrapper{min-height:190px}@-webkit-keyframes dots{0%,20%{color:rgba(0,0,0,0);text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}40%{color:#000;text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}60%{text-shadow:.25em 0 0 black,.5em 0 0 rgba(0,0,0,0)}80%,100%{text-shadow:.25em 0 0 black,.5em 0 0 #000}}@-moz-keyframes dots{0%,20%{color:rgba(0,0,0,0);text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}40%{color:#000;text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}60%{text-shadow:.25em 0 0 black,.5em 0 0 rgba(0,0,0,0)}80%,100%{text-shadow:.25em 0 0 black,.5em 0 0 #000}}@-o-keyframes dots{0%,20%{color:rgba(0,0,0,0);text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}40%{color:#000;text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}60%{text-shadow:.25em 0 0 black,.5em 0 0 rgba(0,0,0,0)}80%,100%{text-shadow:.25em 0 0 black,.5em 0 0 #000}}@keyframes dots{0%,20%{color:rgba(0,0,0,0);text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}40%{color:#000;text-shadow:.25em 0 0 rgba(0,0,0,0),.5em 0 0 rgba(0,0,0,0)}60%{text-shadow:.25em 0 0 black,.5em 0 0 rgba(0,0,0,0)}80%,100%{text-shadow:.25em 0 0 black,.5em 0 0 #000}}#phoneEntryWrapper{min-height:250px}#peSubmitBtn{cursor:not-allowed}</style></head><body><div class="container"><div class="row" id="preload"><p class="loading"></p></div><div id="phoneEntryWrapper" class="hide"><div class="row" id="phoneCheck"><h1 id="peTitle"></h1><p id="peSubTitle"><br></p><form id="phoneEntryForm" class="phoneForm"><p><input class="telephone" type="tel" id="phone" name="phone" pattern="[0-9]{9,10}" required></p><p><input id="peSubmitBtn" class="button submit" type="submit" value="Confirmar ahora" disabled="disabled"></p></form><form action="#" method="get"><input type="hidden" name="play" value="true"> <button id="continueBtn1" type="submit" class="button secondary"></button></form></div><div class="row hide" id="eligibleWrapper"><p><i class="far fa-thumbs-up fa-3x"></i></p><p></p><div id="rewardTextEligible"></div><p></p><form action="#" method="get"><input type="hidden" name="play" value="true"> <button id="redirectBtn" type="submit" class="button submit"></button></form></div><div class="row hide" id="ineligibleWrapper"><i class="far fa-frown fa-3x"></i><p id="ineligibleTitle"></p><p id="ineligibleSubTitle"></p><form action="#" method="get"><input type="hidden" name="play" value="true"> <button id="continueBtn2" class="button secondary"></button></form></div><div class="row hide" id="timer"></div></div><div id="errorWrapper" class="hide"><div class="row"><i class="far fa-frown-open fa-3x"></i></div><div class="row"><div id="errorMsg" class="row"></div></div></div></div><script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js?be=mp-dev.aquto.internal"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput-jquery.min.js" integrity="sha256-s0v2VDVLbAqGy/FEK0588AtGkSz0aOb6ibQCPCkk4Bk=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput.min.js" integrity="sha256-Gf8PGNhkyd/4AuPWG7theaqc8hAvHzocloCkDN9pXFw=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js" integrity="sha256-271j3cFogB3oRK1PLEHwasgC+sTkKr0f1I37LU9Qkyk=" crossorigin="anonymous"></script><script>function getUrlParameter(sParam, sPageURL) {
     let sURLVariables = sPageURL.split('&'),
         sParameterName,
         i;
@@ -83,8 +83,55 @@ function intersect(arr1, arr2) {
     }
 }</script><script>(function (win, doc) {
 
-    const availableCountries = ['mx'];
+    const availableCountries = ['mx', 'cl', 'ar', 'co', 'pe', 'br'];
     const defaultCountries = availableCountries;
+    const phoneNumberValidation = {
+        mx: {
+            minLen: 12,
+            maxLen: 12,
+            countryCode: '52'
+        },
+        cl: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '56'
+        },
+        ar: {
+            minLen: 10,
+            maxLen: 14,
+            countryCode: '549'
+        },
+        co: {
+            minLen: 12,
+            maxLen: 12,
+            countryCode: '57'
+        },
+        pe: {
+            minLen: 11,
+            maxLen: 11,
+            countryCode: '51'
+        },
+        br: {
+            minLen: 13,
+            maxLen: 13,
+            countryCode: '55'
+        }
+    };
+    const countryDialingCodes = {
+        // Mexico
+        '52': 'mx',
+        // Chile
+        '56': 'cl',
+        // Argentina
+        '549': 'ar',
+        // Colombia
+        '57': 'co',
+        // Peru
+        '51': 'pe',
+        // Brazil
+        '55': 'br'
+    };
+
     let isEligible = false;
     let dataFromParent = {};
     let count = 0;
@@ -94,72 +141,64 @@ function intersect(arr1, arr2) {
     let debugEnabled = false;
     let targetOrigin = '*';
 
-    function handleDOM(response, options, status){
+    function handleDOM(response, options){
         const DOMElements = selectDOMElements();
         setTextForElements(DOMElements, options);
-        if (status === 'success'){
-            initIntlTelInput(DOMElements.phone, options);
-            addButtonsEventListeners(DOMElements, options);
-            const phoneNumber = options.phoneNumber;
-            if (response.identified) {
-                if (response.eligible) {
-                    isEligible = true;
-                    if(phoneNumber){
-                        count = 5;
-                        debug('phone entered eligible');
-                        hideEl(DOMElements.preload);
-                        hideEl(DOMElements.phoneCheck);
-                        showEl(DOMElements.phoneEntryWrapper);
-                        showEl(DOMElements.eligibleWrapper);
-                        DOMElements.rewardTextEligible.innerHTML = response.rewardText;
-                    } else{
-                        debug('identified & eligible');
-                        showEl(DOMElements.preload);
-                        triggerOnComplete();
-                    }
+        initIntlTelInput(DOMElements.phone, options);
+        addButtonsEventListeners(DOMElements, options);
+        addPhoneInputEventListener(DOMElements);
+        const phoneNumber = options.phoneNumber;
+        if (response.identified) {
+            if (response.eligible) {
+                isEligible = true;
+                if(phoneNumber){
+                    count = 5;
+                    debug('phone entered eligible');
+                    hideEl(DOMElements.preload);
+                    hideEl(DOMElements.phoneCheck);
+                    showEl(DOMElements.phoneEntryWrapper);
+                    showEl(DOMElements.eligibleWrapper);
+                    DOMElements.rewardTextEligible.innerHTML = response.rewardText;
                 } else {
-                    isEligible = false;
-                    if (phoneNumber) {
-                        count = 5;
-                        debug('phone entered ineligible');
-                        hideEl(DOMElements.preload);
-                        hideEl(DOMElements.phoneCheck);
-                        showEl(DOMElements.ineligibleWrapper);
-                        showEl(DOMElements.phoneEntryWrapper);
-                        showEl(DOMElements.timer);
-                    } else {
-                        debug('identified + ineligible');
-                        hideEl(DOMElements.preload);
-                        showEl(DOMElements.phoneEntryWrapper);
-                        hideEl(DOMElements.phoneCheck);
-                        showEl(DOMElements.ineligibleWrapper);
-                    }
-                }
-                if (phoneNumber) {
-                    showEl(DOMElements.timer);
-                    setTimeout(countDown, 1000, DOMElements.timer);
+                    debug('identified & eligible');
+                    showEl(DOMElements.preload);
+                    triggerOnComplete();
                 }
             } else {
                 isEligible = false;
-                if (phoneNumber){
-                    debug('phone entered unidentified');
+                if (phoneNumber) {
+                    count = 5;
+                    debug('phone entered ineligible');
+                    hideEl(DOMElements.preload);
+                    hideEl(DOMElements.phoneCheck);
+                    showEl(DOMElements.ineligibleWrapper);
+                    showEl(DOMElements.phoneEntryWrapper);
+                    showEl(DOMElements.timer);
+                } else {
+                    debug('identified + ineligible');
                     hideEl(DOMElements.preload);
                     showEl(DOMElements.phoneEntryWrapper);
                     hideEl(DOMElements.phoneCheck);
                     showEl(DOMElements.ineligibleWrapper);
-                } else {
-                    debug('unidentified');
-                    hideEl(DOMElements.preload);
-                    showEl(DOMElements.phoneEntryWrapper);
                 }
             }
-        }
-
-        if (status === 'error'){
-            debug('error.checkAppEligibility');
-            hideEl(DOMElements.preload);
-            hideEl(DOMElements.phoneEntryWrapper);
-            showEl(DOMElements.errorWrapper);
+            if (phoneNumber) {
+                showEl(DOMElements.timer);
+                setTimeout(countDown, 1000, DOMElements.timer);
+            }
+        } else {
+            isEligible = false;
+            if (phoneNumber){
+                debug('phone entered unidentified');
+                hideEl(DOMElements.preload);
+                showEl(DOMElements.phoneEntryWrapper);
+                hideEl(DOMElements.phoneCheck);
+                showEl(DOMElements.ineligibleWrapper);
+            } else {
+                debug('unidentified');
+                hideEl(DOMElements.preload);
+                showEl(DOMElements.phoneEntryWrapper);
+            }
         }
     }
 
@@ -385,7 +424,7 @@ function intersect(arr1, arr2) {
 
         if(dataFromParent.id === 'aq.handleIframeDOM'){
             targetOrigin = parentSrc; // Updating targetOrigin from '*' to parentSrc
-            handleDOM(dataFromParent.response, dataFromParent.options, dataFromParent.status);
+            handleDOM(dataFromParent.response, dataFromParent.options);
             setDebugEnabled(dataFromParent.sPageURL);
         }
     }
@@ -398,7 +437,7 @@ function intersect(arr1, arr2) {
     // postMessage to Parent to confirm iFrame is loaded
     function iFrameLoaded(){
         addIframeEventListener();
-        const message = { eventName: 'aq.iframeLoaded'};
+        const message = { eventName: 'aq.iframeLoaded', iframeRef: this.name};
         sendMessage(message);
     }
 
@@ -411,15 +450,15 @@ function intersect(arr1, arr2) {
                 finalUrl
             };
             debug('Redirecting to', finalUrl);
-            //!debugEnabled && sendMessage(message);
-            sendMessage(message);
+            // !debugEnabled && sendMessage(message);
+            // sendMessage(message);
         }
     }
 
     function submitPhoneEntryForm(event, prevOptions){
         event && event.preventDefault();
         const options = Object.assign({}, prevOptions);
-        options.phoneNumber = iti && iti.getNumber().replace('+', '');
+        options.phoneNumber = iti && iti.getNumber().replace('+', '')
         debug('Submitting Phone Entry Form');
         aquto.checkAppEligibility({
             campaignId: options.campaignId,
@@ -453,6 +492,45 @@ function intersect(arr1, arr2) {
         }
     }
 
+    // Phone Number Entry Validation
+    function numberIsValid(phoneEntrySubmitBtn) {
+        const phoneNumber = iti.getNumber().replace('+', '');
+        const countryCode = findCountry();
+        const isValid = countryCode && phoneNumber.length >= phoneNumberValidation[countryCode].minLen && phoneNumber.length <= phoneNumberValidation[countryCode].maxLen
+        phoneEntrySubmitBtn.disabled = !isValid;
+        phoneEntrySubmitBtn.style.cursor = isValid ? 'pointer' : 'not-allowed';
+    }
+
+    function addPhoneInputEventListener(DOMelements) {
+        DOMelements.phone.maxLength = 18;
+        DOMelements.phone.onkeydown = function() {
+            numberIsValid(DOMelements.peSubmitBtn);
+        };
+        DOMelements.phone.onkeyup = function() {
+            numberIsValid(DOMelements.peSubmitBtn);
+        };
+        DOMelements.phone.addEventListener("countrychange", function() {
+            numberIsValid(DOMelements.peSubmitBtn);
+            DOMelements.phone.value = '';
+        });
+        DOMelements.phone.onkeypress = function(e) {
+            let ASCIICode = (e.which) ? e.which : e.keyCode
+            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+                return false;
+            return true;
+        };
+    }
+
+    function findCountry() {
+        const phoneNumber = iti.getNumber().replace('+', '');
+        const entries = Object.entries(countryDialingCodes);
+
+        for (let i = 0; i < entries.length; i++) {
+            if (phoneNumber.substring(0, entries[i][0].length) === entries[i][0]) {
+                return entries[i][1];
+            }
+        }
+    }
 
     iFrameLoaded();
 

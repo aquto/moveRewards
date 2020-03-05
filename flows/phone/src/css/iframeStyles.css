@@ -237,3 +237,6 @@ html{
 #phoneEntryWrapper{
     min-height: 250px;
 }
+#peSubmitBtn{
+    cursor: not-allowed;
+}
