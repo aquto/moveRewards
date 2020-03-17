@@ -1,8 +1,8 @@
 module.exports = {
   collectCoverageFrom: [
     '**/*.js',
-    '!app/**/*.test.js',
-    '!app/**/*.min.js'
+    '!**/*.test.js',
+    '!**/*.min.js'
   ],
   testRegex: '.*\\.test\\.js$'
 };

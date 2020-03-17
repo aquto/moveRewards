@@ -15,10 +15,6 @@ body{
   min-height: 250px;
 }
 
-h1 {
-  font-size: 18px;
-}
-
 .container-frame {
   display: flex;
   align-items: center;
@@ -37,6 +33,26 @@ h1 {
   justify-content: center;
 }
 
+h1 {
+  font-size: 18px;
+  line-height: 1.2em;
+  margin: 6px 0 6px 0;
+}
+
+#phoneEntrySubTitle {
+  font-size: 11px;
+  margin: 10px 0 10px 0;
+}
+
+p.normal {
+  margin: 0 0 1em 0;
+}
+
+#phoneEntrySubmitBtn:disabled{
+  background: rgba(92, 205, 150, 0.75);
+  cursor: not-allowed;
+}
+
 .row {
   display: block;
   text-align: center;
@@ -51,6 +67,8 @@ h1 {
   display: block !important;
   margin: 0px;
   padding: 0px;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .hide {
@@ -66,7 +84,6 @@ h1 {
   background-color: red !important;
   color: white;
 }
-
 
 /* Identify Styles */
 .telephone {
@@ -97,6 +114,7 @@ h1 {
   color: grey;
   background-color: transparent;
   border-color: grey;
+  /* padding: 7px 0px; */
 }
 
 .iti__country-list{
@@ -154,7 +172,3 @@ h1 {
   line-height: 20px;
 }
 
-#phoneEntrySubmitBtn:disabled{
-  background: rgba(92, 205, 150, 0.75);
-  cursor: not-allowed;
-}

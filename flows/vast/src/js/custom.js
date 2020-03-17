@@ -566,7 +566,7 @@
 
         for (let i = 0; i < elements.length; i ++){
             if(typeof elements[i].id === 'string'){
-                elements[i].innerHTML = messages[elements[i].id];
+                elements[i].innerHTML = messages[elements[i].id].replace(/\n/, '<br/>');
             }
         }
 
