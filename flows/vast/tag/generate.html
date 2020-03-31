@@ -44,6 +44,15 @@
         <label>Languages (comma separated e.g. es,pt): <input type="text" name="l" value=""></label>
         <label>Publisher Site UUID: <input type="text" name="psid" value=""></label>
         <label>Channel: <input type="text" name="ch" value=""></label>
+
+        <label>Impression Pixel: <input type="text" name="trimp" value=""></label>
+        <label>Click Pixel: <input type="text" name="trclk" value=""></label>
+        <label>Video Start Pixel: <input type="text" name="trvst" value=""></label>
+        <label>Video 25% Pixel: <input type="text" name="trv25" value=""></label>
+        <label>Video 50% Pixel: <input type="text" name="trv50" value=""></label>
+        <label>Video 75% Pixel: <input type="text" name="trv75" value=""></label>
+        <label>Video 95% Pixel: <input type="text" name="trv95" value=""></label>
+        <label>Video Complete Pixel: <input type="text" name="trvc" value=""></label>
         <button id="submit" onclick="return generate();">Generate</button>
         <br/>
         <br/>
@@ -59,7 +68,7 @@
 <script>
     function generate() {
         // ts=" + (new Date().getTime()) + "&"
-        var src = "//assets.aquto.com/moveRewards/flows/vast/tag/v1.html?";
+        var src = "assets.aquto.com/moveRewards/flows/vast/tag/v1.html?";
         var query = [];
         var inputs = document.getElementsByTagName("input");
         var inputName;

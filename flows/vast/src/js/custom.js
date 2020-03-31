@@ -47,6 +47,20 @@
 
     const percentageThresholds = [0, 25, 50, 75, 95];
 
+
+    const pixelMacros = {
+        impression: getUrlParameter('trimp'),
+        click: getUrlParameter('trclk'),
+        video: {
+            start: getUrlParameter('trvst'),
+            25: getUrlParameter('trv25'),
+            50: getUrlParameter('trv50'),
+            75: getUrlParameter('trv75'),
+            95: getUrlParameter('trv95'),
+            complete: getUrlParameter('trvc'),
+        }
+    }
+
     // const pixelSubType = 'mrflowsvast';
     const channelDelimiter = '-';
     const channelSuffixes = {
@@ -164,6 +178,7 @@
         if (!videoStarted) {
             videoStarted = true;
             videoStartPixel();
+            videoStartPixel(pixelMacros.video.start);
         }
     });
 
@@ -181,6 +196,7 @@
                         // Remove threshold and trigger
                         pctThresholds.shift();
                         trackVideoView(responseCopy.clickId, nextPct);
+                        trackVideoView(null, null, pixelMacros.video[nextPct]);
                     }
                 } while (percentage >= nextPct);
             }
@@ -201,6 +217,7 @@
         hideElem(DOMelements.video);
         if (!videoError) {
             videoEndPixel();
+            videoEndPixel(pixelMacros.video.complete);
             if (isEligible) {
                 showElem(DOMelements.eligibleElement);
                 completeReward();
@@ -293,6 +310,7 @@
                                 showElem(DOMelements.timer);
                                 DOMelements.timer.innerHTML = timerMessage(count);
                                 startCountdown();
+                                pixelUrl(null,null,'custom banner click url', pixelMacros.click)
                             }
                         }
                         if (phone) {
@@ -496,20 +514,36 @@
         return Math.floor(data / 60).toString().padStart(2, '0') + ':' + (data % 60).toString().padStart(2, '0')
     }
 
-    function impressionPixel() {
-        trackingPixel(channelSuffixes.impression);
+    function impressionPixel(url) {
+        if (url){
+            pixelUrl( null, null, 'custom impression url', url);
+        }else{
+            trackingPixel(channelSuffixes.impression);
+        }
     }
 
-    function videoStartPixel() {
-        trackingPixel(channelSuffixes.videoStart);
+    function videoStartPixel(url) {
+        if (url){
+            pixelUrl( null, null, 'custom video start url', url);
+        }else{
+            trackingPixel(channelSuffixes.impression);
+        }
     }
 
-    function videoEndPixel() {
-        trackingPixel(channelSuffixes.videoEnd);
+    function videoEndPixel(url) {
+        if (url){
+            pixelUrl( null, null, 'custom video end url', url);
+        }else{
+            trackingPixel(channelSuffixes.impression);
+        }
     }
 
-    function videoErrorPixel() {
-        trackingPixel(channelSuffixes.videoError);
+    function videoErrorPixel(url) {
+        if (url){
+            pixelUrl( null, null, 'custom video end url', url);
+        }else{
+            trackingPixel(channelSuffixes.impression);
+        }
     }
 
     function trackingPixel(channelSuffix) {
@@ -528,14 +562,29 @@
         pixelUrl(relativePath, params, 'tracking url');
     }
 
-    function trackVideoView(clickId, percentageViewed) {
-        const params = '?clickId=' + orEmptyStr(clickId) + '&percentageViewed=' + percentageViewed;
-        const relativePath = 'event/videoview';
-        pixelUrl(relativePath, params, 'video tracking url');
+    function trackVideoView(clickId, percentageViewed, url) {
+        if(clickId){
+            const params = '?clickId=' + orEmptyStr(clickId) + '&percentageViewed=' + percentageViewed;
+            const relativePath = 'event/videoview';
+            pixelUrl(relativePath, params, 'video tracking url');
+        }
+
+        if(url){
+            pixelUrl(null, null, 'custom video tracking url', url);
+        }
     }
 
-    function pixelUrl(relativePath, params, name) {
-        const url = '//' + be + '/api/campaign/' + relativePath + params;
+    function pixelUrl(relativePath, params, name, customUrl) {
+        var url = '';
+
+        if (relativePath && params){
+            url = '//' + be + '/api/campaign/' + relativePath + params;
+        }
+
+        if (customUrl){
+            url = customUrl
+        }
+
         debug(name, url);
         new Image().src = url;
     }
@@ -613,6 +662,7 @@
         hideElem(DOMelements.loadingWrapper);
         // Fire impression pixel
         impressionPixel();
+        impressionPixel(pixelMacros.impression);
 
         // Store in window scope so HTML can access
         this.checkPhoneNumber = checkPhoneNumber;
