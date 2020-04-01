@@ -35,6 +35,15 @@ The `checkEligibility` method determines if the current user if eligible to rece
 |phoneNumber|string|no|Manually entered user's phone number that can be used when user is on wifi|
 |publisherSiteUuid|string|no|Unique tracking code assigned by Aquto|
 |channel|string|no|Optional channel of the inventory|
+|Impression Pixel URL|string|no|Optional impression pixel URL|
+|Click Pixel URL|string|no|Optional banner click pixel URL|
+|Video Start Pixel URL|string|no|Optional video start pixel URL|
+|Video 25% Pixel URL|string|no|Optional video pixel URL|
+|Video 50% Pixel URL|string|no|Optional video pixel URL|
+|Video 75% Pixel URL|string|no|Optional video pixel URL|
+|Video 95% Pixel URL|string|no|Optional video pixel URL|
+|Video Complete Pixel URL|string|no|Optional video complete pixel URL|
+
 
 ### Response properties
 |Key|Type|Optional|Description|

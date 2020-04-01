@@ -175,7 +175,6 @@
         if (!videoStarted) {
             videoStarted = true;
             videoStartPixel();
-            new Image().src = videoUrls.start;
         }
     });
 
@@ -193,8 +192,6 @@
                         // Remove threshold and trigger
                         pctThresholds.shift();
                         trackVideoView(responseCopy.clickId, nextPct);
-                        console.log('HERE IS THE URL...', videoUrls[nextPct])
-                        new Image().src = videoUrls[nextPct];
                     }
                 } while (percentage >= nextPct);
             }
@@ -261,6 +258,9 @@
 
         const callChannel = getChannel(channel, phone ? channelSuffixes.phoneEntry : channelSuffixes.autoIdentify);
         debug('checkPhoneNumber', { phone, publisherSiteUuid, callChannel });
+        if (!phone){
+            trackUrl('custom bannerClick pixel', bannerClickUrl);
+        }
 
         aquto.checkAppEligibility({
             campaignId: campaignId,
@@ -288,7 +288,6 @@
                                 debug('identified & eligible');
                                 hideElem(DOMelements.loadingWrapper);
                                 showElem(DOMelements.video);
-                                new Image().src = bannerClickUrl;
                                 player.play();
                             }
                         } else {
@@ -514,14 +513,17 @@
 
     function impressionPixel() {
         trackingPixel(channelSuffixes.impression);
+        trackUrl('custom impression pixel', impressionUrl)
     }
 
     function videoStartPixel() {
         trackingPixel(channelSuffixes.videoStart);
+        trackUrl('custom video start pixel', videoUrls.start);
     }
 
     function videoEndPixel() {
         trackingPixel(channelSuffixes.videoEnd);
+        trackUrl('custom video end pixel', videoUrls.complete);
     }
 
     function videoErrorPixel() {
@@ -548,6 +550,7 @@
         const params = '?clickId=' + orEmptyStr(clickId) + '&percentageViewed=' + percentageViewed;
         const relativePath = 'event/videoview';
         pixelUrl(relativePath, params, 'video tracking url');
+        trackUrl('video tracking url', videoUrls[percentageViewed]);
     }
 
     function pixelUrl(relativePath, params, name) {
@@ -621,6 +624,13 @@
         return v === undefined || v === null ? '' : v;
     }
 
+    function trackUrl(name, url) {
+        if (url) {
+            debug(name, url);
+            new Image().src = url;
+        }
+    }
+
     function init() {
         addEventOverlay();
         showPlayer(0);
@@ -629,7 +639,6 @@
         hideElem(DOMelements.loadingWrapper);
         // Fire impression pixel
         impressionPixel();
-        new Image().src = impressionUrl;
 
         // Store in window scope so HTML can access
         this.checkPhoneNumber = checkPhoneNumber;
