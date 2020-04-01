@@ -212,7 +212,7 @@
         hideElem(DOMelements.video);
         if (!videoError) {
             videoEndPixel();
-            new Image().src = videoUrls.complete;
+
             if (isEligible) {
                 showElem(DOMelements.eligibleElement);
                 completeReward();
