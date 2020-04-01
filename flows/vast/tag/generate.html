@@ -44,7 +44,6 @@
         <label>Languages (comma separated e.g. es,pt): <input type="text" name="l" value=""></label>
         <label>Publisher Site UUID: <input type="text" name="psid" value=""></label>
         <label>Channel: <input type="text" name="ch" value=""></label>
-
         <label>Impression Pixel: <input type="text" name="trimp" value=""></label>
         <label>Click Pixel: <input type="text" name="trclk" value=""></label>
         <label>Video Start Pixel: <input type="text" name="trvst" value=""></label>
@@ -68,7 +67,8 @@
 <script>
     function generate() {
         // ts=" + (new Date().getTime()) + "&"
-        var src = "//assets.aquto.com/moveRewards/flows/vast/tag/v1.html?";
+        // var src = "//assets.aquto.com/moveRewards/flows/vast/tag/v1.html?";
+        var src = "v1.html?";
         var query = [];
         var inputs = document.getElementsByTagName("input");
         var inputName;
@@ -76,6 +76,12 @@
         for (var i = 0; i < inputs.length; ++i) {
             inputName = encodeURIComponent(inputs[i].name);
             inputValue = encodeURIComponent(inputs[i].value);
+            if (inputName === 'trimp' || inputName === 'trclk' ||
+                inputName === 'trvst' || inputName === 'trv25' ||
+                inputName === 'trv50' || inputName === 'trv75' ||
+                inputName === 'trv95' || inputName === 'trvc'){
+                inputValue = inputValue && inputValue.replace(/%7B/, '{').replace(/%7D/, '}')
+            }
             if(inputName !== 'w' && inputName !== 'h'){
                 query.push(inputName + "=" + inputValue);
             }
