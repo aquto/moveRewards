@@ -47,6 +47,17 @@
 
     const percentageThresholds = [0, 25, 50, 75, 95];
 
+    const impressionUrl = getUrlParameter('trimp');
+    const bannerClickUrl = getUrlParameter('trclk');
+    const videoUrls = {
+        start: getUrlParameter('trvst'),
+        25: getUrlParameter('trv25'),
+        50: getUrlParameter('trv50'),
+        75: getUrlParameter('trv75'),
+        95: getUrlParameter('trv95'),
+        complete: getUrlParameter('trvc')
+    };
+
     // const pixelSubType = 'mrflowsvast';
     const channelDelimiter = '-';
     const channelSuffixes = {
@@ -201,6 +212,7 @@
         hideElem(DOMelements.video);
         if (!videoError) {
             videoEndPixel();
+
             if (isEligible) {
                 showElem(DOMelements.eligibleElement);
                 completeReward();
@@ -246,6 +258,9 @@
 
         const callChannel = getChannel(channel, phone ? channelSuffixes.phoneEntry : channelSuffixes.autoIdentify);
         debug('checkPhoneNumber', { phone, publisherSiteUuid, callChannel });
+        if (!phone){
+            trackUrl('custom bannerClick pixel', bannerClickUrl);
+        }
 
         aquto.checkAppEligibility({
             campaignId: campaignId,
@@ -498,14 +513,17 @@
 
     function impressionPixel() {
         trackingPixel(channelSuffixes.impression);
+        trackUrl('custom impression pixel', impressionUrl)
     }
 
     function videoStartPixel() {
         trackingPixel(channelSuffixes.videoStart);
+        trackUrl('custom video start pixel', videoUrls.start);
     }
 
     function videoEndPixel() {
         trackingPixel(channelSuffixes.videoEnd);
+        trackUrl('custom video end pixel', videoUrls.complete);
     }
 
     function videoErrorPixel() {
@@ -532,6 +550,7 @@
         const params = '?clickId=' + orEmptyStr(clickId) + '&percentageViewed=' + percentageViewed;
         const relativePath = 'event/videoview';
         pixelUrl(relativePath, params, 'video tracking url');
+        trackUrl('video tracking url', videoUrls[percentageViewed]);
     }
 
     function pixelUrl(relativePath, params, name) {
@@ -603,6 +622,13 @@
 
     function orEmptyStr(v) {
         return v === undefined || v === null ? '' : v;
+    }
+
+    function trackUrl(name, url) {
+        if (url) {
+            debug(name, url);
+            new Image().src = url;
+        }
     }
 
     function init() {

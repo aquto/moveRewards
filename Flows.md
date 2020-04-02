@@ -17,6 +17,14 @@ Two values are required to generate the code correctly:
 |l| Comma separated list of available languages (Supported and default: es,en,pt)|
 |ch| Incent channel string to be used for reporting purposes|
 |psid| Unique publisher site tracking code assigned by Aquto|
+|trimp|Optional impression pixel URL|
+|trclk|Optional banner click pixel URL|
+|trvst|Optional video start pixel URL|
+|trv25|Optional video 25% progress pixel URL|
+|trv50|Optional video 50% progress pixel URL|
+|trv75|Optional video 75% progress pixel URL|
+|trv95|Optional video 95% progress pixel URL|
+|trvc|Optional video complete pixel URL|
 
 VAST tag URL example:
 
