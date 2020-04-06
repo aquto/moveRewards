@@ -80,7 +80,11 @@ module.exports = function(grunt) {
           'flows/vast/src/js/custom.min.js': ['flows/vast/src/js/custom.js'],
           'flows/vast/src/js/polyfills.min.js': ['flows/vast/src/js/polyfills.js'],
           'flows/vast/src/js/utils.min.js': ['flows/vast/src/js/utils.js'],
-          'flows/vast/src/js/translations.min.js': ['flows/vast/src/js/translations.js']
+          'flows/vast/src/js/translations.min.js': ['flows/vast/src/js/translations.js'],
+          'flows/phone/src/js/polyfills.min.js': ['flows/phone/src/js/polyfills.js'],
+          'flows/phone/src/js/iframeMain.min.js': ['flows/phone/src/js/iframeMain.js'],
+          'flows/phone/src/js/translations.min.js': ['flows/phone/src/js/translations.js'],
+          'flows/phone/src/js/utils.min.js': ['flows/phone/src/js/utils.js']
         }
       }
     },
@@ -125,7 +129,19 @@ module.exports = function(grunt) {
         }
       }
     },
-    clean: ['flows/vast/inlined.html', 'flows/phone/src/inlined.html', 'flows/vast/src/css/styles.css', 'flows/vast/src/js/utils.min.js', 'flows/vast/src/js/polyfills.min.js','flows/vast/src/js/custom.min.js', 'flows/vast/src/js/translations.min.js']
+    clean: [
+      'flows/vast/inlined.html',
+      'flows/phone/src/inlined.html',
+      'flows/vast/src/css/styles.css',
+      'flows/vast/src/js/utils.min.js',
+      'flows/vast/src/js/polyfills.min.js',
+      'flows/vast/src/js/custom.min.js',
+      'flows/vast/src/js/translations.min.js',
+      'flows/phone/src/js/utils.min.js',
+      'flows/phone/src/js/polyfills.min.js',
+      'flows/phone/src/js/iframeMain.min.js',
+      'flows/phone/src/js/translations.min.js'
+    ]
   });
 
 

@@ -2,6 +2,8 @@
 
     const availableCountries = ['mx', 'cl', 'ar', 'co', 'pe', 'br'];
     const defaultCountries = availableCountries;
+    const availableLanguages = ['es', 'pt', 'en'];
+    const defaultLanguages = availableLanguages;
     const phoneNumberValidation = {
         mx: {
             minLen: 12,
@@ -258,20 +260,6 @@
         }
     }
 
-    function getBrowserLang(){
-        const navigatorLang = (navigator.languages && navigator.languages.length) ? navigator.languages[0]
-            : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en';
-        return navigatorLang.substring(0, 2)
-    }
-
-    function filterLanguage(browserLang, allowLang){
-        if (browserLang === allowLang){
-            return browserLang;
-        } else {
-            return allowLang;
-        }
-    }
-
     function getTranslations(lang, translations){
         messages = translations[lang];
         return translations[lang]
@@ -293,16 +281,12 @@
 
     function setTextForElements(DOMElements, options){
 
-        const availableLanguages = ['es', 'pt', 'en'];
-        const defaultLanguages = availableLanguages;
         const userLanguages = options.languages;
-
         const languages = intersect(userLanguages, availableLanguages) || defaultLanguages;
         const navLanguage = getNavigatorLanguage();
         const lang = languages.find( function (l) {return navLanguage === l}) || languages[0];
 
-        updateElementTexts(
-            getTranslations(filterLanguage(getBrowserLang(), lang), translations), DOMElements);
+        updateElementTexts(getTranslations(lang, translations), DOMElements);
     }
 
     function getNavigatorLanguage() {
@@ -367,8 +351,7 @@
                 finalUrl
             };
             debug('Redirecting to', finalUrl);
-            // !debugEnabled && sendMessage(message);
-            // sendMessage(message);
+            sendMessage(message);
         }
     }
 

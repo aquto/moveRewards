@@ -126,10 +126,12 @@ function appendIframeToTarget(DOMElements){
 function createLoadingOverlay(targetEl){
     // Spinner Image
     let loadingImgElement = document.createElement('img');
-    loadingImgElement.src = '../src/assets/images/loader.gif';
-    loadingImgElement.style.float = 'right';
-    loadingImgElement.style.marginRight = '10px';
-    loadingImgElement.style.marginTop = '10px';
+    loadingImgElement.src = '//assets.aquto.com/moveRewards/assets/images/loader.gif';
+    loadingImgElement.style.position = 'relative';
+    loadingImgElement.style.left = '50%';
+    loadingImgElement.style.top = '50%';
+    loadingImgElement.style.marginLeft = '-16px';
+    loadingImgElement.style.marginTop = '-16px';
 
     let loadingOverlay = document.createElement('div');
     loadingOverlay.id = 'overlay_' + targetEl.id;

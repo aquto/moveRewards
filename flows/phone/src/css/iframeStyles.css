@@ -98,6 +98,10 @@ html{
     border-color: white;
 }
 
+.submit:disabled{
+    background-color: rgba(92, 205, 150, 0.75)
+}
+
 .secondary {
     color: grey;
     background-color: transparent;
