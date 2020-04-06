@@ -1,10 +1,10 @@
 const translations = {
     es:{
         loading: 'Cargando',
-        phoneEntryTitle: 'Participa para ganar Megas',
+        phoneEntryTitle: 'Solo estás a un paso de ganar megas gratis!',
         thanksMsg: 'Gracias por ver este video',
         processingText: 'Estamos procesando tu recompensa...',
-        phoneEntrySubTitle: 'Solo confirma tu número de teléfono.',
+        phoneEntrySubTitle: 'Pero antes necesitamos que nos confirmes tu número.',
         phoneEntrySubmitBtn: 'Confirmar ahora',
         rewardTextEligible: 'Tu número participa para ganar megas.',
         continueBtn: 'Continuar sin ganar megas',
