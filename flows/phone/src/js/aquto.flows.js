@@ -126,7 +126,7 @@ function appendIframeToTarget(DOMElements){
 function createLoadingOverlay(targetEl){
     // Spinner Image
     let loadingImgElement = document.createElement('img');
-    loadingImgElement.src = '//assets.aquto.com/moveRewards/assets/images/loader.gif';
+    loadingImgElement.src = '../assets/images/loader.gif';
     loadingImgElement.style.position = 'relative';
     loadingImgElement.style.left = '50%';
     loadingImgElement.style.top = '50%';
