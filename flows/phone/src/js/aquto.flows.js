@@ -8,11 +8,15 @@
  *
  */
 
+const rootUrl = '//assets.aquto.com/moveRewards/flows/phone/tag/';
+// const rootUrl = '../tag/'; // For Test Dev
+
 (function(win, doc){
     let moveRewards = {};
     let data = {};
     let targetOrigin;
     let iframeTag;
+
 
     function checkAppEligibilityPhoneEntry(options) {
         appendLoadingOverlay(options.targetId);
@@ -91,7 +95,7 @@ function createIframeTag(targetId){
     const iframeEl = document.createElement('iframe');
     iframeEl.minWidth = '250px';
     iframeEl.minHeight = '300px';
-    iframeEl.src = '//assets.aquto.com/moveRewards/flows/phone/tag/v1.html';
+    iframeEl.src = rootUrl + 'v1.html';
     // locally
     iframeEl.name = typeof targetId === 'string' ? targetId : targetId.id;
     iframeEl.style.border = "none";
