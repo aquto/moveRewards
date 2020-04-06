@@ -91,7 +91,7 @@ function createIframeTag(targetId){
     const iframeEl = document.createElement('iframe');
     iframeEl.minWidth = '250px';
     iframeEl.minHeight = '300px';
-    iframeEl.src = 'v1.html'; // '//assets.aquto.com/moveRewards/flows/phone/tag/v1.html'; // 'v1.html' test
+    iframeEl.src = '//assets.aquto.com/moveRewards/flows/phone/tag/v1.html';
     // locally
     iframeEl.name = typeof targetId === 'string' ? targetId : targetId.id;
     iframeEl.style.border = "none";
@@ -126,7 +126,7 @@ function appendIframeToTarget(DOMElements){
 function createLoadingOverlay(targetEl){
     // Spinner Image
     let loadingImgElement = document.createElement('img');
-    loadingImgElement.src = '../assets/images/loader.gif';
+    loadingImgElement.src = '//assets.aquto.com/moveRewards/flows/phone/assets/images/loader.gif';
     loadingImgElement.style.position = 'relative';
     loadingImgElement.style.left = '50%';
     loadingImgElement.style.top = '50%';
