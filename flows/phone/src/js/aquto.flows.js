@@ -9,7 +9,7 @@
  */
 
 const rootUrl = '//assets.aquto.com/moveRewards/flows/phone/tag/';
-// const rootUrl = '../tag/'; // For Test Dev
+// const rootUrl = '../tag/'; // For testing while developing
 
 (function(win, doc){
     let moveRewards = {};
@@ -69,9 +69,9 @@ const rootUrl = '//assets.aquto.com/moveRewards/flows/phone/tag/';
 
                 // Call userCallback method when iFrame postMessage "triggerOnComplete"
                 if(eventName === 'aq.triggerOnComplete'){
-                    const redirectUrl = e.data.finalUrl;
+                    const response = e.data.response;
                     iframeTag.parentNode.removeChild(iframeTag)
-                    data.options.onComplete({redirectUrl});
+                    data.options.onComplete(response);
                 }
             }
         }

@@ -251,6 +251,7 @@
     function getFinalUrl(){
         const clickId = dataFromParent.response.clickId || null;
         let clickUrl = dataFromParent.response.clickUrl || null;
+
         // Use passed URL and fallback to URL in query and replace clickId
         if (isEligible){
             const url = clickUrl || getDeviceUrl();
@@ -348,9 +349,9 @@
         if(finalUrl){
             const message = {
                 eventName: 'aq.triggerOnComplete',
-                finalUrl
+                response: Object.assign({targetUrl: finalUrl}, dataFromParent.response)
             };
-            debug('Redirecting to', finalUrl);
+            debug('Target URL', finalUrl);
             sendMessage(message);
         }
     }

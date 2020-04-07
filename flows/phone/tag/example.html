@@ -25,8 +25,9 @@
         targetUrlIOS: 'https://www.apple.com/',
         targetUrlAndroid: 'https://www.android.com/',
         countries: ['mx','ar','br','cl','co'],
+        // { eligible: true, identified: true, targetUrl: 'http://...' }
         onComplete: function(response) {
-          window.location.href = response.redirectUrl;
+          window.location.href = response.targetUrl;
         }
       });
     }
