@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Move Rewards - Ad Banner</title>
+</head>
+<body>
+  <div style="position:relative;width: 360px;" id="aquto_tag">
+    <a href="#" onclick="onClick();" >
+      <img src="https://dummyimage.com/360/e0e0e0/ffffff.jpg&text=ad+Banner" />
+    </a>
+  </div>
+
+  <!-- To use dev env use ?be=mp-dev.aquto.internal -->
+  <script id="aquto-api" type="text/javascript" src="//assets.aquto.com/moveRewards/aquto.min.js"></script>
+  <script src="aquto_flows.min.js"></script>
+  <script>
+    function onClick() {
+      aqutoFlows.checkAppEligibilityPhoneEntry({
+        targetId: 'aquto_tag', // be good to allow element object as well e.g. target: document.getElementById('aquto_tag');
+        campaignId: 1138, // '1212124-fdsa-fds-321',
+        targetUrl: 'https://aquto.com/',
+        targetUrlIOS: 'https://www.apple.com/',
+        targetUrlAndroid: 'https://www.android.com/',
+        countries: ['mx','ar','br','cl','co'],
+        // { eligible: true, identified: true, targetUrl: 'http://...' }
+        onComplete: function(response) {
+          window.location.href = response.targetUrl;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
