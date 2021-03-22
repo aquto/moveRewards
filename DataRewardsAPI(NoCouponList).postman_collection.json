@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "976078d7-66ca-499d-8f5c-b6feea391cfe",
+		"name": "DataRewardsAPI(NoCouponList)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Check Eligibility (DATA_REWARD_CLAROPAY)",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "663d865c-e828-41ec-9135-1d96d81dacee",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "1-ba166cea-cfb7-4d50-bb4d-639d192512ab",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://app.aquto.com/api/campaign/datarewards/eligibility/3778?phoneNumber=525540863512&apiVersion=v8",
+					"protocol": "https",
+					"host": [
+						"app",
+						"aquto",
+						"com"
+					],
+					"path": [
+						"api",
+						"campaign",
+						"datarewards",
+						"eligibility",
+						"3778"
+					],
+					"query": [
+						{
+							"key": "phoneNumber",
+							"value": "525540863512"
+						},
+						{
+							"key": "apiVersion",
+							"value": "v8"
+						},
+						{
+							"key": "jsonp",
+							"value": "jsonp_2m4qsdft8qbekh8",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Complete Reward(DATA_REWARD_CLAROPAY)",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"connection": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "663d865c-e828-41ec-9135-1d96d81dacee",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "1-ba166cea-cfb7-4d50-bb4d-639d192512ab",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://app.aquto.com/api/campaign/datarewards/applyreward/3778?phoneNumber=525540863512&clickId=cl_22b83aa2-71a1-4d05-91bc-128aa4d73c9c_3778&userToken=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiY3R5IjoiSldUIn0..DTN4tU6yiNupRLCemni_BQ.xgRIL9-xyahF1O8v6_KlJ9u6iJu6eYH-E_4AZClLymwkG2YmNd8zLO5RUiLG8_fWud89DuQ9sTnQHIFdECaQgi6htSOQZ4UNMWw3LQ91Ugl9pyioPNHzisGCjItWBTWY5bTqyo7_ix2inDLvSnjwJJcCKPmbQkdg7I3X1VWbjJd2lmlD4oDDciJlk0fxiBhjpn5SgPShRgHSMmIwNfQumhL1WHQqeQSHIha-U_aZ5oV-sQWU6Q6UGjjvAWui8YcdXpS4FYTHUOGIPZbY2d4bmw.dV-y880K-2epFzy-JfILIhAeeMlwNXexf90dF6I739E",
+					"protocol": "https",
+					"host": [
+						"app",
+						"aquto",
+						"com"
+					],
+					"path": [
+						"api",
+						"campaign",
+						"datarewards",
+						"applyreward",
+						"3778"
+					],
+					"query": [
+						{
+							"key": "phoneNumber",
+							"value": "525540863512"
+						},
+						{
+							"key": "clickId",
+							"value": "cl_22b83aa2-71a1-4d05-91bc-128aa4d73c9c_3778"
+						},
+						{
+							"key": "userToken",
+							"value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiY3R5IjoiSldUIn0..DTN4tU6yiNupRLCemni_BQ.xgRIL9-xyahF1O8v6_KlJ9u6iJu6eYH-E_4AZClLymwkG2YmNd8zLO5RUiLG8_fWud89DuQ9sTnQHIFdECaQgi6htSOQZ4UNMWw3LQ91Ugl9pyioPNHzisGCjItWBTWY5bTqyo7_ix2inDLvSnjwJJcCKPmbQkdg7I3X1VWbjJd2lmlD4oDDciJlk0fxiBhjpn5SgPShRgHSMmIwNfQumhL1WHQqeQSHIha-U_aZ5oV-sQWU6Q6UGjjvAWui8YcdXpS4FYTHUOGIPZbY2d4bmw.dV-y880K-2epFzy-JfILIhAeeMlwNXexf90dF6I739E"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
