@@ -178,7 +178,7 @@ The Reward API allows a sponsor to reward a user. Use the phone number, clickId 
  
 |**Request Method**|GET|
 |:---|:---|
-|**Request URI**|https://app.aquto.com/api/campaign/datarewards/applyreward/ &#60;campaignId&#62;?phoneNumber=&#60;phoneNumber&#62;&clickId=&#60;clickId&#62;|
+|**Request URI**|https://app.aquto.com/api/campaign/datarewards/applyreward/ &#60;campaignId&#62;?phoneNumber=&#60;phoneNumber&#62;&clickId=&#60;clickId&#62;&userToken=&#60;userToken&#62;|
 
 |Query Parameter|Type|Required|Description|
 |:---|:---|:---|:---|
